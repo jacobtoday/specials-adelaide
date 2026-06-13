@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specials Adelaide — Railway Deployment Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0f0f0f;--white:#fafaf8;--orange:#f25c05;--yellow:#f5c800;
+  --blue:#1a5cf5;--green:#1ec96a;--bg:#f0ede6;--surface:#fff;
+  --border:#e0ddd5;--text2:#444;--text3:#888;
+  --sans:'Space Grotesk',sans-serif;--mono:'Space Mono',monospace;
+}
+body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;padding:0 0 80px}
+.hero{background:var(--black);color:var(--white);padding:48px 48px 40px;border-bottom:3px solid var(--orange)}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.hero h1{font-family:var(--mono);font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1;letter-spacing:-0.02em;margin-bottom:14px}
+.hero h1 span{color:var(--yellow)}
+.hero p{font-size:15px;color:rgba(255,255,255,0.6);max-width:560px}
+.wrap{max-width:860px;margin:0 auto;padding:0 40px}
+.toc{background:var(--surface);border:3px solid var(--black);border-radius:14px;padding:24px 28px;margin:36px 0;box-shadow:4px 4px 0 var(--black)}
+.toc-title{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;color:var(--text3)}
+.toc ol{padding-left:20px;display:grid;grid-template-columns:1fr 1fr;gap:4px 32px}
+.toc li{font-size:13px;font-weight:500}
+.toc a{color:var(--blue);text-decoration:none}.toc a:hover{text-decoration:underline}
+.phase{margin-top:48px}
+.phase-badge{display:inline-flex;align-items:center;gap:8px;background:var(--black);color:var(--yellow);font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:5px 14px;border-radius:99px;margin-bottom:14px}
+.phase-badge.green{background:var(--green);color:var(--black)}
+.phase-badge.orange{background:var(--orange);color:var(--black)}
+.phase-badge.blue{background:var(--blue);color:var(--white)}
+h2{font-family:var(--mono);font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-0.02em;margin-bottom:6px;line-height:1.1}
+.step{background:var(--surface);border:3px solid var(--black);border-radius:14px;margin-bottom:16px;overflow:hidden;box-shadow:3px 3px 0 var(--black)}
+.step-head{display:flex;align-items:flex-start;gap:14px;padding:20px 22px 16px;border-bottom:2px solid var(--bg)}
+.step-num{width:30px;height:30px;background:var(--black);color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;margin-top:1px}
+.step-title{font-family:var(--mono);font-size:16px;font-weight:700;line-height:1.2;margin-bottom:3px}
+.step-sub{font-size:12px;color:var(--text3)}
+.step-body{padding:18px 22px}
+.step-body p{font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.7}
+.step-body p:last-child{margin-bottom:0}
+.step-body ul,.step-body ol{padding-left:20px;margin-bottom:12px}
+.step-body li{font-size:13px;color:var(--text2);margin-bottom:5px;line-height:1.6}
+.step-body strong{color:var(--black);font-weight:600}
+code{font-family:var(--mono);font-size:12px;background:var(--bg);padding:2px 6px;border-radius:4px;color:var(--orange)}
+pre{background:var(--black);border-radius:10px;padding:18px 20px;margin:12px 0;overflow-x:auto;position:relative}
+pre code{background:none;padding:0;color:var(--yellow);font-size:13px;line-height:1.7}
+.copy-pre{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:4px 10px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.15s}
+.copy-pre:hover{background:var(--orange);color:var(--black);border-color:var(--orange)}
+.callout{border-radius:10px;padding:14px 16px;margin:14px 0;border:2px solid;display:flex;gap:12px;align-items:flex-start}
+.callout-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.callout-text{font-size:13px;line-height:1.6}
+.callout.tip{background:#f0fdf8;border-color:var(--green);color:#166534}
+.callout.warn{background:#fff8e2;border-color:var(--yellow);color:#854d0e}
+.callout.info{background:#eff6ff;border-color:var(--blue);color:#1e3a8a}
+.callout.danger{background:#fef2f2;border-color:#f87171;color:#991b1b}
+.file-tree{background:#111;border-radius:10px;padding:18px 20px;font-family:var(--mono);font-size:13px;color:#aaa;line-height:2;margin:12px 0}
+.ft-dir{color:var(--yellow)}.ft-file{color:#9ae6b4}.ft-new{color:var(--orange)}
+.costs-table{width:100%;border-collapse:collapse;margin:12px 0}
+.costs-table th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);border-bottom:2px solid var(--bg);background:var(--bg)}
+.costs-table td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--bg)}
+.costs-table tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px}
+.tag.free{background:#dcfce7;color:#166534}.tag.paid{background:#fee2e2;color:#991b1b}.tag.optional{background:#e0e7ff;color:#3730a3}
+.cta-bar{background:var(--orange);border:3px solid var(--black);border-radius:14px;padding:24px 28px;margin-top:40px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:4px 4px 0 var(--black)}
+.cta-text h3{font-family:var(--mono);font-size:18px;font-weight:700;margin-bottom:4px}
+.cta-text p{font-size:13px;opacity:0.8}
+.cta-links{display:flex;gap:10px;flex-shrink:0}
+.cta-link{font-family:var(--mono);font-size:12px;font-weight:700;padding:10px 18px;border-radius:8px;text-decoration:none;border:2px solid var(--black);transition:all 0.15s}
+.cta-link.dark{background:var(--black);color:var(--yellow)}.cta-link.dark:hover{background:var(--yellow);color:var(--black)}
+.cta-link.light{background:var(--white);color:var(--black)}.cta-link.light:hover{background:var(--yellow)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">Deployment guide</div>
+    <h1>Getting <span>Specials Adelaide</span><br>live on Railway</h1>
+    <p>Step-by-step setup from zero to a live URL. Estimated time: 20–30 minutes.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="toc">
+    <div class="toc-title">What's in this guide</div>
+    <ol>
+      <li><a href="#files">Your project files</a></li>
+      <li><a href="#github">Set up GitHub repo</a></li>
+      <li><a href="#railway">Deploy on Railway</a></li>
+      <li><a href="#domain">Custom domain</a></li>
+      <li><a href="#admin">Securing the admin</a></li>
+      <li><a href="#updates">Pushing updates</a></li>
+      <li><a href="#supabase">Connecting Supabase</a></li>
+      <li><a href="#costs">Costs</a></li>
+    </ol>
+  </div>
+
+  <!-- ── PHASE 1 ── -->
+  <div class="phase" id="files">
+    <div class="phase-badge">Phase 1</div>
+    <h2>Your project files</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">You've been given a folder called <code>specials-adelaide</code>. Here's what's inside and what each file does.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Folder structure</div><div class="step-sub">Everything Railway needs is already here</div></div>
+      </div>
+      <div class="step-body">
+        <div class="file-tree">
+<span class="ft-dir">specials-adelaide/</span>
+├── <span class="ft-file">index.html</span>         <span style="color:#555">← Public-facing website</span>
+├── <span class="ft-file">admin.html</span>         <span style="color:#555">← Admin panel (password protected)</span>
+├── <span class="ft-new">server.js</span>          <span style="color:#555">← Express server (Railway runs this)</span>
+├── <span class="ft-new">package.json</span>       <span style="color:#555">← Node dependencies</span>
+├── <span class="ft-new">railway.json</span>       <span style="color:#555">← Railway config</span>
+└── <span class="ft-new">.gitignore</span>         <span style="color:#555">← Keeps node_modules out of git</span>
+        </div>
+        <div class="callout tip">
+          <span class="callout-icon">✅</span>
+          <span class="callout-text">All files with an orange name were generated for you. The HTML files are your main site and admin panel — you already have everything.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 2 ── -->
+  <div class="phase" id="github">
+    <div class="phase-badge green">Phase 2</div>
+    <h2>Set up GitHub</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">Railway deploys from GitHub. You need the folder in a repo before anything goes live.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Create a GitHub account (if you don't have one)</div><div class="step-sub">Free — takes 2 minutes</div></div>
+      </div>
+      <div class="step-body">
+        <p>Go to <strong>github.com</strong> and sign up. Use your Born email address.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Create a new repository</div><div class="step-sub">Where your code will live</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>Click the <strong>+</strong> in the top-right → <strong>New repository</strong></li>
+          <li>Name it <code>specials-adelaide</code></li>
+          <li>Set it to <strong>Private</strong> (recommended — keeps your admin URL out of search engines)</li>
+          <li>Leave everything else unchecked, click <strong>Create repository</strong></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">3</div>
+        <div><div class="step-title">Install Git and push your files</div><div class="step-sub">Run these commands in Terminal inside the project folder</div></div>
+      </div>
+      <div class="step-body">
+        <p>Open <strong>Terminal</strong> (Mac: press ⌘Space, type Terminal). Navigate into your project folder:</p>
+        <div style="position:relative">
+<pre><code>cd ~/Downloads/specials-adelaide</code></pre>
+        </div>
+        <p>Then run these commands one at a time, pressing Enter after each:</p>
+        <div style="position:relative">
+<pre><code>git init
+git add .
+git commit -m "Initial commit — Specials Adelaide"
+git branch -M main
+git remote add origin https://github.com/YOURUSERNAME/specials-adelaide.git
+git push -u origin main</code></pre>
+        </div>
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <span class="callout-text">Replace <code>YOURUSERNAME</code> with your actual GitHub username. GitHub will ask you to log in the first time — use your GitHub email and password.</span>
+        </div>
+        <p>When it finishes, refresh your GitHub repo page — you should see all 6 files listed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 3 ── -->
+  <div class="phase" id="railway">
+    <div class="phase-badge orange">Phase 3</div>
+    <h2>Deploy on Railway</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">Railway will detect your <code>package.json</code>, install Express, and start the server automatically.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Create a Railway account</div><div class="step-sub">railway.com — free to start</div></div>
+      </div>
+      <div class="step-body">
+        <p>Go to <strong>railway.com</strong> and click <strong>Login</strong>. Choose <strong>Login with GitHub</strong> — this links Railway to your GitHub so it can read your repos.</p>
+        <div class="callout info">
+          <span class="callout-icon">ℹ️</span>
+          <span class="callout-text">Railway gives you a free trial with $5 credit. After that, the Hobby plan is $5/month which comfortably covers a small site like this.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Create a new project</div><div class="step-sub">Takes about 3 minutes</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>From the Railway dashboard, click <strong>New Project</strong></li>
+          <li>Choose <strong>Deploy from GitHub repo</strong></li>
+          <li>Select <strong>specials-adelaide</strong> from the list</li>
+          <li>Click <strong>Deploy Now</strong></li>
+        </ol>
+        <p>Railway will automatically detect <code>package.json</code>, install Express, and run <code>node server.js</code>. The first deploy takes about 60–90 seconds.</p>
+        <div class="callout tip">
+          <span class="callout-icon">✅</span>
+          <span class="callout-text">Watch the build logs in real time. You'll see "Specials Adelaide running on port 3000" when it's live.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">3</div>
+        <div><div class="step-title">Get your live URL</div><div class="step-sub">Railway gives you a free .up.railway.app URL immediately</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>Click on your service in the Railway dashboard</li>
+          <li>Go to <strong>Settings → Networking</strong></li>
+          <li>Click <strong>Generate Domain</strong></li>
+          <li>You'll get a URL like <code>specials-adelaide.up.railway.app</code></li>
+        </ol>
+        <p>Visit the URL — your site is live. The admin panel is at <code>yourdomain.up.railway.app/admin</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">4</div>
+        <div><div class="step-title">Verify everything works</div><div class="step-sub">Quick checklist before moving on</div></div>
+      </div>
+      <div class="step-body">
+        <ul>
+          <li>✅ Main site loads at <code>/</code> — specials, filters, hero all working</li>
+          <li>✅ Admin panel loads at <code>/admin</code> — login screen appears</li>
+          <li>✅ Admin login works with <strong>admin</strong> / <strong>specials2025</strong></li>
+          <li>✅ You can edit a special price and see it update</li>
+          <li>✅ Week planner functions — can add specials, share plan</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 4 ── -->
+  <div class="phase" id="domain">
+    <div class="phase-badge blue">Phase 4</div>
+    <h2>Custom domain (optional)</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">Replace the <code>.up.railway.app</code> URL with your own domain like <code>specialsadelaide.com.au</code>.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Buy a domain</div><div class="step-sub">~$20/yr for a .com.au</div></div>
+      </div>
+      <div class="step-body">
+        <p>Good registrars for Australian domains:</p>
+        <ul>
+          <li><strong>Crazy Domains</strong> (crazydomains.com.au) — good for .com.au</li>
+          <li><strong>Namecheap</strong> (namecheap.com) — good for .com</li>
+          <li><strong>Google Domains</strong> → now Squarespace Domains</li>
+        </ul>
+        <p>Suggested domain: <code>specialsadelaide.com.au</code> or <code>adlspecials.com.au</code></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Add domain to Railway</div><div class="step-sub">Railway handles SSL automatically</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>In Railway: go to your service → <strong>Settings → Networking</strong></li>
+          <li>Click <strong>+ Custom Domain</strong></li>
+          <li>Enter your domain, e.g. <code>specialsadelaide.com.au</code></li>
+          <li>Railway shows you a <strong>CNAME record</strong> to add — copy it</li>
+        </ol>
+        <p>Then go to your domain registrar's DNS settings and add:</p>
+        <div style="position:relative">
+<pre><code>Type:  CNAME
+Name:  @  (or www)
+Value: [the value Railway gives you]
+TTL:   3600</code></pre>
+        </div>
+        <p>DNS changes take 5–30 minutes to propagate. Railway auto-provisions an SSL certificate (HTTPS) once it detects the DNS.</p>
+        <div class="callout tip">
+          <span class="callout-icon">✅</span>
+          <span class="callout-text">Railway handles HTTPS automatically — you don't need to do anything for the SSL certificate.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 5 ── -->
+  <div class="phase" id="admin">
+    <div class="phase-badge">Phase 5</div>
+    <h2>Securing the admin panel</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">The admin panel at <code>/admin</code> has its own password — change it before going live.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Change the admin password</div><div class="step-sub">Do this before sharing the URL publicly</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>Open <code>/admin</code> and log in with <strong>admin / specials2025</strong></li>
+          <li>Go to <strong>Settings</strong> in the left sidebar</li>
+          <li>Change the <strong>Username</strong> to something other than "admin"</li>
+          <li>Set a strong <strong>Password</strong> (at least 12 characters, mix of letters/numbers)</li>
+          <li>Click <strong>Save</strong> next to each field</li>
+        </ol>
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <span class="callout-text">The admin password is stored in <code>localStorage</code> in the browser — it's per-device. If you log in from a new device, it falls back to the hardcoded default. For production security, update the default credentials directly in <code>admin.html</code> before deploying (search for <code>CREDENTIALS</code> near the top of the script block).</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Change the hardcoded default credentials (recommended)</div><div class="step-sub">One-line edit in admin.html before pushing</div></div>
+      </div>
+      <div class="step-body">
+        <p>Open <code>admin.html</code> in a text editor. Find this line (near the bottom in the <code>&lt;script&gt;</code> block):</p>
+        <div style="position:relative">
+<pre><code>let CREDENTIALS={user:"admin",pass:"specials2025"};</code></pre>
+        </div>
+        <p>Change it to your own username and a strong password:</p>
+        <div style="position:relative">
+<pre><code>let CREDENTIALS={user:"jacob",pass:"YourStrongPassword123!"};</code></pre>
+        </div>
+        <p>Save the file, then push to GitHub (see Phase 6 below). Railway will redeploy automatically.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 6 ── -->
+  <div class="phase" id="updates">
+    <div class="phase-badge green">Phase 6</div>
+    <h2>Pushing updates</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">Every time you push to GitHub, Railway redeploys automatically — usually in under 60 seconds.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Updating a file</div><div class="step-sub">The workflow for every future change</div></div>
+      </div>
+      <div class="step-body">
+        <p>Make changes to <code>index.html</code> or <code>admin.html</code>, then run:</p>
+        <div style="position:relative">
+<pre><code>cd ~/Downloads/specials-adelaide
+git add .
+git commit -m "Updated specials data"
+git push</code></pre>
+        </div>
+        <p>Railway detects the push and redeploys. Watch the progress in the Railway dashboard — your live URL updates when the green checkmark appears.</p>
+        <div class="callout tip">
+          <span class="callout-icon">💡</span>
+          <span class="callout-text">You can also use <strong>GitHub Desktop</strong> (desktop.github.com) if you prefer a visual interface over Terminal commands. It does the same thing with a point-and-click UI.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Adding new specials without coding</div><div class="step-sub">Use the admin panel</div></div>
+      </div>
+      <div class="step-body">
+        <p>For day-to-day content changes — adding a new restaurant, updating a price, toggling a special off — use the admin panel at <code>/admin</code>. Changes save to the browser's <code>localStorage</code> on that device.</p>
+        <div class="callout info">
+          <span class="callout-icon">ℹ️</span>
+          <span class="callout-text"><strong>Important:</strong> Admin panel changes currently save to <em>your browser only</em>. To push changes to the live site for everyone, you'll need to connect Supabase (Phase 7 below) or manually update the HTML file. The admin panel's <strong>Export → Generate SQL</strong> button helps bridge this gap.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PHASE 7 ── -->
+  <div class="phase" id="supabase">
+    <div class="phase-badge blue">Phase 7 — Optional but recommended</div>
+    <h2>Connect Supabase for live data</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">This makes admin edits update the live site for everyone, not just your browser.</p>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Create your Supabase project</div><div class="step-sub">supabase.com — free tier</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>Go to <strong>supabase.com</strong> → New project</li>
+          <li>Name it <code>specials-adelaide</code>, pick <strong>ap-southeast-2 (Sydney)</strong></li>
+          <li>Save your database password somewhere safe</li>
+          <li>Once created, go to <strong>Project Settings → API</strong></li>
+          <li>Copy your <strong>Project URL</strong> and <strong>anon public key</strong></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Run the database schema</div><div class="step-sub">Creates your tables in one go</div></div>
+      </div>
+      <div class="step-body">
+        <p>In Supabase → <strong>SQL Editor → New query</strong>, paste and run this:</p>
+        <div style="position:relative">
+<pre><code>create extension if not exists "pgcrypto";
+
+create table restaurants (
+  id            uuid primary key default gen_random_uuid(),
+  name          text not null,
+  suburb        text not null,
+  cuisine_type  text,
+  address       text,
+  phone         text,
+  website       text,
+  is_active     boolean not null default true,
+  created_at    timestamptz not null default now()
+);
+
+create table specials (
+  id              uuid primary key default gen_random_uuid(),
+  restaurant_id   uuid not null references restaurants(id) on delete cascade,
+  name            text not null,
+  description     text,
+  price           numeric(6,2) not null,
+  category        text,
+  session_type    text,
+  days_available  text[] not null,
+  available_from  text,
+  available_until text,
+  is_active       boolean not null default true,
+  created_at      timestamptz not null default now()
+);
+
+create index on specials(restaurant_id);
+create index on specials(is_active);
+
+alter table restaurants enable row level security;
+alter table specials enable row level security;
+
+create policy "Public read restaurants" on restaurants
+  for select using (is_active = true);
+create policy "Public read specials" on specials
+  for select using (is_active = true);</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">3</div>
+        <div><div class="step-title">Push your data from the admin panel</div><div class="step-sub">Export → Generate SQL → run in Supabase</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>In the admin panel, go to <strong>Import / Export</strong></li>
+          <li>Click <strong>Generate SQL</strong></li>
+          <li>Copy the generated SQL</li>
+          <li>Paste it into Supabase SQL Editor and run it</li>
+        </ol>
+        <p>This upserts all your restaurants and specials into the database.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">4</div>
+        <div><div class="step-title">Add Supabase credentials to Railway</div><div class="step-sub">Environment variables — never hardcode keys</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>In Railway → your service → <strong>Variables</strong> tab</li>
+          <li>Add these two environment variables:</li>
+        </ol>
+        <div style="position:relative">
+<pre><code>SUPABASE_URL=https://yourproject.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5c...</code></pre>
+        </div>
+        <p>Then in <code>index.html</code>, replace the static <code>RESTAURANTS</code> and <code>SPECIALS</code> arrays with Supabase fetch calls. We can help you do that in the next development session.</p>
+        <div class="callout tip">
+          <span class="callout-icon">💡</span>
+          <span class="callout-text">The site works fully without Supabase right now — all 95 specials are baked in. Supabase is the upgrade that lets you manage data without touching code.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COSTS ── -->
+  <div class="phase" id="costs">
+    <div class="phase-badge">Costs</div>
+    <h2>What it costs to run</h2>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">$</div>
+        <div><div class="step-title">Monthly running costs</div><div class="step-sub">Everything you need to keep it live</div></div>
+      </div>
+      <div class="step-body">
+        <table class="costs-table">
+          <thead><tr><th>Service</th><th>What it does</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Railway Hobby</strong></td><td>Hosts the site and server</td><td><span class="tag paid">$5/month</span></td></tr>
+            <tr><td><strong>Supabase</strong></td><td>Database (up to 500MB)</td><td><span class="tag free">Free tier</span></td></tr>
+            <tr><td><strong>GitHub</strong></td><td>Code storage + deploys</td><td><span class="tag free">Free</span></td></tr>
+            <tr><td><strong>Domain</strong></td><td>.com.au custom domain</td><td><span class="tag optional">~$20/year</span></td></tr>
+            <tr><td><strong>SSL / HTTPS</strong></td><td>Auto-provisioned by Railway</td><td><span class="tag free">Free</span></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--text3);margin-top:10px"><strong>Total to launch:</strong> $5/month + $20/year for domain. Under $90 AUD/year all up.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-bar">
+    <div class="cta-text">
+      <h3>Ready to go live?</h3>
+      <p>Start with Phase 2 — create your GitHub repo and push your files.</p>
+    </div>
+    <div class="cta-links">
+      <a href="https://github.com" target="_blank" class="cta-link light">GitHub →</a>
+      <a href="https://railway.com" target="_blank" class="cta-link dark">Railway →</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('pre').forEach(pre => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-pre';
+  btn.textContent = 'Copy';
+  btn.onclick = () => {
+    const code = pre.querySelector('code');
+    navigator.clipboard.writeText(code.textContent).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  };
+  pre.style.position = 'relative';
+  pre.appendChild(btn);
+});
+</script>
+</body>
+</html>

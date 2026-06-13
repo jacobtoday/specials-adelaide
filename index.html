@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specials Adelaide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0f0f0f;
+  --white:#fafaf8;
+  --orange:#f25c05;
+  --yellow:#f5c800;
+  --blue:#1a5cf5;
+  --green:#1ec96a;
+  --purple:#8b45f5;
+  --red:#e8203a;
+  --pink:#f5459a;
+  --bg:#f0ede6;
+  --r:18px;
+  --r-sm:10px;
+  --sans:'Space Grotesk',sans-serif;
+  --mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:15px;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#ccc;border-radius:99px}
+
+/* PAGE ROUTING */
+.page{display:none}.page.active{display:block}
+
+/* TICKER */
+.ticker{background:var(--black);color:var(--yellow);height:38px;overflow:hidden;display:flex;align-items:center;position:sticky;top:0;z-index:300}
+.ticker-inner{display:flex;gap:0;white-space:nowrap;animation:tick 56s linear infinite}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:20px;padding:0 24px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.ticker-dot{color:var(--orange);font-size:14px}
+
+/* NAV */
+nav{background:var(--white);border-bottom:3px solid var(--black);height:62px;display:flex;align-items:center;padding:0 28px;gap:24px;position:sticky;top:38px;z-index:200}
+.nav-logo{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--black);text-decoration:none;letter-spacing:-0.03em;display:flex;align-items:center;gap:0}
+.nav-logo-dot{display:inline-block;width:10px;height:10px;background:var(--orange);border-radius:50%;margin-left:3px;margin-top:-2px}
+.nav-links{display:flex;gap:4px;align-items:center;margin-left:auto}
+.nav-btn{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--black);padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s;background:none;border:2px solid transparent}
+.nav-btn:hover{background:var(--yellow);border-color:var(--black)}
+.nav-btn.active{background:var(--orange);color:var(--white);border-color:var(--black)}
+.nav-badge{background:var(--black);color:var(--yellow);font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;margin-left:4px;font-family:var(--mono)}
+.nav-cta{background:var(--black);color:var(--yellow);padding:10px 22px;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;border:2px solid var(--black);font-family:var(--mono);margin-left:8px;transition:all 0.15s;letter-spacing:0.02em}
+.nav-cta:hover{background:var(--orange);color:var(--black)}
+
+/* HERO */
+.hero{padding:28px 28px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto;gap:12px}
+.hero-title-cell{grid-column:1/3;background:var(--orange);border-radius:var(--r);border:3px solid var(--black);padding:36px 36px 32px;position:relative;overflow:hidden}
+.hero-title-cell::after{content:"";position:absolute;bottom:-20px;right:-20px;width:120px;height:120px;background:var(--yellow);border-radius:50%;border:3px solid var(--black)}
+.hero-h1{font-family:var(--mono);font-size:clamp(36px,4.5vw,62px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;color:var(--black);position:relative;z-index:1;margin-bottom:12px}
+.hero-sub{font-size:15px;color:var(--black);opacity:0.8;max-width:400px;position:relative;z-index:1}
+
+/* HERO FINDER TILE */
+.hero-finder{
+  grid-column:3/4;grid-row:1/3;
+  background:var(--yellow);border-radius:var(--r);border:3px solid var(--black);
+  padding:24px 22px;display:flex;flex-direction:column;gap:14px;
+  box-shadow:4px 4px 0 var(--black);
+}
+.hero-finder-title{font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:-0.01em;margin-bottom:2px}
+.hero-finder-sub{font-size:11px;color:rgba(0,0,0,0.55);font-weight:500}
+
+/* CUSTOM DROPDOWN */
+.hf-field{display:flex;flex-direction:column;gap:5px}
+.hf-label{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.5)}
+.hf-select-wrap{position:relative}
+.hf-select{
+  width:100%;padding:11px 40px 11px 14px;
+  background:var(--white);border:2px solid var(--black);border-radius:var(--r-sm);
+  font-family:var(--mono);font-size:13px;font-weight:700;color:var(--black);
+  cursor:pointer;appearance:none;-webkit-appearance:none;
+  transition:all 0.14s;outline:none;
+}
+.hf-select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(242,92,5,0.18)}
+.hf-select:hover{background:var(--bg)}
+.hf-arrow{
+  position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  pointer-events:none;font-size:11px;font-weight:700;color:var(--black);
+}
+.hf-select option{font-family:var(--mono);font-size:13px;font-weight:700}
+
+/* SEARCH ROW */
+.hf-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--white);border:2px solid var(--black);border-radius:var(--r-sm);
+  padding:10px 14px;transition:border-color 0.14s;
+}
+.hf-search:focus-within{border-color:var(--orange)}
+.hf-search input{background:none;border:none;outline:none;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--black);width:100%}
+.hf-search input::placeholder{color:rgba(0,0,0,0.35);font-weight:400}
+.hf-search svg{flex-shrink:0;opacity:0.4}
+
+/* FIND BUTTON */
+.hf-btn{
+  width:100%;padding:14px;background:var(--black);color:var(--yellow);
+  border:2px solid var(--black);border-radius:var(--r-sm);
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:0.04em;
+  cursor:pointer;transition:all 0.15s;text-transform:uppercase;margin-top:2px;
+}
+.hf-btn:hover{background:var(--orange);color:var(--black);border-color:var(--orange)}
+
+/* ACTIVE FILTER PILLS */
+.hf-active{display:flex;gap:5px;flex-wrap:wrap;min-height:0}
+.hf-pill{
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;
+  background:var(--black);color:var(--yellow);
+  display:flex;align-items:center;gap:5px;font-family:var(--mono);
+}
+.hf-pill-x{cursor:pointer;opacity:0.7;font-size:11px;line-height:1}
+.hf-pill-x:hover{opacity:1}
+
+.hero-cta-cell{grid-column:1/3;background:var(--black);border-radius:var(--r);border:3px solid var(--black);padding:20px 24px;display:flex;align-items:center;gap:14px}
+.hero-cta-btn{font-family:var(--mono);font-size:13px;font-weight:700;padding:11px 20px;border-radius:var(--r-sm);border:2px solid var(--yellow);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.hero-cta-btn.a{background:var(--yellow);color:var(--black)}.hero-cta-btn.a:hover{background:var(--orange);border-color:var(--orange)}
+.hero-cta-btn.b{background:transparent;color:var(--yellow)}.hero-cta-btn.b:hover{background:var(--yellow);color:var(--black)}
+
+/* FILTER STRIP */
+.filter-strip{background:var(--white);border-bottom:3px solid var(--black);padding:14px 28px;position:sticky;top:100px;z-index:100}
+.filter-row{display:flex;align-items:flex-start;gap:20px;flex-wrap:nowrap;overflow-x:auto}
+.filter-row::-webkit-scrollbar{height:0}
+.fg{display:flex;flex-direction:column;gap:7px;flex-shrink:0}
+.fg-lbl{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#888}
+.chips{display:flex;gap:5px;flex-wrap:nowrap}
+.chip{font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 14px;border-radius:99px;background:var(--bg);border:2px solid var(--black);color:var(--black);cursor:pointer;transition:all 0.14s;white-space:nowrap}
+.chip:hover{background:var(--yellow)}
+.chip.on{background:var(--black);color:var(--white);border-color:var(--black)}
+.chip.on-o{background:var(--orange);color:var(--black);border-color:var(--black)}
+.chip.on-b{background:var(--blue);color:var(--white);border-color:var(--black)}
+.chip.on-g{background:var(--green);color:var(--black);border-color:var(--black)}
+.fdiv{width:2px;background:var(--black);height:44px;flex-shrink:0;align-self:center;opacity:0.12}
+.fsearch{display:flex;align-items:center;gap:8px;background:var(--bg);border:2px solid var(--black);border-radius:99px;padding:6px 16px;min-width:190px}
+.fsearch input{background:none;border:none;outline:none;font-family:var(--sans);font-size:12px;font-weight:500;color:var(--black);width:100%}
+.fsearch input::placeholder{color:#aaa}
+
+/* MAIN LAYOUT */
+.browse-main{display:grid;grid-template-columns:1fr 340px;min-height:calc(100vh - 200px)}
+
+/* SPECIALS COL */
+.specials-col{border-right:3px solid var(--black)}
+.spec-header{background:var(--white);border-bottom:3px solid var(--black);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.spec-count{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--black)}
+.spec-hint{font-size:11px;color:#aaa;font-weight:500}
+.specials-grid{padding:20px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* SPECIAL CARD */
+.scard{border-radius:var(--r);border:3px solid var(--black);overflow:hidden;display:flex;flex-direction:column;transition:transform 0.15s,box-shadow 0.15s;box-shadow:4px 4px 0 var(--black)}
+.scard:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--black)}
+.scard-top{padding:16px 16px 12px;flex:1;position:relative}
+.scard-logo{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:8px;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.4);cursor:pointer;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--black)}
+.scard-logo:hover{border-color:var(--black)}
+.scard-food-tag{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:rgba(0,0,0,0.15);color:var(--black);display:inline-block;margin-bottom:10px}
+.scard-name{font-family:var(--mono);font-size:15px;font-weight:700;line-height:1.2;margin-bottom:6px;padding-right:44px}
+.scard-venue{font-size:11px;font-weight:600;opacity:0.7;margin-bottom:3px}
+.scard-desc{font-size:11px;opacity:0.7;line-height:1.5;margin-bottom:10px}
+.scard-days{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:8px}
+.scard-day{font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:rgba(0,0,0,0.12);color:var(--black)}
+.scard-day.on{background:var(--black);color:var(--white)}
+.scard-bottom{padding:12px 16px;border-top:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.08)}
+.scard-price{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--black)}
+.scard-time{font-size:9px;font-weight:600;opacity:0.6;margin-top:1px}
+.scard-add{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.06em;padding:7px 14px;border-radius:var(--r-sm);border:2px solid var(--black);background:var(--white);color:var(--black);cursor:pointer;transition:all 0.14s;text-transform:uppercase}
+.scard-add:hover{background:var(--black);color:var(--white)}
+.scard-add.added{background:var(--green);color:var(--black);border-color:var(--black)}
+
+/* CARD COLOUR THEMES */
+.c-orange{background:var(--orange)}
+.c-yellow{background:var(--yellow)}
+.c-blue{background:var(--blue)}.c-blue .scard-name,.c-blue .scard-food-tag,.c-blue .scard-venue,.c-blue .scard-desc{color:var(--white)}.c-blue .scard-food-tag,.c-blue .scard-day,.c-blue .scard-logo{background:rgba(255,255,255,0.2);color:var(--white)}.c-blue .scard-day.on{background:var(--white);color:var(--blue)}.c-blue .scard-price{color:var(--white)}.c-blue .scard-time{color:var(--white)}.c-blue .scard-bottom{background:rgba(0,0,0,0.2);border-color:rgba(255,255,255,0.2)}.c-blue .scard-add{background:var(--white);color:var(--blue)}.c-blue .scard-add:hover{background:var(--yellow);color:var(--black)}
+.c-purple{background:var(--purple)}.c-purple .scard-name,.c-purple .scard-venue,.c-purple .scard-desc{color:var(--white)}.c-purple .scard-food-tag,.c-purple .scard-day,.c-purple .scard-logo{background:rgba(255,255,255,0.2);color:var(--white)}.c-purple .scard-day.on{background:var(--white);color:var(--purple)}.c-purple .scard-price{color:var(--white)}.c-purple .scard-time{color:var(--white)}.c-purple .scard-bottom{background:rgba(0,0,0,0.2);border-color:rgba(255,255,255,0.2)}.c-purple .scard-add{background:var(--white);color:var(--purple)}.c-purple .scard-add:hover{background:var(--yellow);color:var(--black)}
+.c-green{background:var(--green)}
+.c-red{background:var(--red)}.c-red .scard-name,.c-red .scard-venue,.c-red .scard-desc,.c-red .scard-price{color:var(--white)}.c-red .scard-food-tag,.c-red .scard-day,.c-red .scard-logo{background:rgba(255,255,255,0.2);color:var(--white)}.c-red .scard-day.on{background:var(--white);color:var(--red)}.c-red .scard-time{color:var(--white)}.c-red .scard-bottom{background:rgba(0,0,0,0.2);border-color:rgba(255,255,255,0.2)}.c-red .scard-add{background:var(--white);color:var(--red)}.c-red .scard-add:hover{background:var(--yellow);color:var(--black)}
+.c-pink{background:var(--pink)}.c-pink .scard-name,.c-pink .scard-venue,.c-pink .scard-desc,.c-pink .scard-price{color:var(--white)}.c-pink .scard-food-tag,.c-pink .scard-day,.c-pink .scard-logo{background:rgba(255,255,255,0.2);color:var(--white)}.c-pink .scard-day.on{background:var(--white);color:var(--pink)}.c-pink .scard-time{color:var(--white)}.c-pink .scard-bottom{background:rgba(0,0,0,0.2);border-color:rgba(255,255,255,0.2)}.c-pink .scard-add{background:var(--white);color:var(--pink)}.c-pink .scard-add:hover{background:var(--yellow);color:var(--black)}
+.c-bg{background:var(--bg)}
+
+.empty-grid{grid-column:1/3;padding:64px;text-align:center}
+.empty-grid span{font-family:var(--mono);font-size:32px;display:block;margin-bottom:12px}
+.empty-grid p{font-size:15px;color:#888}
+
+/* MAP COL SIDEBAR */
+.map-sidebar-col{background:var(--white);border-left:none;display:flex;flex-direction:column}
+.map-sidebar-header{background:var(--blue);border-bottom:3px solid var(--black);padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.map-sidebar-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--white)}
+.map-open-btn{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:var(--yellow);color:var(--black);border:2px solid var(--black);padding:6px 14px;border-radius:var(--r-sm);cursor:pointer;transition:all 0.15s}
+.map-open-btn:hover{background:var(--white)}
+.venue-list{flex:1;overflow-y:auto}
+.venue-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:2px solid var(--bg);cursor:pointer;transition:background 0.12s}
+.venue-item:hover{background:var(--bg)}
+.v-num{width:28px;height:28px;border-radius:50%;background:var(--orange);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--black);flex-shrink:0}
+.v-info{flex:1;min-width:0}
+.v-name{font-size:13px;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-sub{font-size:10px;color:#888;margin-top:1px}
+.v-count{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--orange);flex-shrink:0}
+
+/* VENUES SECTION */
+.venues-section{padding:40px 28px;background:var(--bg);border-top:3px solid var(--black)}
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
+.section-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#888;margin-bottom:8px}
+.section-h2{font-family:var(--mono);font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1;letter-spacing:-0.02em}
+.venues-bento{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.venue-bento-card{border-radius:var(--r);border:3px solid var(--black);padding:20px;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;box-shadow:3px 3px 0 var(--black)}
+.venue-bento-card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--black)}
+.vbc-logo{width:48px;height:48px;border-radius:10px;border:2px solid rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;font-weight:700;margin-bottom:14px;background:rgba(255,255,255,0.35)}
+.vbc-name{font-family:var(--mono);font-size:13px;font-weight:700;margin-bottom:4px;line-height:1.2}
+.vbc-meta{font-size:10px;opacity:0.65;font-weight:500;margin-bottom:10px}
+.vbc-count{font-size:11px;font-weight:700;background:rgba(0,0,0,0.12);padding:3px 9px;border-radius:99px;display:inline-block}
+
+/* FOOTER */
+footer{background:var(--black);padding:36px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:3px solid var(--black)}
+.footer-logo{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--yellow)}
+footer p{font-size:11px;color:rgba(255,255,255,0.4)}
+
+/* ══════════════ MAP PAGE ══════════════ */
+.map-page-inner{display:flex;flex-direction:column;height:calc(100vh - 100px)}
+.map-page-header{background:var(--blue);border-bottom:3px solid var(--black);padding:20px 28px;display:flex;align-items:center;gap:20px;flex-shrink:0}
+.map-page-title{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--white)}
+.map-page-sub{font-size:13px;color:rgba(255,255,255,0.7)}
+.map-area-filter{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.map-body{display:grid;grid-template-columns:320px 1fr;flex:1;overflow:hidden}
+.map-list-panel{border-right:3px solid var(--black);overflow-y:auto;background:var(--white)}
+.map-list-head{padding:14px 16px;border-bottom:2px solid var(--bg);font-family:var(--mono);font-size:11px;font-weight:700;background:var(--yellow);border-bottom:3px solid var(--black)}
+.map-venue-entry{border-bottom:2px solid var(--bg);padding:14px 16px;cursor:pointer;transition:background 0.12s}
+.map-venue-entry:hover{background:var(--yellow)}
+.mve-num{width:24px;height:24px;border-radius:50%;background:var(--orange);border:2px solid var(--black);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;margin-right:10px;flex-shrink:0}
+.mve-name{font-size:13px;font-weight:600}
+.mve-sub{font-size:10px;color:#888;margin-top:2px;padding-left:34px}
+.mve-specials{padding:10px 16px 10px 50px;display:none;border-bottom:2px solid var(--bg);background:var(--bg)}
+.mve-specials.open{display:block}
+.mve-spec-item{font-size:11px;padding:5px 0;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
+.mve-spec-item:last-child{border-bottom:none}
+.mve-spec-price{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange)}
+.map-embed-wrap{background:#e8e4da;position:relative;overflow:hidden}
+.map-placeholder-big{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:40px;text-align:center}
+.map-placeholder-big .icon{font-size:56px}
+.map-placeholder-big h2{font-family:var(--mono);font-size:26px;font-weight:700}
+.map-placeholder-big p{font-size:14px;color:#666;max-width:320px;line-height:1.7}
+.map-api-steps{background:var(--yellow);border-radius:var(--r);border:3px solid var(--black);padding:24px;max-width:400px;text-align:left;box-shadow:4px 4px 0 var(--black)}
+.map-api-steps h3{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:14px}
+.map-api-steps ol{padding-left:20px;font-size:13px;line-height:1.9}
+.map-api-steps a{color:var(--blue);font-weight:600}
+.map-api-input{width:100%;margin-top:14px;padding:10px 14px;border:2px solid var(--black);border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;background:var(--white)}
+.map-api-btn{margin-top:10px;width:100%;padding:11px;background:var(--black);color:var(--yellow);border:none;border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:background 0.15s}
+.map-api-btn:hover{background:var(--orange);color:var(--black)}
+
+/* ══════════════ PLANNER PAGE ══════════════ */
+.planner-page{background:var(--bg);min-height:100vh}
+.planner-hero{padding:28px 28px 0}
+.planner-hero-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+.planner-hero-main{background:var(--purple);border-radius:var(--r);border:3px solid var(--black);padding:36px 36px 32px;box-shadow:4px 4px 0 var(--black)}
+.planner-hero-main h1{font-family:var(--mono);font-size:clamp(32px,4vw,54px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;color:var(--white);margin-bottom:10px}
+.planner-hero-main p{font-size:14px;color:rgba(255,255,255,0.75)}
+.planner-stat{border-radius:var(--r);border:3px solid var(--black);padding:24px;box-shadow:4px 4px 0 var(--black)}
+.planner-stat.s1{background:var(--orange)}
+.planner-stat.s2{background:var(--yellow)}
+.ps-num{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1}
+.ps-lbl{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.65;margin-top:4px}
+
+/* PLAN TABS */
+.plan-tabs{display:flex;border-bottom:3px solid var(--black);background:var(--white);padding:0 28px;gap:0;margin-top:24px}
+.ptab{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#888;padding:14px 20px;border:none;border-bottom:4px solid transparent;background:none;cursor:pointer;transition:all 0.14s;margin-bottom:-3px}
+.ptab:hover{color:var(--black)}.ptab.active{color:var(--orange);border-bottom-color:var(--orange)}
+.pview{display:none}.pview.active{display:block}
+
+/* PLAN GRID */
+.plan-inner{padding:24px 28px;display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.plan-sidebar-card{background:var(--white);border-radius:var(--r);border:3px solid var(--black);padding:24px;position:sticky;top:168px;box-shadow:4px 4px 0 var(--black)}
+.plan-sidebar-title{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:20px}
+.budget-block{margin-bottom:20px}
+.budget-lbl{font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#888;margin-bottom:8px}
+.budget-row{display:flex;align-items:center;gap:6px;background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);padding:8px 14px}
+.budget-sign{font-family:var(--mono);font-size:22px;font-weight:700;color:#bbb}
+.budget-inp{background:none;border:none;outline:none;font-family:var(--mono);font-size:22px;font-weight:700;color:var(--black);width:100%}
+.spend-bar-wrap{margin:12px 0 6px}
+.spend-bar-bg{height:8px;background:var(--bg);border-radius:99px;border:2px solid var(--black);overflow:hidden}
+.spend-bar-fill{height:100%;background:var(--orange);border-radius:99px;transition:width 0.4s}
+.spend-nums{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;font-weight:700;margin-top:5px}
+.spend-used{color:var(--black)}.spend-left{color:#888}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:2px solid var(--bg)}
+.sum-row:last-child{border-bottom:none}
+.sum-lbl{font-size:12px;color:#888}
+.sum-val{font-family:var(--mono);font-size:16px;font-weight:700}
+.plan-action-wrap{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.pab{width:100%;padding:12px;border-radius:var(--r-sm);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border:2px solid var(--black);transition:all 0.14s}
+.pab.p{background:var(--black);color:var(--yellow)}.pab.p:hover{background:var(--orange);color:var(--black)}
+.pab.s{background:var(--bg);color:var(--black)}.pab.s:hover{background:var(--yellow)}
+
+/* WEEK CONTENT */
+.day-block{margin-bottom:20px}
+.day-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.day-head-name{font-family:var(--mono);font-size:18px;font-weight:700}
+.day-total-pill{background:var(--orange);color:var(--black);font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;border:2px solid var(--black)}
+.plan-item-row{background:var(--white);border-radius:var(--r-sm);border:2px solid var(--black);display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:8px;box-shadow:2px 2px 0 var(--black)}
+.pir-logo{width:36px;height:36px;border-radius:8px;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;flex-shrink:0}
+.pir-body{flex:1;min-width:0}
+.pir-name{font-size:14px;font-weight:600;color:var(--black)}
+.pir-venue{font-size:10px;color:#888;margin-top:2px}
+.pir-price{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--orange);flex-shrink:0}
+.pir-rm{background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);color:var(--black);cursor:pointer;font-size:12px;padding:5px 9px;line-height:1;transition:all 0.14s;flex-shrink:0;font-weight:700}
+.pir-rm:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+.plan-empty-state{background:var(--white);border-radius:var(--r);border:3px solid var(--black);padding:56px 32px;text-align:center;box-shadow:4px 4px 0 var(--black)}
+.plan-empty-state span{font-size:40px;display:block;margin-bottom:12px}
+.plan-empty-state p{font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:6px}
+.plan-empty-state small{font-size:13px;color:#888}
+
+/* CALENDAR */
+.cal-outer{padding:0}
+.cal-nav-row{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.cal-month-lbl{font-family:var(--mono);font-size:22px;font-weight:700;flex:1}
+.cal-arr{background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);padding:7px 16px;font-size:14px;cursor:pointer;font-weight:700;transition:all 0.14s}
+.cal-arr:hover{background:var(--yellow)}
+.cal-grid-outer{border:3px solid var(--black);border-radius:var(--r);overflow:hidden;box-shadow:4px 4px 0 var(--black);background:var(--white)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-head-c{background:var(--black);color:var(--yellow);padding:9px 6px;text-align:center;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.12em;border-right:2px solid #333}
+.cal-head-c:last-child{border-right:none}
+.cal-cell{padding:8px;min-height:84px;border-bottom:2px solid var(--bg);border-right:2px solid var(--bg);cursor:pointer;transition:background 0.14s;position:relative}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell.other{background:var(--bg);opacity:0.4}
+.cal-cell:hover{background:var(--yellow)}
+.cal-cell.today{background:#fff8e8}
+.cal-cell.today .cal-dn{color:var(--orange);font-weight:700}
+.cal-cell.has{background:#edf9f2}
+.cal-dn{font-size:12px;font-weight:600;color:#888;margin-bottom:4px}
+.cal-pip{font-size:8px;font-weight:700;background:var(--orange);color:var(--black);border-radius:3px;padding:2px 5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.cal-total{position:absolute;bottom:4px;right:5px;font-family:var(--mono);font-size:8px;font-weight:700;color:var(--orange)}
+
+/* HISTORY */
+.hist-card{background:var(--white);border-radius:var(--r);border:3px solid var(--black);margin-bottom:12px;overflow:hidden;box-shadow:3px 3px 0 var(--black)}
+.hist-head-row{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;transition:background 0.14s}
+.hist-head-row:hover{background:var(--yellow)}
+.hist-lbl{font-family:var(--mono);font-size:16px;font-weight:700}
+.hist-meta{font-size:11px;color:#888;margin-top:2px}
+.hist-body{display:none;border-top:3px solid var(--black);padding:16px 20px;background:var(--bg)}
+.hist-body.open{display:block}
+.hist-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #ddd}
+.hist-row:last-child{border-bottom:none}
+.hist-day-lbl{font-family:var(--mono);font-size:9px;font-weight:700;color:#888;min-width:28px;text-transform:uppercase}
+.hist-name{font-size:13px;font-weight:600;flex:1}
+.hist-venue{font-size:10px;color:#aaa}
+.hist-price{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--orange)}
+
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+.overlay.open{display:flex}
+.mbox{background:var(--white);border-radius:var(--r);border:3px solid var(--black);max-width:420px;width:100%;box-shadow:6px 6px 0 var(--black);overflow:hidden}
+.mbox.wide{max-width:500px}
+.m-head{padding:22px 24px 18px;border-bottom:3px solid var(--black);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.m-title{font-family:var(--mono);font-size:20px;font-weight:700}
+.m-sub{font-size:11px;color:#888;margin-top:3px;font-weight:500}
+.m-close{background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);color:var(--black);cursor:pointer;padding:6px 10px;font-size:14px;font-weight:700;line-height:1;flex-shrink:0;transition:all 0.14s}
+.m-close:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+.m-body{padding:22px 24px}
+.day-pick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:18px}
+.dp-btn{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:12px 6px;border-radius:var(--r-sm);background:var(--bg);border:2px solid var(--black);color:#aaa;cursor:default;text-align:center;transition:all 0.14s}
+.dp-btn.avail{color:var(--black);cursor:pointer}.dp-btn.avail:hover{background:var(--yellow)}
+.dp-btn.sel{background:var(--orange);color:var(--black);border-color:var(--black)}
+.m-confirm{width:100%;padding:13px;background:var(--black);color:var(--yellow);border:2px solid var(--black);border-radius:var(--r-sm);cursor:pointer;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.14s}
+.m-confirm:hover:not(:disabled){background:var(--orange);color:var(--black)}
+.m-confirm:disabled{background:var(--bg);color:#bbb;border-color:#ddd;cursor:default}
+.share-box{background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);padding:16px;font-size:11px;line-height:1.8;white-space:pre-wrap;max-height:210px;overflow-y:auto;margin-bottom:16px;font-family:var(--mono);color:var(--black)}
+.share-btns{display:flex;gap:8px}
+.sh-btn{flex:1;padding:11px;border-radius:var(--r-sm);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border:2px solid var(--black);transition:all 0.14s}
+.sh-btn.o{background:var(--bg);color:var(--black)}.sh-btn.o:hover{background:var(--yellow)}
+.sh-btn.f{background:var(--orange);color:var(--black)}.sh-btn.f:hover{background:var(--black);color:var(--yellow)}
+/* LOGO MODAL */
+.drop-zone{border:3px dashed var(--black);border-radius:var(--r-sm);padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.14s;margin-bottom:16px;background:var(--bg)}
+.drop-zone:hover,.drop-zone.over{border-color:var(--orange);background:var(--yellow)}
+.dz-icon{font-size:24px;display:block;margin-bottom:6px}
+.dz-p{font-size:12px;color:#888}
+.clr-lbl{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#888;margin-bottom:8px}
+.swatches{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.sw{width:26px;height:26px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:border-color 0.14s}
+.sw.sel{border-color:var(--black)}
+.sw-plus{width:26px;height:26px;border-radius:50%;border:2px solid #bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#aaa;position:relative;overflow:hidden}
+.sw-plus input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.logo-prev-wrap{display:none;margin-bottom:14px}
+.logo-prev-lbl{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#888;margin-bottom:7px}
+.logo-prev-box{background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);padding:16px;display:flex;align-items:center;justify-content:center;min-height:72px}
+.logo-prev-box svg,.logo-prev-box img{max-width:90px;max-height:60px;object-fit:contain}
+.logo-apply-btn{width:100%;padding:12px;background:var(--orange);color:var(--black);border:2px solid var(--black);border-radius:var(--r-sm);cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;display:none;transition:all 0.14s}
+.logo-apply-btn:hover{background:var(--black);color:var(--yellow)}
+
+@media(max-width:1024px){
+  nav{padding:0 16px;gap:12px}
+  .hero{grid-template-columns:1fr 1fr;padding:16px}
+  .hero-stat3-cell{grid-column:auto;grid-row:auto}
+  .browse-main{grid-template-columns:1fr}
+  .map-sidebar-col{display:none}
+  .specials-grid{grid-template-columns:1fr}
+  .venues-section,.footer{padding-left:16px;padding-right:16px}
+  .plan-inner{grid-template-columns:1fr;padding:16px}
+  .plan-sidebar-card{position:static}
+  .filter-strip{top:100px;padding:12px 16px}
+  .planner-hero{padding:16px 16px 0}
+  .planner-hero-grid{grid-template-columns:1fr 1fr}
+  .plan-tabs,.plan-inner{padding-left:16px;padding-right:16px}
+  .map-body{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker-inner"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('browse');return false">specials<span class="nav-logo-dot"></span></a>
+  <div class="nav-links">
+    <button class="nav-btn active" id="nb-browse" onclick="showPage('browse')">Browse</button>
+    <button class="nav-btn" id="nb-map" onclick="showPage('map')">Map</button>
+    <button class="nav-btn" id="nb-planner" onclick="showPage('planner')">My Week<span class="nav-badge" id="plan-badge" style="display:none"></span></button>
+    <button class="nav-cta" onclick="showPage('planner')">Plan →</button>
+  </div>
+</nav>
+
+<!-- ════════════ BROWSE PAGE ════════════ -->
+<div id="page-browse" class="page active">
+
+<section class="hero">
+  <!-- Title cell -->
+  <div class="hero-title-cell">
+    <div style="font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;opacity:0.65;margin-bottom:14px">Adelaide · Updated weekly</div>
+    <div class="hero-h1">Find great<br>dining deals.</div>
+    <div class="hero-sub" style="margin-top:14px">Every special, every suburb — plan a full week of eating out without the guesswork.</div>
+  </div>
+
+  <!-- FINDER TILE — col 3, rows 1–2 -->
+  <div class="hero-finder">
+    <div>
+      <div class="hero-finder-title">Find a special</div>
+      <div class="hero-finder-sub">Filter by area, day &amp; food type</div>
+    </div>
+
+    <!-- Area -->
+    <div class="hf-field">
+      <div class="hf-label">Area</div>
+      <div class="hf-select-wrap">
+        <select class="hf-select" id="hf-area" onchange="heroDropChange()">
+          <option value="">All areas</option>
+          <option value="CBD">CBD</option>
+          <option value="North">North</option>
+          <option value="NorthEast">North East</option>
+          <option value="East">East</option>
+          <option value="South">South</option>
+          <option value="SouthWest">South West</option>
+          <option value="West">West</option>
+          <option value="Hills">Hills</option>
+          <option value="Coast">Coast</option>
+        </select>
+        <span class="hf-arrow">▾</span>
+      </div>
+    </div>
+
+    <!-- Day -->
+    <div class="hf-field">
+      <div class="hf-label">Day</div>
+      <div class="hf-select-wrap">
+        <select class="hf-select" id="hf-day" onchange="heroDropChange()">
+          <option value="">Any day</option>
+          <option value="monday">Monday</option>
+          <option value="tuesday">Tuesday</option>
+          <option value="wednesday">Wednesday</option>
+          <option value="thursday">Thursday</option>
+          <option value="friday">Friday</option>
+          <option value="saturday">Saturday</option>
+          <option value="sunday">Sunday</option>
+        </select>
+        <span class="hf-arrow">▾</span>
+      </div>
+    </div>
+
+    <!-- Food type -->
+    <div class="hf-field">
+      <div class="hf-label">Food type</div>
+      <div class="hf-select-wrap">
+        <select class="hf-select" id="hf-food" onchange="heroDropChange()">
+          <option value="">Any food</option>
+          <option value="schnitzel">Schnitzel</option>
+          <option value="parmi">Parmi</option>
+          <option value="burger">Burger</option>
+          <option value="steak">Steak</option>
+          <option value="pizza">Pizza</option>
+          <option value="pasta">Pasta</option>
+          <option value="tacos">Tacos</option>
+          <option value="wings">Wings</option>
+          <option value="seafood">Seafood</option>
+          <option value="roast">Roast</option>
+          <option value="brunch">Brunch</option>
+          <option value="curry">Curry</option>
+          <option value="drinks">Drinks</option>
+        </select>
+        <span class="hf-arrow">▾</span>
+      </div>
+    </div>
+
+    <!-- Session -->
+    <div class="hf-field">
+      <div class="hf-label">Meal time</div>
+      <div class="hf-select-wrap">
+        <select class="hf-select" id="hf-session" onchange="heroDropChange()">
+          <option value="">Any time</option>
+          <option value="lunch">🕛 Lunch (11am – 3pm)</option>
+          <option value="dinner">🍽 Dinner (5pm – late)</option>
+          <option value="drinks">🍻 Drinks &amp; Happy Hour</option>
+          <option value="brunch">☀️ Brunch &amp; Bottomless</option>
+        </select>
+        <span class="hf-arrow">▾</span>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="hf-field">
+      <div class="hf-label">Search</div>
+      <div class="hf-search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="kw-inp" placeholder="Restaurant or suburb…" oninput="heroDropChange()">
+      </div>
+    </div>
+
+    <!-- Active filter pills -->
+    <div class="hf-active" id="hf-active-pills"></div>
+
+    <!-- Find button -->
+    <button class="hf-btn" onclick="heroFind()">Find specials ↓</button>
+  </div>
+
+  <!-- CTA cell: col 1-3, row 2 -->
+  <div class="hero-cta-cell">
+    <button class="hero-cta-btn a" onclick="heroFind()">See all specials ↓</button>
+    <button class="hero-cta-btn b" onclick="showPage('planner')">My week →</button>
+  </div>
+</section>
+
+<!-- FILTER STRIP -->
+<div class="filter-strip" id="filter-strip">
+  <div class="filter-row">
+    <div class="fg">
+      <div class="fg-lbl">Area</div>
+      <div class="chips" id="area-chips">
+        <button class="chip on" onclick="setArea('',this)">All</button>
+        <button class="chip" onclick="setArea('CBD',this)">CBD</button>
+        <button class="chip" onclick="setArea('North',this)">North</button>
+        <button class="chip" onclick="setArea('NorthEast',this)">NE</button>
+        <button class="chip" onclick="setArea('East',this)">East</button>
+        <button class="chip" onclick="setArea('South',this)">South</button>
+        <button class="chip" onclick="setArea('SouthWest',this)">SW</button>
+        <button class="chip" onclick="setArea('West',this)">West</button>
+        <button class="chip" onclick="setArea('Hills',this)">Hills</button>
+        <button class="chip" onclick="setArea('Coast',this)">Coast</button>
+      </div>
+    </div>
+    <div class="fdiv"></div>
+    <div class="fg">
+      <div class="fg-lbl">Day</div>
+      <div class="chips" id="day-chips">
+        <button class="chip on" onclick="setDay('',this)">All</button>
+        <button class="chip" onclick="setDay('monday',this)">Mon</button>
+        <button class="chip" onclick="setDay('tuesday',this)">Tue</button>
+        <button class="chip" onclick="setDay('wednesday',this)">Wed</button>
+        <button class="chip" onclick="setDay('thursday',this)">Thu</button>
+        <button class="chip" onclick="setDay('friday',this)">Fri</button>
+        <button class="chip" onclick="setDay('saturday',this)">Sat</button>
+        <button class="chip" onclick="setDay('sunday',this)">Sun</button>
+      </div>
+    </div>
+    <div class="fdiv"></div>
+    <div class="fg">
+      <div class="fg-lbl">Food type</div>
+      <div class="chips" id="food-chips">
+        <button class="chip on" onclick="setFood('',this)">All</button>
+        <button class="chip" onclick="setFood('schnitzel',this)">Schnitzel</button>
+        <button class="chip" onclick="setFood('parmi',this)">Parmi</button>
+        <button class="chip" onclick="setFood('burger',this)">Burger</button>
+        <button class="chip" onclick="setFood('steak',this)">Steak</button>
+        <button class="chip" onclick="setFood('pizza',this)">Pizza</button>
+        <button class="chip" onclick="setFood('pasta',this)">Pasta</button>
+        <button class="chip" onclick="setFood('tacos',this)">Tacos</button>
+        <button class="chip" onclick="setFood('wings',this)">Wings</button>
+        <button class="chip" onclick="setFood('seafood',this)">Seafood</button>
+        <button class="chip" onclick="setFood('roast',this)">Roast</button>
+        <button class="chip" onclick="setFood('brunch',this)">Brunch</button>
+        <button class="chip" onclick="setFood('curry',this)">Curry</button>
+        <button class="chip" onclick="setFood('drinks',this)">Drinks</button>
+      </div>
+    </div>
+    <div class="fdiv"></div>
+    <div class="fg">
+      <div class="fg-lbl">Meal time</div>
+      <div class="chips" id="session-chips">
+        <button class="chip on" onclick="setSess('',this)">Any time</button>
+        <button class="chip" onclick="setSess('lunch',this)">Lunch</button>
+        <button class="chip" onclick="setSess('dinner',this)">Dinner</button>
+        <button class="chip" onclick="setSess('drinks',this)">Drinks</button>
+        <button class="chip" onclick="setSess('brunch',this)">Brunch</button>
+      </div>
+    </div>
+    <div class="fdiv"></div>
+    <div class="fg">
+      <div class="fg-lbl">Search</div>
+      <div class="fsearch">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input placeholder="Restaurant or deal…" id="kw-inp" oninput="applyFilters()">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSE LAYOUT -->
+<div class="browse-main">
+  <div class="specials-col">
+    <div class="spec-header">
+      <span class="spec-count" id="spec-count">— specials</span>
+      <span class="spec-hint">Tap logo to upload SVG</span>
+    </div>
+    <div class="specials-grid" id="specials-grid"></div>
+  </div>
+  <div class="map-sidebar-col">
+    <div class="map-sidebar-header">
+      <span class="map-sidebar-title">Venues</span>
+      <button class="map-open-btn" onclick="showPage('map')">Open Map →</button>
+    </div>
+    <div class="venue-list" id="venue-sidebar-list"></div>
+  </div>
+</div>
+
+<!-- VENUES -->
+<section class="venues-section" id="venues-sec">
+  <div class="section-header">
+    <div><div class="section-eyebrow">On the guide</div><div class="section-h2">Venues</div></div>
+  </div>
+  <div class="venues-bento" id="venues-bento"></div>
+</section>
+
+<footer>
+  <div class="footer-logo">specials.</div>
+  <p>Prices approximate · Always verify with venue before visiting</p>
+</footer>
+</div>
+
+<!-- ════════════ MAP PAGE ════════════ -->
+<div id="page-map" class="page">
+  <div class="map-page-inner">
+    <div class="map-page-header">
+      <div>
+        <div class="map-page-title">Adelaide Specials Map</div>
+        <div class="map-page-sub">Find specials near you — filter by area below</div>
+        <div class="map-area-filter" id="map-area-filter"></div>
+      </div>
+    </div>
+    <div class="map-body">
+      <div class="map-list-panel">
+        <div class="map-list-head">VENUES &amp; SPECIALS</div>
+        <div id="map-venue-entries"></div>
+      </div>
+      <div class="map-embed-wrap">
+        <div class="map-placeholder-big">
+          <div class="icon">📍</div>
+          <h2>Interactive Map</h2>
+          <p>Enter your Google Maps Embed API key below to activate the live map. The venue list on the left is always available.</p>
+          <div class="map-api-steps">
+            <h3>Activate the map</h3>
+            <ol>
+              <li>Go to <a href="https://console.cloud.google.com/apis/library/maps-embed-backend.googleapis.com" target="_blank">Google Cloud Console</a></li>
+              <li>Enable the <strong>Maps Embed API</strong></li>
+              <li>Create an API key under Credentials</li>
+              <li>Paste it below</li>
+            </ol>
+            <input class="map-api-input" id="api-key-input" placeholder="AIzaSy…  paste your API key here">
+            <button class="map-api-btn" onclick="activateMap()">Activate map →</button>
+          </div>
+        </div>
+        <iframe id="map-iframe" src="" style="display:none;width:100%;height:100%;border:none;filter:saturate(0.9)"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PLANNER PAGE ════════════ -->
+<div id="page-planner" class="page planner-page">
+  <div class="planner-hero">
+    <div class="planner-hero-grid">
+      <div class="planner-hero-main">
+        <div style="font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:12px">Your dining plan</div>
+        <h1>Week<br>Planner.</h1>
+        <p style="margin-top:12px">Build your week, track spend, save history, share with mates.</p>
+      </div>
+      <div class="planner-stat s1">
+        <div class="ps-num" id="ps-meals">0</div>
+        <div class="ps-lbl">Meals planned</div>
+      </div>
+      <div class="planner-stat s2">
+        <div class="ps-num" id="ps-spend">$0</div>
+        <div class="ps-lbl">Total spend</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-tabs">
+    <button class="ptab active" onclick="showPTab('current',this)">Current Week</button>
+    <button class="ptab" onclick="showPTab('calendar',this)">Calendar</button>
+    <button class="ptab" onclick="showPTab('history',this)">History</button>
+  </div>
+
+  <!-- CURRENT WEEK -->
+  <div id="pview-current" class="pview active">
+    <div class="plan-inner">
+      <div id="week-content"></div>
+      <div class="plan-sidebar-card">
+        <div class="plan-sidebar-title">Summary</div>
+        <div class="budget-block">
+          <div class="budget-lbl">Weekly budget</div>
+          <div class="budget-row"><span class="budget-sign">$</span><input type="number" class="budget-inp" id="bgt-inp" value="150" oninput="renderCurrent()"></div>
+          <div class="spend-bar-wrap">
+            <div class="spend-bar-bg"><div class="spend-bar-fill" id="spend-fill" style="width:0%"></div></div>
+            <div class="spend-nums"><span class="spend-used" id="spend-used">$0 spent</span><span class="spend-left" id="spend-left-lbl">$150 left</span></div>
+          </div>
+        </div>
+        <div id="sum-rows"></div>
+        <div class="plan-action-wrap">
+          <button class="pab p" onclick="openShare()">Share my plan</button>
+          <button class="pab s" onclick="exportPlan()">Download .txt</button>
+          <button class="pab s" onclick="saveHistory()">Save to history</button>
+        </div>
+        <p style="font-size:10px;color:#bbb;text-align:center;margin-top:12px;font-family:var(--mono)">Browse & tap ADD to build</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="pview-calendar" class="pview">
+    <div class="plan-inner">
+      <div>
+        <div class="cal-nav-row">
+          <button class="cal-arr" onclick="prevMonth()">←</button>
+          <div class="cal-month-lbl" id="cal-month-lbl"></div>
+          <button class="cal-arr" onclick="nextMonth()">→</button>
+        </div>
+        <div class="cal-grid-outer">
+          <div class="cal-grid">
+            <div class="cal-head-c">Mon</div><div class="cal-head-c">Tue</div><div class="cal-head-c">Wed</div><div class="cal-head-c">Thu</div><div class="cal-head-c">Fri</div><div class="cal-head-c">Sat</div><div class="cal-head-c">Sun</div>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+      </div>
+      <div class="plan-sidebar-card" style="position:sticky;top:168px">
+        <div class="plan-sidebar-title" id="cal-sidebar-title">Select a day</div>
+        <div id="cal-detail"><p style="font-size:13px;color:#aaa;font-family:var(--mono)">Click any date to see meals</p></div>
+        <div style="border-top:2px solid var(--bg);padding-top:18px;margin-top:16px">
+          <div class="budget-lbl">Monthly budget</div>
+          <div class="budget-row"><span class="budget-sign">$</span><input type="number" class="budget-inp" id="mbgt-inp" value="600" oninput="renderCalendar()"></div>
+          <div class="spend-bar-wrap">
+            <div class="spend-bar-bg"><div class="spend-bar-fill" id="mspend-fill" style="width:0%"></div></div>
+            <div class="spend-nums"><span class="spend-used" id="mspend-lbl">$0 planned</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="pview-history" class="pview">
+    <div class="plan-inner">
+      <div id="history-content"></div>
+      <div class="plan-sidebar-card">
+        <div class="plan-sidebar-title">About history</div>
+        <p style="font-size:13px;color:#888;line-height:1.7">Every week you save appears here. Tap to expand and review meals. Hit Reload to pull it back into your current planner.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:24px">
+    <div class="footer-logo">specials.</div>
+    <p>Prices approx · Always verify with venue</p>
+  </footer>
+</div>
+
+<!-- DAY PICKER MODAL -->
+<div class="overlay" id="day-modal" onclick="if(event.target===this)closeModal()">
+  <div class="mbox">
+    <div class="m-head">
+      <div><div class="m-title" id="m-title-name"></div><div class="m-sub" id="m-title-venue"></div></div>
+      <button class="m-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="m-body">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#888;margin-bottom:12px">Choose a day</div>
+      <div class="day-pick-grid" id="day-pick-grid"></div>
+      <button class="m-confirm" id="m-confirm" onclick="confirmAdd()" disabled>Add to planner</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="overlay" id="share-modal" onclick="if(event.target===this)closeShare()">
+  <div class="mbox wide">
+    <div class="m-head">
+      <div><div class="m-title">Share your plan</div><div class="m-sub">Copy or send</div></div>
+      <button class="m-close" onclick="closeShare()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="share-box" id="share-text-box"></div>
+      <div class="share-btns">
+        <button class="sh-btn o" onclick="copyShare()">Copy</button>
+        <button class="sh-btn f" onclick="shareNative()">Share →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGO MODAL -->
+<div class="overlay" id="logo-modal" onclick="if(event.target===this)closeLogo()">
+  <div class="mbox">
+    <div class="m-head">
+      <div><div class="m-title" id="logo-modal-title">Upload logo</div><div class="m-sub">SVG will be recoloured to monotone</div></div>
+      <button class="m-close" onclick="closeLogo()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('svg-inp').click()">
+        <span class="dz-icon">⬆</span>
+        <p class="dz-p">Click or drag SVG / PNG logo</p>
+        <input type="file" id="svg-inp" accept=".svg,.png,image/svg+xml,image/png" style="display:none" onchange="handleFile(event)">
+      </div>
+      <div class="clr-lbl">Monotone colour</div>
+      <div class="swatches">
+        <div class="sw sel" style="background:#0f0f0f" onclick="pickCol('#0f0f0f',this)"></div>
+        <div class="sw" style="background:#f25c05" onclick="pickCol('#f25c05',this)"></div>
+        <div class="sw" style="background:#1a5cf5" onclick="pickCol('#1a5cf5',this)"></div>
+        <div class="sw" style="background:#1ec96a" onclick="pickCol('#1ec96a',this)"></div>
+        <div class="sw" style="background:#8b45f5" onclick="pickCol('#8b45f5',this)"></div>
+        <div class="sw" style="background:#f5c800" onclick="pickCol('#f5c800',this)"></div>
+        <div class="sw" style="background:#ffffff;border:2px solid #ddd" onclick="pickCol('#ffffff',this)"></div>
+        <div class="sw-plus">+<input type="color" value="#0f0f0f" oninput="pickCol(this.value,null,true)"></div>
+      </div>
+      <div class="logo-prev-wrap" id="logo-prev-wrap">
+        <div class="logo-prev-lbl">Preview</div>
+        <div class="logo-prev-box" id="logo-prev-box"></div>
+      </div>
+      <button class="logo-apply-btn" id="logo-apply-btn" onclick="applyLogo()">Apply logo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const DS={monday:"Mon",tuesday:"Tue",wednesday:"Wed",thursday:"Thu",friday:"Fri",saturday:"Sat",sunday:"Sun"};
+const DF={monday:"Monday",tuesday:"Tuesday",wednesday:"Wednesday",thursday:"Thursday",friday:"Friday",saturday:"Saturday",sunday:"Sunday"};
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const CARD_COLORS=["c-orange","c-yellow","c-blue","c-purple","c-green","c-red","c-pink","c-bg","c-yellow","c-orange"];
+const AREA_MAP={
+  CBD:["Adelaide CBD","Adelaide"],
+  North:["North Adelaide","Prospect","Sefton Park","Clearview","Northfield","Pennington"],
+  NorthEast:["Modbury","Tea Tree Gully","Salisbury","Collinswood","Marryatville"],
+  East:["Norwood","Magill","Burnside","Kensington","Marryatville","Parkside"],
+  South:["Mitcham","Blackwood","Morphett Vale","Mitchell Park","Oaklands Park","Unley"],
+  SouthWest:["Marion","Glenelg","Brighton","Seacliff"],
+  West:["Mile End","Henley Beach","Fulham","Seaton","West Lakes Shore","Brompton","Thebarton"],
+  Hills:["Balhannah","Bridgewater","Adelaide Hills"],
+  Coast:["Henley Beach","Glenelg","Seaford","Brighton","Semaphore"],
+};
+
+const RESTAURANTS=[
+  {id:"r1",name:"Cumberland Arms Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Waymouth St"},
+  {id:"r2",name:"General Havelock Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"162 Hutt St"},
+  {id:"r3",name:"Union Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"70 Waymouth St"},
+  {id:"r4",name:"Gilbert Street Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"88 Gilbert St"},
+  {id:"r5",name:"The Laneway Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"29 Ebenezer Place"},
+  {id:"r6",name:"Benjamin On Franklin",suburb:"Adelaide CBD",cuisine:"Bar",addr:"148 Franklin St"},
+  {id:"r7",name:"Lady Burra Brewhouse",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"3 Nile St"},
+  {id:"r8",name:"Duke of Brunswick Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"207 Gilbert St"},
+  {id:"r9",name:"Duke of York Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"81-83 Grenfell St"},
+  {id:"r10",name:"Rob Roy Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"Corner Grenfell & Pulteney St"},
+  {id:"r11",name:"The Austral",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Rundle St"},
+  {id:"r12",name:"Coopers Alehouse",suburb:"Adelaide CBD",cuisine:"Australian",addr:"226 Rundle St"},
+  {id:"r13",name:"PJ O'Briens",suburb:"Adelaide CBD",cuisine:"Irish",addr:"Grenfell St"},
+  {id:"r14",name:"Norwood Hotel",suburb:"Norwood",cuisine:"Australian",addr:"97 The Parade"},
+  {id:"r15",name:"Alma Tavern",suburb:"Norwood",cuisine:"Australian",addr:"66 Magill Rd"},
+  {id:"r16",name:"The Kensi",suburb:"Marryatville",cuisine:"Australian",addr:"23 Regent St"},
+  {id:"r17",name:"Feathers Hotel",suburb:"Burnside",cuisine:"Australian",addr:"Greenhill Rd"},
+  {id:"r18",name:"Parkside Hotel",suburb:"Parkside",cuisine:"Australian",addr:"142 Glen Osmond Rd"},
+  {id:"r19",name:"Sportys",suburb:"Fullarton",cuisine:"Australian",addr:"150 Glen Osmond Rd"},
+  {id:"r20",name:"Tower Hotel",suburb:"Magill",cuisine:"Australian",addr:"621 Magill Rd"},
+  {id:"r21",name:"Hampstead Hotel",suburb:"Clearview",cuisine:"Australian",addr:"184 Hampstead Rd"},
+  {id:"r22",name:"Enfield Hotel",suburb:"Clearview",cuisine:"Australian",addr:"184 Hampstead Rd"},
+  {id:"r23",name:"Northern Tavern",suburb:"Sefton Park",cuisine:"Australian",addr:"269 Main N Rd"},
+  {id:"r24",name:"Windmill Hotel",suburb:"Prospect",cuisine:"Australian",addr:"94 Main N Rd"},
+  {id:"r25",name:"Hecho En Mexico",suburb:"Prospect",cuisine:"Mexican",addr:"Prospect Rd"},
+  {id:"r26",name:"Cathedral Hotel",suburb:"North Adelaide",cuisine:"Australian",addr:"45 Kermode St"},
+  {id:"r27",name:"Lord Melbourne Hotel",suburb:"North Adelaide",cuisine:"Australian",addr:"63 Melbourne St"},
+  {id:"r28",name:"Grand Junction Tavern",suburb:"Pennington",cuisine:"Australian",addr:"174 Grand Junction Rd"},
+  {id:"r29",name:"Excelsior Hotel",suburb:"Brompton",cuisine:"Australian",addr:"110 Coglin St"},
+  {id:"r30",name:"Lockleys Hotel",suburb:"Fulham",cuisine:"Australian",addr:"493 Henley Beach Rd"},
+  {id:"r31",name:"Mile End Hotel",suburb:"Mile End",cuisine:"Australian",addr:"30 Henley Beach Rd"},
+  {id:"r32",name:"Ambra Spirits",suburb:"Thebarton",cuisine:"Italian",addr:""},
+  {id:"r33",name:"Bartley Hotel",suburb:"West Lakes Shore",cuisine:"Australian",addr:"Bartley Terrace"},
+  {id:"r34",name:"Seaton Hotel",suburb:"Seaton",cuisine:"Australian",addr:"253 Tapleys Hill Rd"},
+  {id:"r35",name:"Cremorne Hotel",suburb:"Unley",cuisine:"Australian",addr:"207 Unley Rd"},
+  {id:"r36",name:"Belair Hotel",suburb:"Mitcham",cuisine:"Australian",addr:""},
+  {id:"r37",name:"Gully Public House",suburb:"Adelaide Hills",cuisine:"Australian",addr:""},
+  {id:"r38",name:"Aldgate Pump Hotel",suburb:"Adelaide Hills",cuisine:"Australian",addr:"Aldgate"},
+  {id:"r39",name:"Marion Hotel",suburb:"Mitchell Park",cuisine:"Australian",addr:"849 Marion Rd"},
+  {id:"r40",name:"Emu Hotel",suburb:"Morphett Vale",cuisine:"Australian",addr:"132 Main South Rd"},
+  {id:"r41",name:"TGI Fridays",suburb:"Oaklands Park",cuisine:"American",addr:"293 Diagonal Rd"},
+  {id:"r42",name:"Seamore's",suburb:"Henley Beach",cuisine:"Italian",addr:"255 Esplanade"},
+  {id:"r43",name:"Henley Beach Hotel",suburb:"Henley Beach",cuisine:"Australian",addr:"157 Esplanade"},
+  {id:"r44",name:"Largs Pier Hotel",suburb:"Largs Bay",cuisine:"Australian",addr:"Esplanade"},
+  {id:"r45",name:"Beach Hotel Seaford",suburb:"Seaford",cuisine:"Australian",addr:"Griffiths Drive"},
+  {id:"r46",name:"Beach Burrito Co",suburb:"Glenelg",cuisine:"Mexican",addr:"56 Jetty Rd"},
+  {id:"r47",name:"Mismatch Brewing Co",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"55 Nile St"},
+  {id:"r48",name:"Bandit Pizza",suburb:"Adelaide CBD",cuisine:"Italian",addr:""},
+  {id:"r49",name:"Good Gilbert",suburb:"Adelaide CBD",cuisine:"Modern Australian",addr:"Gilbert St"},
+  {id:"r50",name:"Fleet Street Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"Fleet St"},
+  {id:"r51",name:"Grunthal Brewhouse",suburb:"Adelaide Hills",cuisine:"Brewery",addr:""},
+  {id:"r52",name:"Bar Lune",suburb:"Adelaide CBD",cuisine:"Wine Bar",addr:""},
+  {id:"r53",name:"Gilbert Street Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"88 Gilbert St"},
+  {id:"r54",name:"La Scala Cafe",suburb:"Adelaide CBD",cuisine:"Italian",addr:""},
+];
+
+// session: "lunch" = 11am-3pm, "dinner" = 5pm-late, "drinks" = happy hour/bar only, "brunch" = morning/midday
+const SPECIALS=[
+  // ── CBD FOOD ──
+  {id:"s1",rid:"r1",name:"Schnitzel or Parmi Tuesday",desc:"$15 parmy or schnitzel with any drink purchase. Lunch or dinner",price:15,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s2",rid:"r1",name:"$20 Rump Steak Nightly",desc:"$20 rump steak every night when you purchase a drink",price:20,food:"steak",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"9pm"},
+  {id:"s3",rid:"r1",name:"Fish n' Chips Monday",desc:"Serve of fish n chips $15 with any drink — all day Monday",price:15,food:"seafood",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s4",rid:"r1",name:"Sunday Parmy",desc:"Chicken parmy $15 when you buy a drink on Sundays",price:15,food:"parmi",session:"dinner",days:["sunday"],from:"12pm",until:"8pm"},
+  {id:"s5",rid:"r2",name:"Schnitzel Monday CBD",desc:"Just $15 schnitzel, chips, side salad and sauce lunch or dinner",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s6",rid:"r2",name:"Burger Thursday CBD",desc:"$17 burgers for lunch Monday, $17 schnitzels Tuesday lunch",price:17,food:"burger",session:"lunch",days:["monday"],from:"12pm",until:"3pm"},
+  {id:"s7",rid:"r2",name:"Stone Grill Rump Wednesday",desc:"$26 250g Stone Grill Rump Steak — lunch or dinner",price:26,food:"steak",session:"lunch",days:["wednesday"],from:"12pm",until:"3pm"},
+  {id:"s8",rid:"r2",name:"Wings Tuesday CBD",desc:"Two kilos of wings for $15 — Tuesday special",price:15,food:"wings",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s9",rid:"r3",name:"Parmi & Pint Night",desc:"Chicken or Beef Parmi with core pint on tap for $25",price:25,food:"parmi",session:"dinner",days:["monday","tuesday"],from:"5pm",until:"9pm"},
+  {id:"s10",rid:"r3",name:"Burger Lunch Union",desc:"Union Burger or Chicken Avocado Burger with chips $20",price:20,food:"burger",session:"lunch",days:["monday","tuesday"],from:"12pm",until:"3pm"},
+  {id:"s11",rid:"r4",name:"Pasta Monday CBD",desc:"$20 pasta lunch or dinner. Rotating house specials",price:20,food:"pasta",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s12",rid:"r4",name:"Pizza Tuesday",desc:"Pizzas are $20 Tuesday. All day",price:20,food:"pizza",session:"dinner",days:["tuesday"],from:"11am",until:"10pm"},
+  {id:"s13",rid:"r4",name:"Wings Wednesday & Thursday",desc:"Kilo of best wings in town, 8 flavours — pre-order only",price:22,food:"wings",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
+  {id:"s14",rid:"r4",name:"Pizza & Pasta Wed Dinner",desc:"Entrée, Pasta and a Cocktail $49 every Wednesday and Thursday",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
+  {id:"s15",rid:"r5",name:"Pardon the Bun",desc:"One burger, endless fries for $20 — Tuesday special",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"10pm"},
+  {id:"s16",rid:"r5",name:"Happy Hour Pizza & Games",desc:"$9 pizzas, $7 games, $10 pint specials",price:9,food:"pizza",session:"drinks",days:["wednesday","thursday","friday"],from:"4pm",until:"7pm"},
+  {id:"s17",rid:"r5",name:"Limoncello Spritz Hour",desc:"Limoncello Spritz just $12 during Spritz Hour Wed–Sat",price:12,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday"],from:"5pm",until:"6pm"},
+  {id:"s18",rid:"r6",name:"$20 Cocktail Jugs 3–5pm",desc:"$20 cocktail jugs, selected beer jugs & bottles of Patrick Sparkling",price:20,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"5pm"},
+  {id:"s19",rid:"r6",name:"$7 Pints & $5 Wines 5–6pm",desc:"$7 pints, $5 select wines — Benjamin on Franklin",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"6pm"},
+  {id:"s20",rid:"r6",name:"Curry Tuesday Benjamin",desc:"Choice of four house-made curries $13 with any drink",price:13,food:"curry",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s21",rid:"r7",name:"Happy Hour Lady Burra",desc:"$8 house beers, wines & spirits for happy hour",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s22",rid:"r8",name:"Schnitzel Monday Duke",desc:"Chicken, beef or eggplant schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"5pm",until:"8:30pm"},
+  {id:"s23",rid:"r9",name:"Cheap Mains Monday",desc:"All mains $12.90 every Monday — except Porterhouse",price:12.9,food:"roast",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s24",rid:"r9",name:"$14.90 Mains With Drink",desc:"All mains $14.90 with drink purchase Mon–Thu lunch",price:14.9,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday"],from:"12pm",until:"2pm"},
+  {id:"s25",rid:"r9",name:"T-Bone Monday",desc:"400g T-bone with red wine jus and chips $19.90 all day",price:19.9,food:"steak",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s26",rid:"r10",name:"Buy 1 Get 1 Pasta Rob Roy",desc:"Get your second pasta free when you review on Google or Facebook",price:24,food:"pasta",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"9pm"},
+  {id:"s27",rid:"r11",name:"Burger & Beer Austral",desc:"Burger & Beer Deal $21 — great value at The Austral",price:21,food:"burger",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
+  {id:"s28",rid:"r12",name:"Coopers Pints Happy Hour",desc:"5pm–7pm $5 Coopers pints, $3.50 wine — Coopers Alehouse",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
+  {id:"s29",rid:"r13",name:"$14 Steak Night PJ's",desc:"$14 steak night with chef's choice of chips & salad",price:14,food:"steak",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
+  {id:"s30",rid:"r13",name:"Express Lunch PJ's",desc:"$15 express lunch with half pint, house wine or soft drink",price:15,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
+  {id:"s31",rid:"r47",name:"Pizzas & Jugs Sunday",desc:"$15 jugs and margherita pizzas every Sunday",price:15,food:"pizza",session:"brunch",days:["sunday"],from:"12pm",until:"6pm"},
+  {id:"s32",rid:"r48",name:"Cozzie Livs Mondays",desc:"Select pizzas $24.99, starters $19.99 and drinks $9.99 — Bandit",price:24.99,food:"pizza",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
+  {id:"s33",rid:"r48",name:"Pizza Mon & Tue",desc:"$15 pizzas all day Monday and Tuesday at Jimmy's",price:15,food:"pizza",session:"dinner",days:["monday","tuesday"],from:"12pm",until:"10pm"},
+  {id:"s34",rid:"r49",name:"3-Course Wed & Thu",desc:"3-course share menu $45pp Wed and Thu — Good Gilbert",price:45,food:"roast",session:"dinner",days:["wednesday","thursday"],from:"6pm",until:"9pm"},
+  {id:"s35",rid:"r52",name:"Golden Hour Cocktail Carafe",desc:"Cocktail carafe $25 during Golden Hour on Fridays",price:25,food:"drinks",session:"drinks",days:["friday"],from:"3pm",until:"5pm"},
+  {id:"s36",rid:"r53",name:"Pizza Wednesday CBD",desc:"Selected Pizzas $15 — Wednesday only",price:15,food:"pizza",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
+  {id:"s37",rid:"r54",name:"All-You-Can-Eat Pizza & Pasta",desc:"Unlimited pasta and pizza every Monday and Wednesday — book ahead",price:35,food:"pizza",session:"dinner",days:["monday","wednesday"],from:"6pm",until:"9pm"},
+  {id:"s38",rid:"r50",name:"Bottomless Brunch Fri–Sun",desc:"2hr bottomless cocktails with brunch bites. Sessions 11am–1pm and 2pm–4pm. $85pp",price:85,food:"brunch",session:"brunch",days:["friday","saturday","sunday"],from:"11am",until:"4pm"},
+  // ── NORWOOD & EAST ──
+  {id:"s39",rid:"r14",name:"Bottomless Cocktails Norwood",desc:"1 cocktail on arrival + 1hr bottomless. Limited to 100 guests per night",price:9,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"10pm"},
+  {id:"s40",rid:"r15",name:"Happy Hour Alma Norwood",desc:"$8 tap beer pints and $8 house wines at Alma Tavern",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s41",rid:"r16",name:"Burger & Pint Kensi",desc:"Your choice of burger and a pint of Coopers $18 — Corner Bar only",price:18,food:"burger",session:"dinner",days:["tuesday"],from:"6pm",until:"9pm"},
+  {id:"s42",rid:"r17",name:"Happy Hour Feathers",desc:"Mon–Thu 4–6pm: $7 schooners or $8.50 pints. Fri–Sat 7–8pm: $14 espresso martinis",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"8pm"},
+  {id:"s43",rid:"r18",name:"Locals Schnitzel Night",desc:"Schnitzel, calamari, battered fish — $20 pub classics night",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"5:30pm",until:"9pm"},
+  {id:"s44",rid:"r18",name:"Wing Wednesday Parkside",desc:"500g buffalo wings with blue cheese dipping sauce",price:18,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
+  {id:"s45",rid:"r18",name:"Curry Tuesday Parkside",desc:"Rotating curry night — $20 Tuesday dinner",price:20,food:"curry",session:"dinner",days:["tuesday"],from:"5pm",until:"9pm"},
+  {id:"s46",rid:"r19",name:"$7 Pints Happy Hour",desc:"$7 pints for happy hour at Sportys Fullarton",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s47",rid:"r20",name:"Burger Tuesdays Tower",desc:"All burgers & sandwiches with chips — Tower Hotel Magill",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  // ── NORTH ──
+  {id:"s48",rid:"r21",name:"Schnitzel Wednesday Clearview",desc:"Full-size schnitzel with salad, veg bar & warm bread rolls $20",price:20,food:"schnitzel",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
+  {id:"s49",rid:"r21",name:"Happy Hour Hampstead",desc:"Sports bar $7.50 pints & $7 house wine Mon–Fri",price:7.5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s50",rid:"r22",name:"Schnitzel Monday Enfield",desc:"Schnitzel with chips & $5 toppers — lunch and dinner",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s51",rid:"r23",name:"Monday Schnitzel Sefton",desc:"Chicken or beef schnitzel with chips, salad & gravy",price:18.9,food:"schnitzel",session:"dinner",days:["monday"],from:"11:30am",until:"8pm"},
+  {id:"s52",rid:"r24",name:"Schnitzel with Drink Windmill",desc:"$16 schnitzel or salad with any drink purchase",price:16,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
+  {id:"s53",rid:"r25",name:"Taco Tuesday $6 Prospect",desc:"$6 hand-pressed tacos — chicken, fish, prawn & more",price:6,food:"tacos",session:"lunch",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s54",rid:"r26",name:"Weekday Lunch North Adel",desc:"Schnitzels, fish & chips, curry, roast + soft drink $20",price:20,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11:30am",until:"2:30pm"},
+  {id:"s55",rid:"r27",name:"Friday Pasta Lord Melbourne",desc:"Pasta with selected tap beers or house wine $25",price:25,food:"pasta",session:"dinner",days:["friday"],from:"4pm",until:"8pm"},
+  {id:"s56",rid:"r28",name:"Parmi Night Pennington",desc:"Classic parmi with chips and salad $20",price:20,food:"parmi",session:"dinner",days:["tuesday"],from:"5pm",until:"9pm"},
+  // ── WEST & INNER ──
+  {id:"s57",rid:"r29",name:"Schnitzel Mon–Wed Excelsior",desc:"$20 schnitzels Mon–Wed. Half price toppings Tuesdays",price:20,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday"],from:"12pm",until:"9pm"},
+  {id:"s58",rid:"r30",name:"Schnitzel Tue & Wed Lockleys",desc:"Beef or chicken schnitzel with chips and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
+  {id:"s59",rid:"r31",name:"Pub Schnitty Mile End Tue",desc:"Golden pub schnitty with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s60",rid:"r31",name:"Happy Hour Mile End",desc:"House beers & wines $6 — Mon to Fri 4pm–6pm",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s61",rid:"r32",name:"Pasta & Cocktail Night",desc:"Entrée, pasta and a cocktail $49 per person — Ambra Spirits",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
+  {id:"s62",rid:"r32",name:"Bottomless Brunch Thebarton",desc:"Weekend bottomless brunch with live sax and DJs $65pp",price:65,food:"brunch",session:"brunch",days:["saturday","sunday"],from:"10am",until:"1pm"},
+  {id:"s63",rid:"r33",name:"Schnitzel West Lakes Tue",desc:"Chicken schnitzels from $13.90 — Tuesday special",price:13.9,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s64",rid:"r34",name:"Schnitzel Seaton Tue & Wed",desc:"$20 Beef or Chicken Schnitzel with chips and salad",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
+  {id:"s65",rid:"r35",name:"Happy Hour Cremorne Unley",desc:"Aperol Spritz $14, Gin Spritz $16, tap beer & wine $10",price:10,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s66",rid:"r35",name:"Burger Lunch Cremorne",desc:"Beef or chicken burger with mid-strength pint",price:30,food:"burger",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
+  // ── SOUTH & HILLS ──
+  {id:"s67",rid:"r36",name:"Wing Wednesday Belair",desc:"1kg wings & 2 imperials of selected beer — Belair Hotel",price:28,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
+  {id:"s68",rid:"r37",name:"Parma & Pint Lunch Hills",desc:"$25 pint and parmi deal for weekday lunch",price:25,food:"parmi",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
+  {id:"s69",rid:"r37",name:"Weekday Happy Hour Hills",desc:"Drink specials every weekday 5pm–7pm at the Gully",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
+  {id:"s70",rid:"r37",name:"Steak & Schnitzel Hills Wed",desc:"Schnitzels from $15.90, steak specials on hump day",price:15.9,food:"schnitzel",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
+  {id:"s71",rid:"r38",name:"Schnitzel Night Aldgate",desc:"$16.90 schnitzel with choice of 10 toppings",price:16.9,food:"schnitzel",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
+  {id:"s72",rid:"r39",name:"Burger Night Marion",desc:"Your choice of burger with chips in The Shed sports bar $18",price:18,food:"burger",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
+  {id:"s73",rid:"r39",name:"Saturday & Sunday Pizza",desc:"$18 Pizza in the Shed every Saturday and Sunday 12pm–4pm",price:18,food:"pizza",session:"brunch",days:["saturday","sunday"],from:"12pm",until:"4pm"},
+  {id:"s74",rid:"r40",name:"Burger Wednesday Morphett",desc:"Burger special with chips $19",price:19,food:"burger",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
+  {id:"s75",rid:"r41",name:"Signature Burgers Mon TGI",desc:"$16.90 signature burgers with fries",price:16.9,food:"burger",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s76",rid:"r41",name:"TGI Lunch Specials",desc:"$15.90 lunch for MyFridays members — dine in only",price:15.9,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11am",until:"3pm"},
+  // ── COAST & HENLEY ──
+  {id:"s77",rid:"r42",name:"Wednesday Date Night Seamore's",desc:"Select pizzas, pasta and chicken schnitzel $17 — Wednesday special",price:17,food:"pizza",session:"dinner",days:["wednesday"],from:"5:30pm",until:"9pm"},
+  {id:"s78",rid:"r42",name:"Italian Banquet Seamore's",desc:"3-course arancini + pizza or pasta + dessert $39pp for groups of 4+",price:39,food:"pasta",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"6pm",until:"9pm"},
+  {id:"s79",rid:"r43",name:"Schnitzel Henley Mon & Thu",desc:"Chicken or beef with chips, salad & gravy $20",price:20,food:"schnitzel",session:"dinner",days:["monday","thursday"],from:"12pm",until:"8:30pm"},
+  {id:"s80",rid:"r44",name:"Largs Happy Hour Mon–Sat",desc:"$6 house wine, $7 Coopers pints, $8 base spirits, $10 Ambra Spritzes",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
+  {id:"s81",rid:"r44",name:"Friday Cocktails Largs",desc:"$15 classic cocktails including espresso martini and margarita",price:15,food:"drinks",session:"drinks",days:["friday"],from:"6pm",until:"9pm"},
+  {id:"s82",rid:"r45",name:"Schnitzel Monday Seaford",desc:"Beef or chicken schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s83",rid:"r45",name:"Burgers & Sandos Tuesday",desc:"$20 all burgers and sandwiches from main menu",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s84",rid:"r45",name:"Seafood Friday Seaford",desc:"Battered or grilled fish, prawns and chips $22",price:22,food:"seafood",session:"lunch",days:["friday"],from:"12pm",until:"8pm"},
+  {id:"s85",rid:"r46",name:"Half Price Tacos Tuesday",desc:"$4 half-price tacos all day Tuesday — Beach Burrito Co Glenelg",price:4,food:"tacos",session:"lunch",days:["tuesday"],from:"11:30am",until:"9:30pm"},
+  {id:"s86",rid:"r46",name:"Beer & Wine Happy Hour",desc:"Beer & wine $5, tacos $5, Classic & Jalapeño margaritas $12",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"6pm"},
+  // ── HILLS & SPECIAL ──
+  {id:"s87",rid:"r51",name:"Bottomless Pizza Fridays",desc:"Unlimited pizza slices every Friday — bookings essential",price:30,food:"pizza",session:"dinner",days:["friday"],from:"6pm",until:"9pm"},
+  {id:"s88",rid:"r51",name:"Pasta & Wine Thursday",desc:"$30 pasta with a glass of wine or tap beer — 4 rotating options",price:30,food:"pasta",session:"dinner",days:["thursday"],from:"5pm",until:"9pm"},
+  // ── EXTRA CBD DRINKS ──
+  {id:"s89",rid:"r3",name:"Happy Hour Union CBD",desc:"Core beer pints, house wines & house spirits $8 every day",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"6pm"},
+  {id:"s90",rid:"r2",name:"Happy Hour CBD General",desc:"$8 house beers & house wines for happy hour daily",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s91",rid:"r7",name:"$8 Pints & Wines Nightly",desc:"$8 pints and $7 wines in the bar, $15 cocktails Thu & Fri",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s92",rid:"r52",name:"$8 Wines & Beers Bar Lune",desc:"Local wines $8, bottled beer $8, signature cocktails $15",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
+  {id:"s93",rid:"r47",name:"$8.50 Happy Hour Mismatch",desc:"$8.50 selected pints, $7 house wines, $8.50 base spirits or $12 Aperol Spritz",price:8.5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"5pm"},
+  {id:"s94",rid:"r49",name:"$4 Course Dinner + Drinks",desc:"4-course share dinner menu with 2hr drinks package $99pp",price:99,food:"roast",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5:30pm",until:"8pm"},
+  {id:"s95",rid:"r5",name:"Pork Ribs Tuesday",desc:"Pork ribs, chips & salad $21.90 at The Austral",price:21.9,food:"roast",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+];
+
+
+// ── STATE ──
+let fArea="",fDay="",fFood="",fSession="",fKw="";
+let plan=[],pending=null,selDay=null;
+let logos={};
+let curLogoRid=null,pendingLogoData=null,pendingLogoType=null,rawSvg=null,curColor="#0f0f0f";
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
+let calPlan={},savedHistory=[],selCalDate=null;
+let mapAreaFilter="";
+
+// ── TICKER ──
+function buildTicker(){
+  const items=SPECIALS.slice(0,20).map(s=>{const r=RESTAURANTS.find(x=>x.id===s.rid);return`<span class="ticker-item"><span>${s.name} — ${r?.name||""}</span><span class="ticker-dot">$${s.price}</span></span>`;}).join("");
+  const t=document.getElementById("ticker-inner");t.innerHTML=items+items;
+}
+
+// ── PAGE NAV ──
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+id).classList.add("active");
+  ["browse","map","planner"].forEach(p=>document.getElementById("nb-"+p)?.classList.remove("active"));
+  document.getElementById("nb-"+id)?.classList.add("active");
+  window.scrollTo(0,0);
+  if(id==="planner"){renderCurrent();renderCalendar();renderHistory();}
+  if(id==="map"){renderMapVenues();}
+}
+
+// ── PLAN TABS ──
+function showPTab(id,el){
+  document.querySelectorAll(".pview").forEach(v=>v.classList.remove("active"));
+  document.getElementById("pview-"+id).classList.add("active");
+  document.querySelectorAll(".ptab").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  if(id==="calendar")renderCalendar();
+  if(id==="history")renderHistory();
+}
+
+// ── AREA ──
+function getArea(suburb){
+  for(const[a,subs]of Object.entries(AREA_MAP)){if(subs.includes(suburb))return a;}
+  return"Other";
+}
+
+// ── FILTERS ──
+function setSess(v,el){fSession=v;document.querySelectorAll("#session-chips .chip").forEach(b=>b.classList.remove("on"));el.classList.add("on");if(document.getElementById("hf-session"))document.getElementById("hf-session").value=v;applyFilters();}
+
+function setArea(v,el){fArea=v;document.querySelectorAll("#area-chips .chip").forEach(b=>b.classList.remove("on"));el.classList.add("on");applyFilters();}
+function setDay(v,el){fDay=v;document.querySelectorAll("#day-chips .chip").forEach(b=>b.classList.remove("on"));el.classList.add("on");applyFilters();}
+function setFood(v,el){fFood=(fFood===v&&v)?"":v;document.querySelectorAll("#food-chips .chip").forEach(b=>b.classList.remove("on"));if(fFood)el.classList.add("on");else document.querySelector("#food-chips .chip").classList.add("on");applyFilters();}
+function applyFilters(){fKw=(document.getElementById("kw-inp").value||"").toLowerCase();renderSpecials();renderVenueSidebar();}
+function getFiltered(){
+  return SPECIALS.filter(s=>{
+    const r=RESTAURANTS.find(x=>x.id===s.rid);
+    if(fArea&&getArea(r?.suburb||"")!==fArea)return false;
+    if(fDay&&!s.days.includes(fDay))return false;
+    if(fFood&&s.food!==fFood)return false;
+    if(fSession&&s.session!==fSession)return false;
+    if(fKw&&![s.name,s.desc,r?.name,r?.suburb,s.food,s.session].join(" ").toLowerCase().includes(fKw))return false;
+    return true;
+  });
+}
+
+// ── LOGO HTML ──
+function logoHtml(rid,sz=36){
+  const lg=logos[rid];const rest=RESTAURANTS.find(x=>x.id===rid)||{name:"?"};
+  if(!lg)return`<div class="logo-init" style="width:${sz}px;height:${sz}px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:2px solid rgba(0,0,0,0.2);font-family:var(--mono);font-size:${Math.round(sz*.38)}px;font-weight:700;background:rgba(255,255,255,0.3)">${rest.name[0]}</div>`;
+  if(lg.type==="svg")return`<div style="width:${sz}px;height:${sz}px;display:flex;align-items:center;justify-content:center">${lg.data}</div>`;
+  return`<img src="${lg.data}" style="width:${sz}px;height:${sz}px;object-fit:contain;border-radius:8px">`;
+}
+
+// ── SPECIALS ──
+function renderSpecials(){
+  const list=getFiltered();
+  document.getElementById("spec-count").textContent=`${list.length} special${list.length!==1?"s":""}`;
+  if(!list.length){
+    document.getElementById("specials-grid").innerHTML=`<div class="empty-grid"><span>🔍</span><p>No specials match your filters. Try adjusting area, day or food type.</p></div>`;
+    return;
+  }
+  document.getElementById("specials-grid").innerHTML=list.map((s,i)=>{
+    const r=RESTAURANTS.find(x=>x.id===s.rid);
+    const sessIcon={lunch:"🕛",dinner:"🍽",drinks:"🍻",brunch:"☀️"};
+    const on=plan.some(p=>p.sid===s.id);
+    const clr=CARD_COLORS[i%CARD_COLORS.length];
+    const days=DAYS.map(d=>`<span class="scard-day${s.days.includes(d)?" on":""}">${DS[d]}</span>`).join("");
+    return`<div class="scard ${clr}">
+      <div class="scard-top">
+        <div class="scard-logo" onclick="openLogo('${s.rid}')" title="Upload logo">${logoHtml(s.rid,34)}</div>
+        <span class="scard-food-tag">${s.food}${s.session?` · ${sessIcon[s.session]||""}${s.session}`:""}</span>
+        <div class="scard-name">${s.name}</div>
+        <div class="scard-venue">${r?.name||""} · ${r?.suburb||""}</div>
+        <div class="scard-desc">${s.desc}</div>
+        <div class="scard-days">${days}</div>
+      </div>
+      <div class="scard-bottom">
+        <div>
+          <div class="scard-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</div>
+          ${s.from?`<div class="scard-time">${s.from}${s.until?" – "+s.until:""}</div>`:""}
+        </div>
+        <button class="scard-add${on?" added":""}" onclick="handleAdd('${s.id}')">${on?"✓ Added":"+ Add"}</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ── VENUE SIDEBAR ──
+function renderVenueSidebar(){
+  const rids=[...new Set(getFiltered().map(s=>s.rid))];
+  const venues=RESTAURANTS.filter(r=>rids.includes(r.id));
+  const counts={};SPECIALS.forEach(s=>{if(rids.includes(s.rid))counts[s.rid]=(counts[s.rid]||0)+1;});
+  document.getElementById("venue-sidebar-list").innerHTML=venues.map((r,i)=>`
+    <div class="venue-item">
+      <div class="v-num">${i+1}</div>
+      <div class="v-info"><div class="v-name">${r.name}</div><div class="v-sub">${r.suburb}${r.addr?" · "+r.addr:""}</div></div>
+      <div class="v-count">${counts[r.id]||0}</div>
+    </div>`).join("")||`<div style="padding:20px 16px;font-size:12px;color:#aaa;text-align:center;font-family:var(--mono)">No venues match</div>`;
+}
+
+// ── VENUES BENTO ──
+const V_COLORS=["c-orange","c-yellow","c-blue","c-green","c-purple","c-red","c-pink","c-bg"];
+function renderVenuesBento(){
+  const counts={};SPECIALS.forEach(s=>{counts[s.rid]=(counts[s.rid]||0)+1});
+  document.getElementById("venues-bento").innerHTML=RESTAURANTS.map((r,i)=>{
+    const clr=V_COLORS[i%V_COLORS.length];
+    const lg=logos[r.id];
+    const logoInner=lg?(lg.type==="svg"?lg.data:`<img src="${lg.data}" style="width:48px;height:48px;object-fit:contain">`):`<span style="font-family:var(--mono);font-size:18px;font-weight:700">${r.name[0]}</span>`;
+    return`<div class="venue-bento-card ${clr}" onclick="openLogo('${r.id}')">
+      <div class="vbc-logo">${logoInner}</div>
+      <div class="vbc-name">${r.name}</div>
+      <div class="vbc-meta">${r.suburb}${r.cuisine?" · "+r.cuisine:""}</div>
+      <span class="vbc-count">${counts[r.id]||0} special${(counts[r.id]||0)!==1?"s":""}</span>
+    </div>`;
+  }).join("");
+}
+
+// ── STATS ──
+function updateStats(){
+  document.getElementById("stat-n").textContent=SPECIALS.length;
+  document.getElementById("stat-v").textContent=RESTAURANTS.length;
+  document.getElementById("stat-p").textContent="$"+Math.round(SPECIALS.reduce((a,s)=>a+s.price,0)/SPECIALS.length);
+}
+
+// ── MAP PAGE ──
+function renderMapVenues(){
+  const filter=mapAreaFilter;
+  const rids=[...new Set(SPECIALS.map(s=>s.rid))];
+  const venues=RESTAURANTS.filter(r=>rids.includes(r.id)&&(!filter||getArea(r.suburb)===filter));
+  const counts={};SPECIALS.forEach(s=>{counts[s.rid]=(counts[s.rid]||0)+1});
+
+  // area filter chips on map page
+  const af=document.getElementById("map-area-filter");
+  const areas=["","CBD","North","NorthEast","East","South","SouthWest","West","Hills","Coast"];
+  const areaLabels={"":" All areas",CBD:"CBD",North:"North",NorthEast:"NE",East:"East",South:"South",SouthWest:"SW",West:"West",Hills:"Hills",Coast:"Coast"};
+  af.innerHTML=areas.map(a=>`<button class="chip${mapAreaFilter===a?" on":""}" onclick="setMapArea('${a}')">${areaLabels[a]}</button>`).join("");
+
+  document.getElementById("map-venue-entries").innerHTML=venues.map((r,i)=>{
+    const rSpecials=SPECIALS.filter(s=>s.rid===r.id);
+    return`<div>
+      <div class="map-venue-entry" onclick="toggleMapVenue('mv-${r.id}')">
+        <div style="display:flex;align-items:center">
+          <span class="mve-num">${i+1}</span>
+          <div>
+            <div class="mve-name">${r.name}</div>
+          </div>
+        </div>
+        <div class="mve-sub">${r.suburb}${r.addr?" · "+r.addr:""} · ${counts[r.id]||0} specials</div>
+      </div>
+      <div class="mve-specials" id="mv-${r.id}">
+        ${rSpecials.map(s=>`<div class="mve-spec-item"><span>${s.name} <span style="font-size:9px;color:#aaa">(${s.days.map(d=>DS[d]).join(",")}${s.from?" · "+s.from:""})</span></span><span class="mve-spec-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</span></div>`).join("")}
+      </div>
+    </div>`;
+  }).join("")||`<div style="padding:24px;text-align:center;font-size:12px;color:#aaa;font-family:var(--mono)">No venues match this filter</div>`;
+}
+function setMapArea(a){mapAreaFilter=a;renderMapVenues();}
+function toggleMapVenue(id){const el=document.getElementById(id);el&&el.classList.toggle("open");}
+function activateMap(){
+  const key=document.getElementById("api-key-input").value.trim();
+  if(!key){alert("Please enter your API key");return;}
+  const iframe=document.getElementById("map-iframe");
+  iframe.src=`https://www.google.com/maps/embed/v1/view?key=${key}&center=-34.9285,138.5999&zoom=12`;
+  iframe.style.display="block";
+  iframe.previousElementSibling.style.display="none";
+}
+
+// ── ADD TO PLAN ──
+function handleAdd(id){
+  const s=SPECIALS.find(x=>x.id===id);if(!s)return;
+  if(plan.some(p=>p.sid===id)){plan=plan.filter(p=>p.sid!==id);renderSpecials();renderCurrent();updateBadge();return;}
+  if(s.days.length===1){plan.push({sid:id,day:s.days[0]});renderSpecials();renderCurrent();updateBadge();return;}
+  openModal(s);
+}
+function openModal(s){
+  pending=s;selDay=null;
+  document.getElementById("m-title-name").textContent=s.name;
+  document.getElementById("m-title-venue").textContent=RESTAURANTS.find(x=>x.id===s.rid)?.name||"";
+  document.getElementById("day-pick-grid").innerHTML=DAYS.map(d=>{const a=s.days.includes(d);return`<button class="dp-btn${a?" avail":""}" ${a?"":"disabled"} onclick="selMDay('${d}',this)">${DS[d]}</button>`;}).join("");
+  document.getElementById("m-confirm").disabled=true;
+  document.getElementById("day-modal").classList.add("open");
+}
+function selMDay(d,el){selDay=d;document.querySelectorAll(".dp-btn").forEach(b=>b.classList.remove("sel"));el.classList.add("sel");document.getElementById("m-confirm").disabled=false;}
+function confirmAdd(){if(!pending||!selDay)return;plan.push({sid:pending.id,day:selDay});closeModal();renderSpecials();renderCurrent();updateBadge();}
+function closeModal(){document.getElementById("day-modal").classList.remove("open");pending=null;selDay=null;}
+function updateBadge(){const b=document.getElementById("plan-badge");b.style.display=plan.length?"":"none";b.textContent=plan.length;document.getElementById("ps-meals").textContent=plan.length;const t=plan.reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);document.getElementById("ps-spend").textContent="$"+t.toFixed(0);}
+
+// ── RENDER CURRENT ──
+function renderCurrent(){
+  const budget=parseFloat(document.getElementById("bgt-inp").value)||0;
+  const total=plan.reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+  const pct=budget>0?Math.min(100,(total/budget)*100):0;
+  document.getElementById("spend-fill").style.width=pct+"%";
+  document.getElementById("spend-fill").style.background=total>budget?"#e8203a":"var(--orange)";
+  document.getElementById("spend-used").textContent="$"+total.toFixed(0)+" spent";
+  document.getElementById("spend-left-lbl").textContent=total>budget?"$"+(total-budget).toFixed(0)+" over":"$"+(budget-total).toFixed(0)+" left";
+  document.getElementById("sum-rows").innerHTML=
+    `<div class="sum-row"><span class="sum-lbl">Meals planned</span><span class="sum-val">${plan.length}</span></div>
+     <div class="sum-row"><span class="sum-lbl">Days covered</span><span class="sum-val">${[...new Set(plan.map(p=>p.day))].length}</span></div>
+     <div class="sum-row"><span class="sum-lbl">Total spend</span><span class="sum-val" style="color:var(--orange)">$${total.toFixed(0)}</span></div>`;
+  document.getElementById("ps-meals").textContent=plan.length;
+  document.getElementById("ps-spend").textContent="$"+total.toFixed(0);
+
+  if(!plan.length){
+    document.getElementById("week-content").innerHTML=`<div class="plan-empty-state"><span>🍽️</span><p>Your week is empty.</p><small>Browse specials and hit + Add to build your plan</small></div>`;
+    return;
+  }
+  const byDay={};plan.forEach((p,i)=>{if(!byDay[p.day])byDay[p.day]=[];byDay[p.day].push({...p,idx:i});});
+  document.getElementById("week-content").innerHTML=DAYS.filter(d=>byDay[d]).map(d=>{
+    const dt=byDay[d].reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+    return`<div class="day-block">
+      <div class="day-head-row"><span class="day-head-name">${DF[d]}</span><span class="day-total-pill">$${dt.toFixed(0)}</span></div>
+      ${byDay[d].map(p=>{const s=SPECIALS.find(x=>x.id===p.sid);if(!s)return"";const r=RESTAURANTS.find(x=>x.id===s.rid);
+        return`<div class="plan-item-row">
+          <div class="pir-logo">${logoHtml(s.rid,34)}</div>
+          <div class="pir-body"><div class="pir-name">${s.name}</div><div class="pir-venue">${r?.name||""}${r?.suburb?" · "+r.suburb:""}</div></div>
+          <div class="pir-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</div>
+          <button class="pir-rm" onclick="removePlan(${p.idx})">✕</button>
+        </div>`;}).join("")}
+    </div>`;
+  }).join("");
+}
+function removePlan(idx){plan.splice(idx,1);renderSpecials();renderCurrent();updateBadge();}
+
+// ── CALENDAR ──
+function renderCalendar(){
+  document.getElementById("cal-month-lbl").textContent=MONTHS[calMonth]+" "+calYear;
+  const first=new Date(calYear,calMonth,1),last=new Date(calYear,calMonth+1,0).getDate();
+  const startDow=(first.getDay()+6)%7,today=new Date();
+  let html="";
+  for(let i=0;i<startDow;i++){const pd=new Date(calYear,calMonth,0-(startDow-1-i));html+=`<div class="cal-cell other"><div class="cal-dn">${pd.getDate()}</div></div>`;}
+  for(let d=1;d<=last;d++){
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const dp=calPlan[ds]||[];
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const dow=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"][new Date(calYear,calMonth,d).getDay()];
+    const dt=dp.reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+    html+=`<div class="cal-cell${isToday?" today":""}${dp.length?" has":""}" onclick="selCalDay('${ds}','${dow}')">
+      <div class="cal-dn">${d}</div>
+      ${dp.slice(0,2).map(p=>{const s=SPECIALS.find(x=>x.id===p.sid);return s?`<span class="cal-pip">${s.name}</span>`:""}).join("")}
+      ${dt?`<div class="cal-total">$${dt}</div>`:""}
+    </div>`;
+  }
+  const rem=(7-(startDow+last)%7)%7;
+  for(let i=1;i<=rem;i++)html+=`<div class="cal-cell other"><div class="cal-dn">${i}</div></div>`;
+  document.getElementById("cal-grid").innerHTML=html;
+
+  const mbgt=parseFloat(document.getElementById("mbgt-inp").value)||0;
+  const mt=Object.values(calPlan).flat().reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+  document.getElementById("mspend-fill").style.width=(mbgt>0?Math.min(100,(mt/mbgt)*100):0)+"%";
+  document.getElementById("mspend-lbl").textContent="$"+mt.toFixed(0)+" planned";
+}
+function prevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
+function nextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
+
+function selCalDay(ds,dow){
+  selCalDate=ds;
+  const dp=calPlan[ds]||[];
+  const d=new Date(ds+"T00:00:00");
+  const lbl=d.toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("cal-sidebar-title").textContent=lbl;
+  const daySpecials=SPECIALS.filter(s=>s.days.includes(dow));
+  const dt=dp.reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+  let html="";
+  if(dp.length){
+    html+=dp.map((p,i)=>{const s=SPECIALS.find(x=>x.id===p.sid);const r=s?RESTAURANTS.find(x=>x.id===s.rid):null;
+      return`<div class="plan-item-row" style="margin-bottom:6px">
+        <div class="pir-body"><div class="pir-name" style="font-size:13px">${s?.name||""}</div><div class="pir-venue">${r?.name||""}</div></div>
+        <div class="pir-price" style="font-size:15px">$${s?s.price:0}</div>
+        <button class="pir-rm" onclick="removeCalMeal('${ds}',${i})">✕</button>
+      </div>`;}).join("");
+    html+=`<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange);margin:8px 0 16px">Total: $${dt.toFixed(0)}</div>`;
+  }else html+=`<p style="font-size:12px;color:#aaa;font-family:var(--mono);margin-bottom:14px">No meals for this day</p>`;
+
+  if(daySpecials.length){
+    html+=`<div style="font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#888;margin-bottom:10px">Add for ${DF[dow]||"this day"}</div>`;
+    html+=daySpecials.slice(0,5).map(s=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg);border-radius:var(--r-sm);margin-bottom:6px;cursor:pointer;border:2px solid transparent;transition:border-color 0.14s" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='transparent'" onclick="addCalMeal('${ds}','${s.id}')">
+        <div style="flex:1;font-size:12px;font-weight:600">${s.name}</div>
+        <span style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--orange)">$${s.price%1===0?s.price:s.price.toFixed(2)}</span>
+        <span style="font-size:16px;font-weight:700;color:var(--orange)">+</span>
+      </div>`).join("");
+  }
+  document.getElementById("cal-detail").innerHTML=html;
+}
+function addCalMeal(ds,sid){if(!calPlan[ds])calPlan[ds]=[];if(!calPlan[ds].some(p=>p.sid===sid)){calPlan[ds].push({sid});renderCalendar();const d=new Date(ds+"T00:00:00");selCalDay(ds,["sunday","monday","tuesday","wednesday","thursday","friday","saturday"][d.getDay()]);}}
+function removeCalMeal(ds,idx){calPlan[ds].splice(idx,1);if(!calPlan[ds].length)delete calPlan[ds];renderCalendar();const d=new Date(ds+"T00:00:00");selCalDay(ds,["sunday","monday","tuesday","wednesday","thursday","friday","saturday"][d.getDay()]);}
+
+// ── HISTORY ──
+function saveHistory(){
+  if(!plan.length){alert("Your planner is empty — nothing to save.");return;}
+  const now=new Date(),total=plan.reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+  savedHistory.unshift({label:"Week of "+now.toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"}),plan:[...plan],total,savedAt:now.toISOString()});
+  try{localStorage.setItem("spl-hist",JSON.stringify(savedHistory));}catch(e){}
+  renderHistory();alert("✓ Saved to history!");
+}
+function renderHistory(){
+  try{const h=localStorage.getItem("spl-hist");if(h)savedHistory=JSON.parse(h);}catch(e){}
+  if(!savedHistory.length){
+    document.getElementById("history-content").innerHTML=`<div class="plan-empty-state"><span>📅</span><p>No saved weeks yet.</p><small>Hit "Save to history" on the Current Week tab</small></div>`;
+    return;
+  }
+  document.getElementById("history-content").innerHTML=savedHistory.map((h,hi)=>`
+    <div class="hist-card">
+      <div class="hist-head-row" onclick="toggleHist(${hi})">
+        <div><div class="hist-lbl">${h.label}</div><div class="hist-meta">${h.plan.length} meals · $${h.total.toFixed(0)} total</div></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button onclick="event.stopPropagation();reloadHistory(${hi})" style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:7px 14px;border-radius:var(--r-sm);background:var(--yellow);border:2px solid var(--black);cursor:pointer">Reload</button>
+          <span style="font-weight:700" id="ha-${hi}">↓</span>
+        </div>
+      </div>
+      <div class="hist-body" id="hb-${hi}">
+        ${h.plan.map(p=>{const s=SPECIALS.find(x=>x.id===p.sid);const r=s?RESTAURANTS.find(x=>x.id===s.rid):null;
+          return`<div class="hist-row"><span class="hist-day-lbl">${DS[p.day]}</span><span class="hist-name">${s?.name||"?"}</span><span class="hist-venue">${r?.name||""}</span><span class="hist-price">$${s?s.price:0}</span></div>`;
+        }).join("")}
+      </div>
+    </div>`).join("");
+}
+function toggleHist(hi){const b=document.getElementById("hb-"+hi);const a=document.getElementById("ha-"+hi);b.classList.toggle("open");a.textContent=b.classList.contains("open")?"↑":"↓";}
+function reloadHistory(hi){if(!confirm("Replace current plan with this saved week?"))return;plan=[...savedHistory[hi].plan];renderSpecials();renderCurrent();updateBadge();showPTab("current",document.querySelector(".ptab"));}
+
+// ── SHARE ──
+function buildShareText(){
+  if(!plan.length)return"No meals planned yet.";
+  const lines=["SPECIALS ADELAIDE — WEEK PLAN","━".repeat(36),""];
+  const byDay={};plan.forEach(p=>{if(!byDay[p.day])byDay[p.day]=[];byDay[p.day].push(p);});
+  DAYS.filter(d=>byDay[d]).forEach(d=>{
+    lines.push(DF[d].toUpperCase());
+    byDay[d].forEach(p=>{const s=SPECIALS.find(x=>x.id===p.sid);const r=s?RESTAURANTS.find(x=>x.id===s.rid):null;
+      if(s){lines.push("  "+s.name);lines.push("  "+[r?.name,r?.suburb,r?.addr].filter(Boolean).join(" · "));lines.push("  $"+(s.price%1===0?s.price:s.price.toFixed(2))+(s.from?" · "+s.from+(s.until?" – "+s.until:""):"")); lines.push("");}
+    });
+  });
+  const total=plan.reduce((sum,p)=>{const s=SPECIALS.find(x=>x.id===p.sid);return sum+(s?s.price:0)},0);
+  lines.push("━".repeat(36));lines.push("TOTAL: $"+total.toFixed(0));lines.push("");lines.push("specialsadelaide.com.au");
+  return lines.join("\n");
+}
+function openShare(){document.getElementById("share-text-box").textContent=buildShareText();document.getElementById("share-modal").classList.add("open");}
+function closeShare(){document.getElementById("share-modal").classList.remove("open");}
+function copyShare(){navigator.clipboard.writeText(document.getElementById("share-text-box").textContent).then(()=>{const b=document.querySelector(".sh-btn.o");const o=b.textContent;b.textContent="Copied!";setTimeout(()=>b.textContent=o,1500);});}
+function shareNative(){if(navigator.share)navigator.share({title:"My Adelaide Specials Week",text:buildShareText()}).catch(()=>{});else copyShare();}
+function exportPlan(){const blob=new Blob([buildShareText()],{type:"text/plain"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="adelaide-specials-week.txt";a.click();}
+
+// ── LOGO ──
+function openLogo(rid){curLogoRid=rid;rawSvg=null;pendingLogoData=null;document.getElementById("logo-modal-title").textContent=RESTAURANTS.find(r=>r.id===rid)?.name||"Upload logo";document.getElementById("logo-prev-wrap").style.display="none";document.getElementById("logo-apply-btn").style.display="none";document.getElementById("logo-prev-box").innerHTML="";document.getElementById("svg-inp").value="";document.getElementById("logo-modal").classList.add("open");}
+function closeLogo(){document.getElementById("logo-modal").classList.remove("open");curLogoRid=null;}
+function handleFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  if(file.type==="image/svg+xml"||file.name.endsWith(".svg")){pendingLogoType="svg";reader.onload=ev=>{rawSvg=ev.target.result;applyColorToSvg(curColor);};reader.readAsText(file);}
+  else{pendingLogoType="img";reader.onload=ev=>{pendingLogoData=ev.target.result;document.getElementById("logo-prev-box").innerHTML=`<img src="${pendingLogoData}" style="max-width:90px;max-height:60px;object-fit:contain">`;document.getElementById("logo-prev-wrap").style.display="block";document.getElementById("logo-apply-btn").style.display="block";};reader.readAsDataURL(file);}
+}
+function applyColorToSvg(color){
+  if(!rawSvg)return;
+  const parser=new DOMParser(),doc=parser.parseFromString(rawSvg,"image/svg+xml"),svg=doc.querySelector("svg");if(!svg)return;
+  svg.querySelectorAll("style").forEach(s=>{s.textContent=s.textContent.replace(/fill\s*:\s*[^;}"']+/gi,`fill:${color}`).replace(/stroke\s*:\s*(?!none)[^;}"']+/gi,`stroke:${color}`);});
+  svg.querySelectorAll("*").forEach(el=>{
+    const f=el.getAttribute("fill"),st=el.getAttribute("stroke");
+    if(f&&f!=="none"&&f!=="transparent")el.setAttribute("fill",color);
+    if(st&&st!=="none"&&st!=="transparent")el.setAttribute("stroke",color);
+    if(el.style.fill&&el.style.fill!=="none")el.style.fill=color;
+    if(el.style.stroke&&el.style.stroke!=="none")el.style.stroke=color;
+  });
+  if(!svg.getAttribute("viewBox")&&svg.getAttribute("width")&&svg.getAttribute("height"))svg.setAttribute("viewBox",`0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`);
+  svg.setAttribute("width","100%");svg.setAttribute("height","100%");svg.style.maxWidth="90px";svg.style.maxHeight="60px";
+  const s=new XMLSerializer();pendingLogoData=s.serializeToString(svg);
+  document.getElementById("logo-prev-box").innerHTML=pendingLogoData;
+  document.getElementById("logo-prev-wrap").style.display="block";document.getElementById("logo-apply-btn").style.display="block";
+}
+function pickCol(c,el,custom=false){curColor=c;if(!custom){document.querySelectorAll(".sw").forEach(s=>s.classList.remove("sel"));if(el)el.classList.add("sel");}applyColorToSvg(c);}
+function applyLogo(){if(!curLogoRid||!pendingLogoData)return;logos[curLogoRid]={type:pendingLogoType,data:pendingLogoData};closeLogo();renderSpecials();renderVenuesBento();renderCurrent();}
+const dz=document.getElementById("drop-zone");
+dz.addEventListener("dragover",e=>{e.preventDefault();dz.classList.add("over")});
+dz.addEventListener("dragleave",()=>dz.classList.remove("over"));
+dz.addEventListener("drop",e=>{e.preventDefault();dz.classList.remove("over");const f=e.dataTransfer.files[0];if(f){const dt=new DataTransfer();dt.items.add(f);document.getElementById("svg-inp").files=dt.files;handleFile({target:{files:[f]}});}});
+
+// ── HERO DROPDOWN FINDER ──
+function heroDropChange(){
+  fArea=document.getElementById("hf-area").value;
+  fDay=document.getElementById("hf-day").value;
+  fFood=document.getElementById("hf-food").value;
+  fSession=document.getElementById("hf-session").value;
+  fKw=(document.getElementById("kw-inp").value||"").toLowerCase();
+  // sync session chips
+  document.querySelectorAll("#session-chips .chip").forEach(b=>b.classList.remove("on"));
+  const sc=document.querySelector(`#session-chips .chip[onclick*="'${fSession}'"]`);
+  if(sc)sc.classList.add("on"); else document.querySelector("#session-chips .chip").classList.add("on");
+  syncStripChips();
+  renderHeroPills();
+  renderSpecials();
+  renderVenueSidebar();
+}
+
+function heroFind(){
+  heroDropChange();
+  document.getElementById("specials-grid").scrollIntoView({behavior:"smooth"});
+}
+
+function renderHeroPills(){
+  const areaLabels={CBD:"CBD",North:"North",NorthEast:"North East",East:"East",South:"South",SouthWest:"South West",West:"West",Hills:"Hills",Coast:"Coast"};
+  const foodLabels={schnitzel:"Schnitzel",parmi:"Parmi",burger:"Burger",steak:"Steak",pizza:"Pizza",pasta:"Pasta",tacos:"Tacos",wings:"Wings",seafood:"Seafood",roast:"Roast",brunch:"Brunch",curry:"Curry",drinks:"Drinks"};
+  const dayLabels={monday:"Monday",tuesday:"Tuesday",wednesday:"Wednesday",thursday:"Thursday",friday:"Friday",saturday:"Saturday",sunday:"Sunday"};
+  const sessLabels={lunch:"Lunch",dinner:"Dinner",drinks:"Drinks",brunch:"Brunch"};
+  const pills=[];
+  if(fArea)pills.push({label:areaLabels[fArea]||fArea,clear:()=>{document.getElementById("hf-area").value="";heroDropChange();}});
+  if(fDay)pills.push({label:dayLabels[fDay]||fDay,clear:()=>{document.getElementById("hf-day").value="";heroDropChange();}});
+  if(fFood)pills.push({label:foodLabels[fFood]||fFood,clear:()=>{document.getElementById("hf-food").value="";heroDropChange();}});
+  if(fSession)pills.push({label:sessLabels[fSession]||fSession,clear:()=>{document.getElementById("hf-session").value="";heroDropChange();}});
+  if(fKw)pills.push({label:`"${fKw}"`,clear:()=>{document.getElementById("kw-inp").value="";heroDropChange();}});
+  const wrap=document.getElementById("hf-active-pills");
+  if(!pills.length){wrap.innerHTML="";return;}
+  wrap.innerHTML=pills.map((p,i)=>`<span class="hf-pill">${p.label}<span class="hf-pill-x" onclick="heroDropClear(${i})">✕</span></span>`).join("");
+  wrap._pills=pills;
+}
+function heroDropClear(i){const pills=document.getElementById("hf-active-pills")._pills;if(pills&&pills[i])pills[i].clear();}
+
+function syncStripChips(){
+  document.querySelectorAll("#area-chips .chip").forEach(b=>b.classList.remove("on"));
+  const ac=document.querySelector(`#area-chips .chip[onclick*="'${fArea}'"]`);
+  if(ac)ac.classList.add("on"); else document.querySelector("#area-chips .chip").classList.add("on");
+  document.querySelectorAll("#day-chips .chip").forEach(b=>b.classList.remove("on"));
+  const dc=document.querySelector(`#day-chips .chip[onclick*="'${fDay}'"]`);
+  if(dc)dc.classList.add("on"); else document.querySelector("#day-chips .chip").classList.add("on");
+  document.querySelectorAll("#food-chips .chip").forEach(b=>b.classList.remove("on"));
+  const fc=document.querySelector(`#food-chips .chip[onclick*="'${fFood}'"]`);
+  if(fc)fc.classList.add("on"); else document.querySelector("#food-chips .chip").classList.add("on");
+  document.querySelectorAll("#session-chips .chip").forEach(b=>b.classList.remove("on"));
+  const ssc=document.querySelector(`#session-chips .chip[onclick*="'${fSession}'"]`);
+  if(ssc)ssc.classList.add("on"); else document.querySelector("#session-chips .chip").classList.add("on");
+}
+
+const _setArea=setArea,_setDay=setDay,_setFood=setFood,_setSess=setSess;
+setArea=function(v,el){_setArea(v,el);if(document.getElementById("hf-area"))document.getElementById("hf-area").value=v;renderHeroPills();};
+setDay=function(v,el){_setDay(v,el);if(document.getElementById("hf-day"))document.getElementById("hf-day").value=v;renderHeroPills();};
+setFood=function(v,el){_setFood(v,el);if(document.getElementById("hf-food"))document.getElementById("hf-food").value=fFood;renderHeroPills();};
+setSess=function(v,el){_setSess(v,el);renderHeroPills();};
+
+// ── INIT ──
+try{const h=localStorage.getItem("spl-hist");if(h)savedHistory=JSON.parse(h);}catch(e){}
+buildTicker();renderSpecials();renderVenueSidebar();renderVenuesBento();renderCurrent();renderCalendar();
+</script>
+</body>
+</html>
