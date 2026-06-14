@@ -53,10 +53,12 @@ nav{background:var(--white);border-bottom:3px solid var(--black);height:62px;dis
 
 /* HERO */
 .hero{padding:28px 28px 24px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto;gap:12px}
-.hero-title-cell{grid-column:1/3;background:var(--orange);border-radius:var(--r);border:3px solid var(--black);padding:36px 36px 32px;position:relative;overflow:hidden}
+.hero-title-cell{grid-column:1/3;grid-row:1/3;background:var(--orange);border-radius:var(--r);border:3px solid var(--black);padding:36px 36px 32px;position:relative;overflow:hidden;display:flex;flex-direction:column}
 .hero-title-cell::after{content:"";position:absolute;bottom:-20px;right:-20px;width:120px;height:120px;background:var(--yellow);border-radius:50%;border:3px solid var(--black)}
-.hero-h1{font-family:var(--mono);font-size:clamp(36px,4.5vw,62px);font-weight:700;line-height:0.95;letter-spacing:-0.03em;color:var(--black);position:relative;z-index:1;margin-bottom:12px}
-.hero-sub{font-size:15px;color:var(--black);opacity:0.8;max-width:400px;position:relative;z-index:1}
+.hero-h1{font-family:var(--mono);font-size:clamp(26px,3.6vw,46px);font-weight:700;line-height:1.05;letter-spacing:-0.02em;color:var(--black);position:relative;z-index:1;margin-bottom:12px;max-width:560px}
+.hero-sub{font-size:15px;color:var(--black);opacity:0.8;max-width:460px;position:relative;z-index:1}
+.hero-suggest-btn{position:relative;z-index:1;margin-top:auto;align-self:flex-start;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.04em;padding:11px 20px;border-radius:var(--r-sm);border:2px solid var(--black);background:var(--black);color:var(--yellow);cursor:pointer;transition:all 0.15s;text-transform:uppercase}
+.hero-suggest-btn:hover{background:var(--yellow);color:var(--black)}
 
 /* HERO FINDER TILE */
 .hero-finder{
@@ -436,9 +438,12 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 
   /* HERO */
   .hero{grid-template-columns:1fr;padding:14px;gap:10px}
-  .hero-title-cell{grid-column:1/2;padding:24px 20px 28px}
-  .hero-h1{font-size:38px}
+  .hero-title-cell{grid-column:1/2;grid-row:auto;padding:24px 20px 28px}
+  .hero-title-cell::after{display:none}
+  .hero-suggest-btn{margin-top:18px}
+  .hero-h1{font-size:28px;max-width:100%}
   .hero-sub{font-size:14px;max-width:100%}
+  .hero-suggest-btn{width:100%;text-align:center}
   .hero-finder{grid-column:1/2;grid-row:auto;padding:20px 18px}
   .hero-finder-title{font-size:15px}
 
@@ -529,9 +534,10 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 <section class="hero">
   <!-- Title cell -->
   <div class="hero-title-cell">
-    <div style="font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;opacity:0.65;margin-bottom:14px">Adelaide · Updated weekly</div>
-    <div class="hero-h1">Find great<br>dining deals.</div>
-    <div class="hero-sub" style="margin-top:14px">Every special, every suburb — plan a full week of eating out without the guesswork.</div>
+    <div style="font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;opacity:0.65;margin-bottom:14px">Adelaide</div>
+    <div class="hero-h1">The golden age of being a tightarse has arrived.</div>
+    <div class="hero-sub" style="margin-top:14px">You can eat out seven nights a week and still pretend you're "being good with money."</div>
+    <button class="hero-suggest-btn" onclick="openSuggestModal()">Have a new special? Let us know.</button>
   </div>
 
   <!-- FINDER TILE — col 3, rows 1–2 -->
