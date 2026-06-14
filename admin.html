@@ -518,6 +518,7 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
       <div class="field"><label class="field-label">From</label><input class="field-input" id="sd-from" placeholder="5pm"></div>
       <div class="field"><label class="field-label">Until</label><input class="field-input" id="sd-until" placeholder="9pm"></div>
     </div>
+    <div class="field"><label class="field-label">Notes</label><textarea class="field-textarea" id="sd-notes" placeholder="Booking required, T&Cs, fine print, what's not included..."></textarea></div>
     <div class="field" style="display:flex;align-items:center;gap:10px">
       <div class="toggle on" id="sd-active-tog" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
       <label class="field-label" style="margin:0">Active (visible on site)</label>
@@ -1114,6 +1115,7 @@ function openSpecialDrawer(id) {
   document.getElementById("sd-session").value = s ? (s.session||"") : "";
   document.getElementById("sd-from").value = s ? (s.from||"") : "";
   document.getElementById("sd-until").value = s ? (s.until||"") : "";
+  document.getElementById("sd-notes").value = s ? (s.notes||"") : "";
   document.getElementById("sd-active-tog").classList.toggle("on", !s || s.active !== false);
   document.querySelectorAll("#sd-days .day-pick-btn").forEach(function(b){
     b.classList.toggle("on", !!(s && s.days && s.days.indexOf(b.dataset.day)>=0));
@@ -1137,6 +1139,7 @@ async function saveSpecial() {
     days: days,
     from: document.getElementById("sd-from").value.trim(),
     until: document.getElementById("sd-until").value.trim(),
+    notes: document.getElementById("sd-notes").value.trim(),
     active: document.getElementById("sd-active-tog").classList.contains("on"),
   };
   if (!data.name || !data.rid || !data.price || !days.length) { toast("Fill required fields (restaurant, name, price, at least one day)"); return; }

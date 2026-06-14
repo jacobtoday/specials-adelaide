@@ -401,6 +401,27 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 .scard-flag{position:absolute;top:12px;left:12px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.5);border:2px solid rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;transition:all 0.14s;z-index:2}
 .scard-flag:hover{background:var(--red);border-color:var(--black);color:var(--white)}
 
+/* SPECIAL DETAIL MODAL */
+.dt-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.dt-tag{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:5px 11px;border-radius:99px;background:var(--bg);border:2px solid var(--black)}
+.dt-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:18px}
+.dt-price{font-family:var(--mono);font-size:34px;font-weight:700;color:var(--orange)}
+.dt-time{font-size:13px;color:#888;font-weight:600}
+.dt-section{margin-bottom:18px}
+.dt-section:last-of-type{margin-bottom:0}
+.dt-section-lbl{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#888;margin-bottom:8px}
+.dt-text{font-size:13px;line-height:1.7;color:var(--black)}
+.dt-days{display:flex;gap:6px;flex-wrap:wrap}
+.dt-day{font-family:var(--mono);font-size:11px;font-weight:700;padding:7px 12px;border-radius:var(--r-sm);border:2px solid var(--black);background:var(--bg);color:#bbb}
+.dt-day.on{background:var(--black);color:var(--yellow)}
+.dt-addr{font-size:13px;line-height:1.7;color:var(--black);background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);padding:11px 14px}
+.dt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.dt-action-btn{flex:1;min-width:130px;text-align:center;padding:12px;border-radius:var(--r-sm);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;border:2px solid var(--black);transition:all 0.14s;text-decoration:none;color:var(--black);background:var(--bg);display:inline-block}
+.dt-action-btn.primary{background:var(--black);color:var(--yellow)}
+.dt-action-btn.primary:hover{background:var(--orange);color:var(--black)}
+.dt-action-btn:hover{background:var(--yellow)}
+.dt-action-btn.disabled{opacity:0.4;cursor:default;pointer-events:none}
+
 @media(max-width:1024px){
   nav{padding:0 16px;gap:12px}
   .hero{grid-template-columns:1fr 1fr;padding:16px}
@@ -1050,6 +1071,40 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
   </div>
 </div>
 
+<!-- SPECIAL DETAIL MODAL -->
+<div class="overlay" id="detail-modal" onclick="if(event.target===this)closeSpecialDetail()">
+  <div class="mbox wide">
+    <div class="m-head">
+      <div>
+        <div class="m-title" id="dt-name"></div>
+        <div class="m-sub" id="dt-venue"></div>
+      </div>
+      <button class="m-close" onclick="closeSpecialDetail()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="dt-tags" id="dt-tags"></div>
+      <div class="dt-price-row" id="dt-price-row"></div>
+      <div class="dt-section" id="dt-desc-section">
+        <div class="dt-section-lbl">About this special</div>
+        <p class="dt-text" id="dt-desc"></p>
+      </div>
+      <div class="dt-section" id="dt-notes-section" style="display:none">
+        <div class="dt-section-lbl">Good to know</div>
+        <p class="dt-text" id="dt-notes"></p>
+      </div>
+      <div class="dt-section">
+        <div class="dt-section-lbl">Available</div>
+        <div class="dt-days" id="dt-days"></div>
+      </div>
+      <div class="dt-section">
+        <div class="dt-section-lbl">Location</div>
+        <div class="dt-addr" id="dt-addr"></div>
+      </div>
+      <div class="dt-actions" id="dt-actions"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 const DAYS=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 const DS={monday:"Mon",tuesday:"Tue",wednesday:"Wed",thursday:"Thu",friday:"Fri",saturday:"Sat",sunday:"Sun"};
@@ -1165,10 +1220,10 @@ function renderSpecials(){
     const on=plan.some(p=>p.sid===s.id);
     const clr=CARD_COLORS[i%CARD_COLORS.length];
     const days=DAYS.map(d=>`<span class="scard-day${s.days.includes(d)?" on":""}">${DS[d]}</span>`).join("");
-    return`<div class="scard ${clr}">
+    return`<div class="scard ${clr}" onclick="openSpecialDetail('${s.id}')" style="cursor:pointer">
       <div class="scard-top">
         <div class="scard-flag" onclick="event.stopPropagation();openReportModal('${s.id}')" title="Report this special">⚑</div>
-        <div class="scard-logo" onclick="openLogo('${s.rid}')" title="Upload logo">${logoHtml(s.rid,34)}</div>
+        <div class="scard-logo" onclick="event.stopPropagation();openLogo('${s.rid}')" title="Upload logo">${logoHtml(s.rid,34)}</div>
         <span class="scard-food-tag">${s.food}${s.session?` · ${sessIcon[s.session]||""}${s.session}`:""}</span>
         <div class="scard-name">${s.name}</div>
         <div class="scard-venue">${r?.name||""} · ${r?.suburb||""}</div>
@@ -1180,7 +1235,7 @@ function renderSpecials(){
           <div class="scard-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</div>
           ${s.from?`<div class="scard-time">${s.from}${s.until?" – "+s.until:""}</div>`:""}
         </div>
-        <button class="scard-add${on?" added":""}" onclick="handleAdd('${s.id}')">${on?"✓ Added":"+ Add"}</button>
+        <button class="scard-add${on?" added":""}" onclick="event.stopPropagation();handleAdd('${s.id}')">${on?"✓ Added":"+ Add"}</button>
       </div>
     </div>`;
   }).join("");
@@ -1661,6 +1716,72 @@ function showSuggestSuccess(){
     <button class="m-confirm" style="margin-top:8px" onclick="closeSuggestModal()">Done</button>
   </div>`;
 }
+
+// ── SPECIAL DETAIL MODAL ──
+function openSpecialDetail(specialId){
+  const s=SPECIALS.find(x=>x.id===specialId);
+  if(!s)return;
+  const r=RESTAURANTS.find(x=>x.id===s.rid);
+  const sessIcon={lunch:"🕛",dinner:"🍽",drinks:"🍻",brunch:"☀️"};
+
+  document.getElementById("dt-name").textContent=s.name;
+  document.getElementById("dt-venue").textContent=`${r?.name||""}${r?.suburb?" · "+r.suburb:""}`;
+
+  // Tags
+  const tags=[];
+  if(s.food) tags.push(s.food);
+  if(s.session) tags.push(`${sessIcon[s.session]||""} ${s.session}`.trim());
+  if(r?.cuisine) tags.push(r.cuisine);
+  document.getElementById("dt-tags").innerHTML=tags.map(t=>`<span class="dt-tag">${t}</span>`).join("");
+
+  // Price + time
+  const price=`$${s.price%1===0?s.price:s.price.toFixed(2)}`;
+  const time=s.from?`${s.from}${s.until?" – "+s.until:""}`:"";
+  document.getElementById("dt-price-row").innerHTML=`<span class="dt-price">${price}</span>${time?`<span class="dt-time">${time}</span>`:""}`;
+
+  // Description
+  if(s.desc){
+    document.getElementById("dt-desc-section").style.display="block";
+    document.getElementById("dt-desc").textContent=s.desc;
+  }else{
+    document.getElementById("dt-desc-section").style.display="none";
+  }
+
+  // Notes
+  if(s.notes){
+    document.getElementById("dt-notes-section").style.display="block";
+    document.getElementById("dt-notes").textContent=s.notes;
+  }else{
+    document.getElementById("dt-notes-section").style.display="none";
+  }
+
+  // Days
+  document.getElementById("dt-days").innerHTML=DAYS.map(d=>`<span class="dt-day${s.days.includes(d)?" on":""}">${DF[d]}</span>`).join("");
+
+  // Address
+  const addrParts=[];
+  if(r?.name) addrParts.push(r.name);
+  if(r?.addr) addrParts.push(r.addr);
+  if(r?.suburb) addrParts.push(r.suburb);
+  document.getElementById("dt-addr").textContent=addrParts.length?addrParts.join(", ")+", Adelaide SA":"Address not available";
+
+  // Actions: website + directions
+  const actions=[];
+  if(r?.website){
+    const url=r.website.startsWith("http")?r.website:`https://${r.website}`;
+    actions.push(`<a class="dt-action-btn" href="${url}" target="_blank" rel="noopener">Visit website ↗</a>`);
+  }
+  if(r?.lat&&r?.lng){
+    actions.push(`<a class="dt-action-btn primary" href="https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}" target="_blank" rel="noopener">Get directions →</a>`);
+  }else if(r?.addr){
+    const q=encodeURIComponent(`${r.name} ${r.addr} ${r.suburb} Adelaide SA`);
+    actions.push(`<a class="dt-action-btn primary" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Get directions →</a>`);
+  }
+  document.getElementById("dt-actions").innerHTML=actions.join("");
+
+  document.getElementById("detail-modal").classList.add("open");
+}
+function closeSpecialDetail(){document.getElementById("detail-modal").classList.remove("open");}
 
 // ── REPORT AN ISSUE MODAL ──
 let reportSpecialId=null;

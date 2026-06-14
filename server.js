@@ -68,7 +68,7 @@ app.get('/api/specials', async (req, res) => {
     const mapped = rows.map(s => ({
       id: s.id, rid: s.rid, name: s.name, desc: s.desc_text,
       price: parseFloat(s.price), food: s.food, session: s.session,
-      days: s.days, from: s.from_time, until: s.until_time, active: s.active
+      days: s.days, from: s.from_time, until: s.until_time, notes: s.notes || '', active: s.active
     }));
     res.json(mapped);
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -78,11 +78,11 @@ app.post('/api/specials', async (req, res) => {
   try {
     const s = req.body;
     await pool.query(
-      `INSERT INTO specials (id,rid,name,desc_text,price,food,session,days,from_time,until_time,active)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+      `INSERT INTO specials (id,rid,name,desc_text,price,food,session,days,from_time,until_time,notes,active)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
        ON CONFLICT (id) DO UPDATE SET
-         rid=$2, name=$3, desc_text=$4, price=$5, food=$6, session=$7, days=$8, from_time=$9, until_time=$10, active=$11`,
-      [s.id, s.rid, s.name, s.desc || '', s.price || 0, s.food || '', s.session || '', s.days || [], s.from || '', s.until || '', s.active !== false]
+         rid=$2, name=$3, desc_text=$4, price=$5, food=$6, session=$7, days=$8, from_time=$9, until_time=$10, notes=$11, active=$12`,
+      [s.id, s.rid, s.name, s.desc || '', s.price || 0, s.food || '', s.session || '', s.days || [], s.from || '', s.until || '', s.notes || '', s.active !== false]
     );
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }

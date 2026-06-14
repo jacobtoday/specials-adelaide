@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS specials (
   days        TEXT[] NOT NULL DEFAULT '{}',
   from_time   TEXT DEFAULT '',
   until_time  TEXT DEFAULT '',
+  notes       TEXT DEFAULT '',
   active      BOOLEAN NOT NULL DEFAULT true,
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -83,6 +84,7 @@ CREATE INDEX IF NOT EXISTS idx_rest_active      ON restaurants(active);
 -- Migration: add lat/lng columns if upgrading an existing database
 ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS lat NUMERIC(9,6);
 ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS lng NUMERIC(9,6);
+ALTER TABLE specials ADD COLUMN IF NOT EXISTS notes TEXT DEFAULT '';
 
 -- Seed default admin credentials (change after first login)
 INSERT INTO settings (key, value) VALUES ('admin_user', 'admin')
