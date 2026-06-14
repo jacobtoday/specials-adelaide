@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Specials Adelaide — Admin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -16,13 +14,13 @@
   --r:14px;--r-sm:8px;
   --sans:'Space Grotesk',sans-serif;--mono:'Space Mono',monospace;
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:14px;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#ccc;border-radius:99px}
 
-/* ── LOCK SCREEN ── */
+/* LOCK */
 #lock-screen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:24px}
-.lock-logo{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--yellow);letter-spacing:-0.02em}
+#app{display:none}
+.lock-logo{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--yellow)}
 .lock-logo span{color:var(--orange)}
 .lock-card{background:#1a1a16;border:3px solid #333;border-radius:var(--r);padding:36px;width:340px}
 .lock-title{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px}
@@ -31,35 +29,33 @@ body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:1
 .lock-label{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#666;margin-bottom:6px;display:block}
 .lock-input{width:100%;background:#111;border:2px solid #333;border-radius:var(--r-sm);padding:11px 14px;font-family:var(--mono);font-size:14px;color:var(--white);outline:none;transition:border-color 0.15s}
 .lock-input:focus{border-color:var(--orange)}
-.lock-btn{width:100%;padding:13px;background:var(--orange);color:var(--black);border:none;border-radius:var(--r-sm);font-family:var(--mono);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.04em;text-transform:uppercase;margin-top:6px;transition:background 0.15s}
+.lock-btn{width:100%;padding:13px;background:var(--orange);color:var(--black);border:none;border-radius:var(--r-sm);font-family:var(--mono);font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.15s}
 .lock-btn:hover{background:var(--yellow)}
-.lock-error{font-size:12px;color:var(--red);margin-top:8px;display:none}
+.lock-error{font-size:12px;color:var(--red);margin-top:10px;display:none;font-family:var(--mono)}
 .lock-hint{font-size:11px;color:#444;text-align:center;margin-top:10px}
+.lock-hint a{color:#666;font-size:10px}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
-/* ── APP SHELL ── */
-#app{display:none}
+/* LAYOUT */
 .admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
 
-/* ── SIDEBAR ── */
+/* SIDEBAR */
 .sidebar{background:var(--black);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sidebar-logo{padding:22px 20px 16px;border-bottom:2px solid #222}
-.sidebar-logo-text{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--yellow);letter-spacing:-0.02em}
+.sidebar-logo-text{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--yellow)}
 .sidebar-logo-sub{font-size:10px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-top:3px;font-family:var(--mono)}
 .sidebar-section{padding:16px 12px 8px;font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#444}
 .sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:2px 8px;border-radius:var(--r-sm);cursor:pointer;transition:all 0.14s;color:#888;font-size:13px;font-weight:500;border:none;background:none;width:calc(100% - 16px);text-align:left;font-family:var(--sans)}
 .sidebar-item:hover{background:#1a1a16;color:var(--white)}
 .sidebar-item.active{background:var(--orange);color:var(--black)}
-.sidebar-item svg{flex-shrink:0;opacity:0.7}
-.sidebar-item.active svg{opacity:1}
-.sidebar-count{margin-left:auto;background:rgba(255,255,255,0.12);color:inherit;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;font-family:var(--mono)}
+.sidebar-count{margin-left:auto;background:rgba(255,255,255,0.12);font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;font-family:var(--mono)}
 .sidebar-item.active .sidebar-count{background:rgba(0,0,0,0.18)}
 .sidebar-bottom{margin-top:auto;padding:16px 12px;border-top:2px solid #1a1a16}
 .sidebar-user{font-size:11px;color:#555;font-family:var(--mono)}
 .logout-btn{display:block;width:100%;margin-top:8px;padding:9px;background:#1a1a16;border:1px solid #333;border-radius:var(--r-sm);color:#888;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.06em;text-align:center;text-transform:uppercase;transition:all 0.14s}
 .logout-btn:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
-/* ── MAIN AREA ── */
+/* MAIN */
 .main-area{display:flex;flex-direction:column;min-height:100vh;background:var(--bg)}
 .topbar{background:var(--white);border-bottom:3px solid var(--black);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .topbar-title{font-family:var(--mono);font-size:16px;font-weight:700}
@@ -69,20 +65,18 @@ body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:1
 .tb-btn.secondary{background:none;color:var(--black)}.tb-btn.secondary:hover{background:var(--yellow)}
 .tb-btn.danger{background:none;color:var(--red);border-color:var(--red)}.tb-btn.danger:hover{background:var(--red);color:var(--white)}
 .content{padding:28px;flex:1}
-
-/* ── VIEW SYSTEM ── */
 .view{display:none}.view.active{display:block}
 
-/* ── DASHBOARD ── */
+/* DASHBOARD */
 .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
 .dash-card{background:var(--surface);border:3px solid var(--black);border-radius:var(--r);padding:22px;box-shadow:3px 3px 0 var(--black)}
 .dash-card.c-o{background:var(--orange)}.dash-card.c-y{background:var(--yellow)}.dash-card.c-g{background:var(--green)}.dash-card.c-b{background:var(--blue)}
 .dash-num{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1}
 .dash-lbl{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.65;margin-top:6px}
-.dash-card.c-b .dash-num,.dash-card.c-b .dash-lbl,.dash-card.c-b .dash-sub{color:var(--white)}
 .dash-sub{font-size:11px;opacity:0.5;margin-top:4px}
+.dash-card.c-b .dash-num,.dash-card.c-b .dash-lbl,.dash-card.c-b .dash-sub{color:var(--white)}
 .activity-list{background:var(--surface);border:3px solid var(--black);border-radius:var(--r);overflow:hidden;box-shadow:3px 3px 0 var(--black)}
-.activity-head{background:var(--black);padding:13px 18px;display:flex;align-items:center;justify-content:space-between}
+.activity-head{background:var(--black);padding:13px 18px}
 .activity-head-title{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--yellow)}
 .activity-row{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:2px solid var(--bg);transition:background 0.12s}
 .activity-row:hover{background:var(--bg)}
@@ -91,22 +85,21 @@ body{background:var(--bg);color:var(--black);font-family:var(--sans);font-size:1
 .activity-text{flex:1;font-size:13px}
 .activity-time{font-size:11px;color:var(--text3);font-family:var(--mono)}
 
-/* ── TABLE ── */
+/* TABLE */
 .tbl-wrap{background:var(--surface);border:3px solid var(--black);border-radius:var(--r);overflow:hidden;box-shadow:3px 3px 0 var(--black)}
-.tbl-header{background:var(--black);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tbl-header{background:var(--black);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .tbl-header-title{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--yellow)}
-.tbl-search{display:flex;align-items:center;gap:8px;background:#1a1a16;border:1.5px solid #333;border-radius:var(--r-sm);padding:7px 14px;min-width:220px}
+.tbl-search{display:flex;align-items:center;gap:8px;background:#1a1a16;border:1.5px solid #333;border-radius:var(--r-sm);padding:7px 14px;min-width:200px}
 .tbl-search input{background:none;border:none;outline:none;font-family:var(--sans);font-size:12px;color:var(--white);width:100%}
 .tbl-search input::placeholder{color:#555}
-.tbl-search svg{flex-shrink:0;color:#555}
+.tbl-select{background:#1a1a16;border:1.5px solid #333;border-radius:var(--r-sm);padding:7px 12px;font-family:var(--mono);font-size:11px;color:#aaa;outline:none}
 table{width:100%;border-collapse:collapse}
 thead th{padding:11px 16px;text-align:left;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);border-bottom:2px solid var(--bg);background:var(--bg);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--bg);transition:background 0.12s}
 tbody tr:hover{background:#faf9f5}
 tbody tr:last-child{border-bottom:none}
 td{padding:12px 16px;font-size:13px;vertical-align:middle}
-.td-name{font-weight:600;color:var(--black)}
-.td-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.td-name{font-weight:600}.td-sub{font-size:11px;color:var(--text3);margin-top:2px}
 .td-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px;border:1.5px solid}
 .td-badge.active{background:#e8f9ee;color:#166534;border-color:#166534}
 .td-badge.inactive{background:#fde8e8;color:#991b1b;border-color:#991b1b}
@@ -116,9 +109,8 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
 .td-badge.brunch{background:#fce7f3;color:#9d174d;border-color:#ec4899}
 .logo-thumb{width:36px;height:36px;border-radius:8px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text3);overflow:hidden;flex-shrink:0;cursor:pointer;transition:border-color 0.14s}
 .logo-thumb:hover{border-color:var(--orange)}
-.logo-thumb img,.logo-thumb svg{width:100%;height:100%;object-fit:contain}
 .row-actions{display:flex;gap:6px}
-.row-btn{font-size:11px;font-weight:700;padding:5px 11px;border-radius:var(--r-sm);cursor:pointer;border:1.5px solid;font-family:var(--mono);letter-spacing:0.04em;text-transform:uppercase;transition:all 0.13s;white-space:nowrap}
+.row-btn{font-size:11px;font-weight:700;padding:5px 11px;border-radius:var(--r-sm);cursor:pointer;border:1.5px solid;font-family:var(--mono);text-transform:uppercase;transition:all 0.13s;white-space:nowrap}
 .row-btn.edit{border-color:var(--black);background:none;color:var(--black)}.row-btn.edit:hover{background:var(--yellow);border-color:var(--yellow)}
 .row-btn.del{border-color:var(--red);background:none;color:var(--red)}.row-btn.del:hover{background:var(--red);color:var(--white)}
 .row-btn.tog{border-color:var(--green);background:none;color:var(--green)}.row-btn.tog:hover{background:var(--green);color:var(--black)}
@@ -126,8 +118,15 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
 .price-cell{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--orange)}
 .day-pips{display:flex;gap:2px;flex-wrap:wrap}
 .day-pip{font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;background:var(--black);color:var(--yellow);font-family:var(--mono)}
+.empty-tbl{padding:64px;text-align:center;color:var(--text3)}
+.empty-tbl span{font-size:32px;display:block;margin-bottom:10px}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:2px solid var(--bg);background:var(--bg)}
+.pg-info{font-size:12px;color:var(--text3)}
+.pg-btns{display:flex;gap:6px}
+.pg-btn{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 12px;border-radius:var(--r-sm);border:2px solid var(--black);background:none;cursor:pointer;transition:all 0.13s}
+.pg-btn:hover{background:var(--yellow)}.pg-btn.cur{background:var(--black);color:var(--yellow)}
 
-/* ── FORM / DRAWER ── */
+/* DRAWER */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:400;backdrop-filter:blur(3px)}
 .drawer-overlay.open{display:block}
 .drawer{position:fixed;top:0;right:-520px;width:520px;height:100vh;background:var(--white);border-left:3px solid var(--black);z-index:500;transition:right 0.28s cubic-bezier(0.22,1,0.36,1);overflow-y:auto;display:flex;flex-direction:column}
@@ -142,12 +141,7 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
 .field{margin-bottom:18px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field-label{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block}
-.field-input,.field-select,.field-textarea{
-  width:100%;padding:10px 13px;
-  background:var(--bg);border:2px solid var(--border);border-radius:var(--r-sm);
-  font-family:var(--sans);font-size:13px;color:var(--black);outline:none;
-  transition:border-color 0.14s;appearance:none;
-}
+.field-input,.field-select,.field-textarea{width:100%;padding:10px 13px;background:var(--bg);border:2px solid var(--border);border-radius:var(--r-sm);font-family:var(--sans);font-size:13px;color:var(--black);outline:none;transition:border-color 0.14s;appearance:none}
 .field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--orange)}
 .field-textarea{resize:vertical;min-height:72px;line-height:1.5}
 .field-select-wrap{position:relative}
@@ -156,424 +150,293 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
 .day-pick-btn{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 12px;border-radius:var(--r-sm);border:2px solid var(--border);background:var(--bg);color:var(--text3);cursor:pointer;transition:all 0.13s}
 .day-pick-btn:hover{border-color:var(--black);color:var(--black)}
 .day-pick-btn.on{background:var(--black);color:var(--yellow);border-color:var(--black)}
-.save-btn{flex:1;padding:12px;background:var(--orange);color:var(--black);border:2px solid var(--black);border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;transition:all 0.14s}
+.save-btn{flex:1;padding:12px;background:var(--orange);color:var(--black);border:2px solid var(--black);border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;font-weight:700;text-transform:uppercase;cursor:pointer;transition:all 0.14s}
 .save-btn:hover{background:var(--yellow)}
 .cancel-btn{padding:12px 20px;background:none;color:var(--black);border:2px solid var(--black);border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.14s}
 .cancel-btn:hover{background:var(--bg)}
 .del-btn-full{padding:12px 20px;background:none;color:var(--red);border:2px solid var(--red);border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:all 0.14s}
 .del-btn-full:hover{background:var(--red);color:var(--white)}
+.toggle{width:40px;height:22px;background:#ddd;border-radius:99px;position:relative;cursor:pointer;transition:background 0.2s;border:2px solid var(--black);flex-shrink:0;display:inline-block}
+.toggle.on{background:var(--green)}
+.toggle-knob{position:absolute;top:1px;left:1px;width:16px;height:16px;background:var(--black);border-radius:50%;transition:transform 0.2s}
+.toggle.on .toggle-knob{transform:translateX(18px)}
 
-/* LOGO UPLOADER IN DRAWER */
-.logo-uploader{border:3px dashed var(--border);border-radius:var(--r-sm);padding:24px;text-align:center;cursor:pointer;transition:all 0.14s;margin-bottom:16px;position:relative}
+/* LOGO UPLOAD */
+.logo-uploader{border:3px dashed var(--border);border-radius:var(--r-sm);padding:24px;text-align:center;cursor:pointer;transition:all 0.14s;margin-bottom:16px}
 .logo-uploader:hover,.logo-uploader.over{border-color:var(--orange);background:#fff8f0}
 .logo-uploader-preview{display:flex;align-items:center;justify-content:center;height:80px}
-.logo-uploader-preview img,.logo-uploader-preview svg{max-width:120px;max-height:80px;object-fit:contain}
 .lu-placeholder{font-size:22px;display:block;margin-bottom:6px}
 .lu-text{font-size:12px;color:var(--text3)}
-.lu-clear{margin-top:10px;font-size:11px;font-weight:700;color:var(--red);cursor:pointer;font-family:var(--mono);background:none;border:none;text-transform:uppercase;letter-spacing:0.08em}
 .color-swatches-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .csw{width:26px;height:26px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:border-color 0.14s}
 .csw.sel{border-color:var(--black)}
 .csw-custom{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);position:relative;overflow:hidden}
 .csw-custom input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:28px;right:28px;background:var(--black);color:var(--yellow);font-family:var(--mono);font-size:13px;font-weight:700;padding:14px 22px;border-radius:var(--r-sm);border:2px solid var(--orange);z-index:9000;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.green{background:var(--green);color:var(--black);border-color:var(--black)}
-.toast.red{background:var(--red);color:var(--white);border-color:var(--black)}
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.settings-card{background:var(--surface);border:3px solid var(--black);border-radius:var(--r);padding:24px;box-shadow:3px 3px 0 var(--black)}
+.settings-card-title{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--bg)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bg)}
+.settings-row:last-child{border-bottom:none}
+.settings-key{font-size:12px;font-weight:600}
+.settings-val{font-size:12px;color:var(--text3);font-family:var(--mono)}
+.inline-edit{display:flex;gap:8px;align-items:center}
+.inline-input{background:var(--bg);border:2px solid var(--border);border-radius:var(--r-sm);padding:6px 10px;font-family:var(--mono);font-size:12px;color:var(--black);outline:none;width:180px;transition:border-color 0.14s}
+.inline-input:focus{border-color:var(--orange)}
 
-/* ── CONFIRM DIALOG ── */
+/* LOGOS GRID */
+.logos-grid{padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.logo-card{background:var(--surface);border:3px solid var(--black);border-radius:var(--r);padding:18px;text-align:center;box-shadow:3px 3px 0 var(--black);cursor:pointer;transition:all 0.14s}
+.logo-card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--black)}
+.logo-card-img{width:72px;height:72px;border:2px solid var(--bg);border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;overflow:hidden}
+.logo-card-name{font-size:12px;font-weight:600;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+.logo-card-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.logo-card-status{font-size:9px;font-weight:700;margin-top:6px;letter-spacing:0.1em;text-transform:uppercase}
+
+/* CONFIRM / TOAST */
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:center;justify-content:center}
 .confirm-overlay.open{display:flex}
 .confirm-box{background:var(--white);border:3px solid var(--black);border-radius:var(--r);padding:28px;max-width:380px;width:100%;box-shadow:6px 6px 0 var(--black)}
 .confirm-title{font-family:var(--mono);font-size:18px;font-weight:700;margin-bottom:8px}
 .confirm-msg{font-size:13px;color:var(--text2);margin-bottom:22px;line-height:1.6}
 .confirm-btns{display:flex;gap:10px}
-
-/* ── SETTINGS ── */
-.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.settings-card{background:var(--surface);border:3px solid var(--black);border-radius:var(--r);padding:24px;box-shadow:3px 3px 0 var(--black)}
-.settings-card-title{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--bg)}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bg)}
-.settings-row:last-child{border-bottom:none}
-.settings-key{font-size:12px;font-weight:600;color:var(--black)}
-.settings-val{font-size:12px;color:var(--text3);font-family:var(--mono)}
-.toggle-wrap{display:flex;align-items:center;gap:8px}
-.toggle{width:40px;height:22px;background:#ddd;border-radius:99px;position:relative;cursor:pointer;transition:background 0.2s;border:2px solid var(--black);flex-shrink:0}
-.toggle.on{background:var(--green)}
-.toggle-knob{position:absolute;top:1px;left:1px;width:16px;height:16px;background:var(--black);border-radius:50%;transition:transform 0.2s}
-.toggle.on .toggle-knob{transform:translateX(18px)}
-.inline-edit{display:flex;gap:8px;align-items:center}
-.inline-input{background:var(--bg);border:2px solid var(--border);border-radius:var(--r-sm);padding:6px 10px;font-family:var(--mono);font-size:12px;color:var(--black);outline:none;width:180px;transition:border-color 0.14s}
-.inline-input:focus{border-color:var(--orange)}
-
-/* EMPTY STATE */
-.empty-tbl{padding:64px;text-align:center;color:var(--text3)}
-.empty-tbl span{font-size:32px;display:block;margin-bottom:10px}
-.empty-tbl p{font-size:14px}
-
-/* PAGINATION */
-.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:2px solid var(--bg);background:var(--bg)}
-.pg-info{font-size:12px;color:var(--text3)}
-.pg-btns{display:flex;gap:6px}
-.pg-btn{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 12px;border-radius:var(--r-sm);border:2px solid var(--black);background:none;cursor:pointer;transition:all 0.13s}
-.pg-btn:hover{background:var(--yellow)}.pg-btn.cur{background:var(--black);color:var(--yellow)}
-.pg-btn:disabled{opacity:0.3;cursor:default}
-
-@media(max-width:900px){
-  .admin-layout{grid-template-columns:1fr}
-  .sidebar{display:none}
-  .dash-grid{grid-template-columns:1fr 1fr}
-  .settings-grid{grid-template-columns:1fr}
-}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--black);color:var(--yellow);font-family:var(--mono);font-size:13px;font-weight:700;padding:14px 22px;border-radius:var(--r-sm);border:2px solid var(--orange);z-index:9000;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.green{background:var(--green);color:var(--black);border-color:var(--black)}
+.toast.red{background:var(--red);color:var(--white);border-color:var(--black)}
 </style>
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
 <div id="lock-screen">
   <div class="lock-logo">specials<span>.</span></div>
   <div class="lock-card">
     <div class="lock-title">Admin Panel</div>
-    <div class="lock-sub">Sign in to manage your specials data</div>
+    <div class="lock-sub">Sign in to manage specials data</div>
     <div class="lock-field">
       <label class="lock-label">Username</label>
       <input class="lock-input" id="login-user" type="text" placeholder="admin" autocomplete="username">
     </div>
     <div class="lock-field">
       <label class="lock-label">Password</label>
-      <input class="lock-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <input class="lock-input" id="login-pass" type="password" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <button class="lock-btn" onclick="doLogin()">Sign in →</button>
+    <button class="lock-btn" onclick="doLogin()">Sign in</button>
     <div class="lock-error" id="login-error">Incorrect username or password</div>
     <div class="lock-hint">Default: admin / specials2025</div>
-    <div class="lock-hint" style="margin-top:6px"><a href="#" onclick="clearSavedAuth()" style="color:#555;font-size:10px">Reset to default credentials</a></div>
+    <div class="lock-hint"><a href="#" onclick="resetAuth();return false">Reset to default credentials</a></div>
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app">
 <div class="admin-layout">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-text">specials.</div>
       <div class="sidebar-logo-sub">Admin Panel</div>
     </div>
     <div class="sidebar-section">Content</div>
-    <button class="sidebar-item active" onclick="showView('dashboard',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Dashboard
-    </button>
-    <button class="sidebar-item" onclick="showView('specials',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-      Specials
-      <span class="sidebar-count" id="sb-specials-count">0</span>
-    </button>
-    <button class="sidebar-item" onclick="showView('restaurants',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Restaurants
-      <span class="sidebar-count" id="sb-rest-count">0</span>
-    </button>
-    <button class="sidebar-item" onclick="showView('logos',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      Logos
-    </button>
+    <button class="sidebar-item active" onclick="showView('dashboard',this)">Dashboard</button>
+    <button class="sidebar-item" onclick="showView('specials',this)">Specials <span class="sidebar-count" id="sb-specials-count">0</span></button>
+    <button class="sidebar-item" onclick="showView('restaurants',this)">Restaurants <span class="sidebar-count" id="sb-rest-count">0</span></button>
+    <button class="sidebar-item" onclick="showView('logos',this)">Logos</button>
     <div class="sidebar-section">Management</div>
-    <button class="sidebar-item" onclick="showView('import',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Import / Export
-    </button>
-    <button class="sidebar-item" onclick="showView('settings',this)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      Settings
-    </button>
+    <button class="sidebar-item" onclick="showView('export',this)">Export / Import</button>
+    <button class="sidebar-item" onclick="showView('settings',this)">Settings</button>
     <div class="sidebar-bottom">
-      <div class="sidebar-user" id="sidebar-user">Logged in as admin</div>
+      <div class="sidebar-user" id="sidebar-user"></div>
       <button class="logout-btn" onclick="doLogout()">Sign out</button>
     </div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main-area">
     <div class="topbar">
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div class="topbar-actions" id="topbar-actions">
-        <a href="index.html" target="_blank" class="tb-btn secondary">↗ View site</a>
+        <a href="index.html" target="_blank" class="tb-btn secondary">View site</a>
       </div>
     </div>
-
     <div class="content">
 
-      <!-- DASHBOARD VIEW -->
+      <!-- DASHBOARD -->
       <div class="view active" id="view-dashboard">
         <div class="dash-grid">
-          <div class="dash-card c-o">
-            <div class="dash-num" id="d-specials">0</div>
-            <div class="dash-lbl">Total specials</div>
-            <div class="dash-sub" id="d-active-specials">— active</div>
-          </div>
-          <div class="dash-card c-y">
-            <div class="dash-num" id="d-restaurants">0</div>
-            <div class="dash-lbl">Restaurants</div>
-            <div class="dash-sub" id="d-suburbs">— suburbs</div>
-          </div>
-          <div class="dash-card c-g">
-            <div class="dash-num" id="d-avg">$0</div>
-            <div class="dash-lbl">Avg special price</div>
-            <div class="dash-sub" id="d-price-range">range —</div>
-          </div>
-          <div class="dash-card c-b">
-            <div class="dash-num" id="d-logos">0</div>
-            <div class="dash-lbl">Logos uploaded</div>
-            <div class="dash-sub" id="d-logos-sub">— without logo</div>
-          </div>
+          <div class="dash-card c-o"><div class="dash-num" id="d-specials">0</div><div class="dash-lbl">Specials</div><div class="dash-sub" id="d-active-s"></div></div>
+          <div class="dash-card c-y"><div class="dash-num" id="d-rests">0</div><div class="dash-lbl">Restaurants</div><div class="dash-sub" id="d-suburbs"></div></div>
+          <div class="dash-card c-g"><div class="dash-num" id="d-avg">$0</div><div class="dash-lbl">Avg price</div><div class="dash-sub" id="d-range"></div></div>
+          <div class="dash-card c-b"><div class="dash-num" id="d-logos">0</div><div class="dash-lbl">Logos</div><div class="dash-sub" id="d-no-logos"></div></div>
         </div>
         <div class="activity-list">
-          <div class="activity-head">
-            <span class="activity-head-title">Recent activity</span>
-          </div>
-          <div id="activity-log"></div>
+          <div class="activity-head"><div class="activity-head-title">Recent activity</div></div>
+          <div id="activity-log"><div style="padding:24px;text-align:center;color:#aaa;font-size:13px">No recent activity yet.</div></div>
         </div>
       </div>
 
-      <!-- SPECIALS VIEW -->
+      <!-- SPECIALS -->
       <div class="view" id="view-specials">
         <div class="tbl-wrap">
           <div class="tbl-header">
-            <span class="tbl-header-title">All Specials <span id="specials-tbl-count" style="opacity:0.5;font-size:11px"></span></span>
-            <div style="display:flex;gap:10px;align-items:center">
-              <div class="tbl-search">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input placeholder="Search specials…" id="specials-search" oninput="renderSpecialsTable()">
-              </div>
-              <select id="specials-filter-food" onchange="renderSpecialsTable()" style="background:#1a1a16;border:1.5px solid #333;border-radius:var(--r-sm);padding:7px 12px;font-family:var(--mono);font-size:11px;color:#aaa;outline:none">
+            <span class="tbl-header-title">Specials <span id="spec-count" style="opacity:0.5;font-size:11px"></span></span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <div class="tbl-search"><input placeholder="Search..." id="spec-search" oninput="renderSpecialsTable()"></div>
+              <select class="tbl-select" id="spec-f-food" onchange="renderSpecialsTable()">
                 <option value="">All types</option>
-                <option>schnitzel</option><option>parmi</option><option>burger</option>
-                <option>steak</option><option>pizza</option><option>pasta</option>
-                <option>tacos</option><option>wings</option><option>seafood</option>
-                <option>roast</option><option>brunch</option><option>curry</option><option>drinks</option>
+                <option>schnitzel</option><option>parmi</option><option>burger</option><option>steak</option>
+                <option>pizza</option><option>pasta</option><option>tacos</option><option>wings</option>
+                <option>seafood</option><option>roast</option><option>brunch</option><option>curry</option><option>drinks</option>
               </select>
-              <select id="specials-filter-session" onchange="renderSpecialsTable()" style="background:#1a1a16;border:1.5px solid #333;border-radius:var(--r-sm);padding:7px 12px;font-family:var(--mono);font-size:11px;color:#aaa;outline:none">
+              <select class="tbl-select" id="spec-f-sess" onchange="renderSpecialsTable()">
                 <option value="">All sessions</option>
                 <option value="lunch">Lunch</option><option value="dinner">Dinner</option>
                 <option value="drinks">Drinks</option><option value="brunch">Brunch</option>
               </select>
             </div>
           </div>
-          <table>
-            <thead><tr>
-              <th>Special</th><th>Restaurant</th><th>Price</th>
-              <th>Type</th><th>Session</th><th>Days</th><th>Status</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="specials-tbody"></tbody>
-          </table>
-          <div class="pagination" id="specials-pg"></div>
+          <table><thead><tr>
+            <th>Special</th><th>Restaurant</th><th>Price</th><th>Type</th><th>Session</th><th>Days</th><th>Status</th><th>Actions</th>
+          </tr></thead><tbody id="spec-tbody"></tbody></table>
+          <div class="pagination" id="spec-pg"></div>
         </div>
       </div>
 
-      <!-- RESTAURANTS VIEW -->
+      <!-- RESTAURANTS -->
       <div class="view" id="view-restaurants">
         <div class="tbl-wrap">
           <div class="tbl-header">
-            <span class="tbl-header-title">All Restaurants <span id="rests-tbl-count" style="opacity:0.5;font-size:11px"></span></span>
-            <div style="display:flex;gap:10px;align-items:center">
-              <div class="tbl-search">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input placeholder="Search restaurants…" id="rests-search" oninput="renderRestsTable()">
-              </div>
-            </div>
+            <span class="tbl-header-title">Restaurants <span id="rest-count" style="opacity:0.5;font-size:11px"></span></span>
+            <div class="tbl-search"><input placeholder="Search..." id="rest-search" oninput="renderRestsTable()"></div>
           </div>
-          <table>
-            <thead><tr>
-              <th>Logo</th><th>Restaurant</th><th>Suburb</th><th>Cuisine</th>
-              <th>Specials</th><th>Status</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="rests-tbody"></tbody>
-          </table>
-          <div class="pagination" id="rests-pg"></div>
+          <table><thead><tr>
+            <th>Logo</th><th>Restaurant</th><th>Suburb</th><th>Cuisine</th><th>Specials</th><th>Status</th><th>Actions</th>
+          </tr></thead><tbody id="rest-tbody"></tbody></table>
+          <div class="pagination" id="rest-pg"></div>
         </div>
       </div>
 
-      <!-- LOGOS VIEW -->
+      <!-- LOGOS -->
       <div class="view" id="view-logos">
         <div class="tbl-wrap">
           <div class="tbl-header">
             <span class="tbl-header-title">Restaurant Logos</span>
-            <span style="font-size:11px;color:#888;font-family:var(--mono)" id="logo-progress-lbl"></span>
+            <span class="tbl-header-title" id="logo-prog" style="font-size:11px;opacity:0.6"></span>
           </div>
-          <div style="padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="logos-grid"></div>
+          <div class="logos-grid" id="logos-grid"></div>
         </div>
       </div>
 
-      <!-- IMPORT / EXPORT VIEW -->
-      <div class="view" id="view-import">
+      <!-- EXPORT -->
+      <div class="view" id="view-export">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div class="settings-card">
-            <div class="settings-card-title">Export data</div>
-            <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Download your full specials and restaurant data as JSON — ready to import into a database or back up locally.</p>
-            <button class="tb-btn primary" onclick="exportJSON()" style="width:100%;padding:12px">Download JSON</button>
-            <div style="margin-top:10px">
-            <button class="tb-btn secondary" onclick="exportCSV()" style="width:100%;padding:12px">Download CSV (specials only)</button>
-            </div>
+            <div class="settings-card-title">Export</div>
+            <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Download all data as JSON backup, or specials as CSV.</p>
+            <button class="tb-btn primary" onclick="exportJSON()" style="width:100%;padding:12px;margin-bottom:8px">Download JSON</button>
+            <button class="tb-btn secondary" onclick="exportCSV()" style="width:100%;padding:12px">Download CSV</button>
           </div>
           <div class="settings-card">
-            <div class="settings-card-title">Import data</div>
-            <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Import a JSON file previously exported from this admin panel. This will merge with existing data.</p>
-            <div class="logo-uploader" id="import-drop" onclick="document.getElementById('import-file').click()" style="height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
-              <span style="font-size:18px">📂</span>
-              <span class="lu-text">Click or drag JSON file</span>
-              <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
-            </div>
+            <div class="settings-card-title">Import</div>
+            <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Import a previously exported JSON file to restore or merge data.</p>
+            <label style="display:block;border:3px dashed var(--border);border-radius:var(--r-sm);padding:24px;text-align:center;cursor:pointer;transition:all 0.14s" onmouseover="this.style.borderColor='var(--orange)'" onmouseout="this.style.borderColor='var(--border)'">
+              <div style="font-size:20px;margin-bottom:6px">📂</div>
+              <div style="font-size:12px;color:var(--text3)">Click to select JSON file</div>
+              <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
+            </label>
           </div>
           <div class="settings-card" style="grid-column:1/3">
-            <div class="settings-card-title">Supabase SQL — Push to database</div>
-            <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">When you're ready to connect to Supabase, copy this SQL to upsert all current specials and restaurants into your database.</p>
+            <div class="settings-card-title">Generate Supabase SQL</div>
+            <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">Generate SQL to upsert all current data into your Supabase database.</p>
             <button class="tb-btn primary" onclick="generateSQL()" style="padding:10px 20px">Generate SQL</button>
-            <div id="sql-output" style="margin-top:14px;display:none">
-              <div style="background:#111;border-radius:var(--r-sm);padding:16px;font-family:var(--mono);font-size:11px;color:#aaa;max-height:300px;overflow-y:auto;white-space:pre;line-height:1.7" id="sql-text"></div>
+            <div id="sql-wrap" style="display:none;margin-top:14px">
+              <pre style="background:#111;border-radius:var(--r-sm);padding:16px;font-family:var(--mono);font-size:11px;color:#aaa;max-height:280px;overflow-y:auto;white-space:pre-wrap;line-height:1.6" id="sql-out"></pre>
               <button class="tb-btn secondary" onclick="copySQL()" style="margin-top:10px;padding:8px 18px">Copy SQL</button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SETTINGS VIEW -->
+      <!-- SETTINGS -->
       <div class="view" id="view-settings">
         <div class="settings-grid">
           <div class="settings-card">
-            <div class="settings-card-title">Site settings</div>
+            <div class="settings-card-title">Admin credentials</div>
             <div class="settings-row">
-              <div><div class="settings-key">Site name</div></div>
+              <div><div class="settings-key">Username</div></div>
               <div class="inline-edit">
-                <input class="inline-input" id="setting-sitename" value="Specials Adelaide">
-                <button class="tb-btn primary" onclick="saveSetting('sitename')" style="padding:6px 12px">Save</button>
+                <input class="inline-input" id="set-username" placeholder="admin">
+                <button class="tb-btn primary" onclick="saveCredentials()" style="padding:6px 12px">Save</button>
               </div>
             </div>
             <div class="settings-row">
-              <div><div class="settings-key">Google Maps API Key</div><div class="settings-val">For map page embed</div></div>
+              <div><div class="settings-key">New password</div></div>
               <div class="inline-edit">
-                <input class="inline-input" id="setting-mapskey" placeholder="AIzaSy…" type="password">
-                <button class="tb-btn primary" onclick="saveSetting('mapskey')" style="padding:6px 12px">Save</button>
-              </div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-key">Ticker speed</div><div class="settings-val">Scrolling banner duration</div></div>
-              <div class="inline-edit">
-                <input class="inline-input" id="setting-ticker" value="56" type="number" style="width:80px">
-                <span style="font-size:12px;color:var(--text3)">sec</span>
-                <button class="tb-btn primary" onclick="saveSetting('ticker')" style="padding:6px 12px">Save</button>
+                <input class="inline-input" id="set-password" type="password" placeholder="New password">
+                <button class="tb-btn primary" onclick="saveCredentials()" style="padding:6px 12px">Save</button>
               </div>
             </div>
           </div>
           <div class="settings-card">
-            <div class="settings-card-title">Admin account</div>
-            <div class="settings-row">
-              <div><div class="settings-key">Username</div></div>
-              <div class="inline-edit">
-                <input class="inline-input" id="setting-username" value="admin">
-                <button class="tb-btn primary" onclick="saveSetting('username')" style="padding:6px 12px">Save</button>
-              </div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-key">Password</div></div>
-              <div class="inline-edit">
-                <input class="inline-input" id="setting-password" type="password" placeholder="New password…">
-                <button class="tb-btn primary" onclick="saveSetting('password')" style="padding:6px 12px">Save</button>
-              </div>
-            </div>
-            <div class="settings-row">
-              <div><div class="settings-key">Session timeout</div><div class="settings-val">Auto-logout after inactivity</div></div>
-              <div class="inline-edit">
-                <input class="inline-input" id="setting-timeout" value="60" type="number" style="width:80px">
-                <span style="font-size:12px;color:var(--text3)">min</span>
-              </div>
-            </div>
-          </div>
-          <div class="settings-card" style="grid-column:1/3">
             <div class="settings-card-title">Danger zone</div>
             <div class="settings-row">
-              <div><div class="settings-key">Reset all data</div><div class="settings-val">Restore factory sample data — cannot be undone</div></div>
-              <button class="tb-btn danger" onclick="confirmReset()">Reset data</button>
+              <div><div class="settings-key">Reset all specials &amp; restaurants</div><div class="settings-val">Restores factory sample data</div></div>
+              <button class="tb-btn danger" onclick="confirmReset()">Reset</button>
             </div>
             <div class="settings-row">
-              <div><div class="settings-key">Clear all logos</div><div class="settings-val">Remove all uploaded restaurant logos</div></div>
-              <button class="tb-btn danger" onclick="clearLogos()">Clear logos</button>
+              <div><div class="settings-key">Clear all logos</div></div>
+              <button class="tb-btn danger" onclick="confirmClearLogos()">Clear</button>
             </div>
           </div>
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main-area -->
-</div><!-- /admin-layout -->
-</div><!-- /app -->
-
-<!-- DRAWER overlay -->
-<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+    </div>
+  </div>
+</div>
+</div>
 
 <!-- SPECIAL DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="special-drawer">
   <div class="drawer-head">
-    <div>
-      <div class="drawer-title" id="sd-title">Add special</div>
-      <div class="drawer-sub" id="sd-sub">New special entry</div>
-    </div>
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <div><div class="drawer-title" id="sd-title">Add special</div><div class="drawer-sub" id="sd-sub"></div></div>
+    <button class="drawer-close" onclick="closeDrawer()">X</button>
   </div>
   <div class="drawer-body">
     <input type="hidden" id="sd-id">
     <div class="field">
       <label class="field-label">Restaurant *</label>
-      <div class="field-select-wrap">
-        <select class="field-select" id="sd-rid"></select>
-        <span class="field-select-arrow">▾</span>
-      </div>
+      <div class="field-select-wrap"><select class="field-select" id="sd-rid"></select><span class="field-select-arrow">v</span></div>
     </div>
-    <div class="field">
-      <label class="field-label">Special name *</label>
-      <input class="field-input" id="sd-name" placeholder="e.g. Schnitzel Tuesday">
-    </div>
-    <div class="field">
-      <label class="field-label">Description</label>
-      <textarea class="field-textarea" id="sd-desc" placeholder="What's included, how to redeem…"></textarea>
-    </div>
+    <div class="field"><label class="field-label">Special name *</label><input class="field-input" id="sd-name" placeholder="e.g. Schnitzel Tuesday"></div>
+    <div class="field"><label class="field-label">Description</label><textarea class="field-textarea" id="sd-desc" placeholder="What is included..."></textarea></div>
     <div class="field-row">
-      <div class="field">
-        <label class="field-label">Price ($) *</label>
-        <input class="field-input" id="sd-price" type="number" step="0.01" placeholder="18.00">
-      </div>
+      <div class="field"><label class="field-label">Price ($) *</label><input class="field-input" id="sd-price" type="number" step="0.01" placeholder="18.00"></div>
       <div class="field">
         <label class="field-label">Food type *</label>
         <div class="field-select-wrap">
           <select class="field-select" id="sd-food">
-            <option value="">Select…</option>
-            <option>schnitzel</option><option>parmi</option><option>burger</option>
-            <option>steak</option><option>pizza</option><option>pasta</option>
-            <option>tacos</option><option>wings</option><option>seafood</option>
-            <option>roast</option><option>brunch</option><option>curry</option><option>drinks</option>
+            <option value="">Select...</option>
+            <option>schnitzel</option><option>parmi</option><option>burger</option><option>steak</option>
+            <option>pizza</option><option>pasta</option><option>tacos</option><option>wings</option>
+            <option>seafood</option><option>roast</option><option>brunch</option><option>curry</option><option>drinks</option>
           </select>
-          <span class="field-select-arrow">▾</span>
+          <span class="field-select-arrow">v</span>
         </div>
       </div>
     </div>
     <div class="field">
-      <label class="field-label">Session / Meal time *</label>
+      <label class="field-label">Session *</label>
       <div class="field-select-wrap">
         <select class="field-select" id="sd-session">
-          <option value="">Select…</option>
-          <option value="lunch">Lunch (11am – 3pm)</option>
-          <option value="dinner">Dinner (5pm – late)</option>
-          <option value="drinks">Drinks & Happy Hour</option>
-          <option value="brunch">Brunch & Bottomless</option>
+          <option value="">Select...</option>
+          <option value="lunch">Lunch</option><option value="dinner">Dinner</option>
+          <option value="drinks">Drinks</option><option value="brunch">Brunch</option>
         </select>
-        <span class="field-select-arrow">▾</span>
+        <span class="field-select-arrow">v</span>
       </div>
     </div>
     <div class="field">
-      <label class="field-label">Days available *</label>
+      <label class="field-label">Days *</label>
       <div class="day-picker" id="sd-days">
         <button class="day-pick-btn" data-day="monday" onclick="toggleDay(this)">Mon</button>
         <button class="day-pick-btn" data-day="tuesday" onclick="toggleDay(this)">Tue</button>
@@ -585,133 +448,103 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
       </div>
     </div>
     <div class="field-row">
-      <div class="field">
-        <label class="field-label">Available from</label>
-        <input class="field-input" id="sd-from" placeholder="e.g. 5pm">
-      </div>
-      <div class="field">
-        <label class="field-label">Available until</label>
-        <input class="field-input" id="sd-until" placeholder="e.g. 9pm">
-      </div>
+      <div class="field"><label class="field-label">From</label><input class="field-input" id="sd-from" placeholder="5pm"></div>
+      <div class="field"><label class="field-label">Until</label><input class="field-input" id="sd-until" placeholder="9pm"></div>
     </div>
     <div class="field" style="display:flex;align-items:center;gap:10px">
-      <div class="toggle" id="sd-active-tog" onclick="this.classList.toggle('on')">
-        <div class="toggle-knob"></div>
-      </div>
+      <div class="toggle on" id="sd-active-tog" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
       <label class="field-label" style="margin:0">Active (visible on site)</label>
     </div>
   </div>
   <div class="drawer-footer">
     <button class="del-btn-full" id="sd-del-btn" onclick="deleteSpecial()" style="display:none">Delete</button>
     <button class="cancel-btn" onclick="closeDrawer()">Cancel</button>
-    <button class="save-btn" onclick="saveSpecial()">Save special</button>
+    <button class="save-btn" onclick="saveSpecial()">Save</button>
   </div>
 </div>
 
 <!-- RESTAURANT DRAWER -->
 <div class="drawer" id="rest-drawer">
   <div class="drawer-head">
-    <div>
-      <div class="drawer-title" id="rd-title">Add restaurant</div>
-      <div class="drawer-sub" id="rd-sub">New venue entry</div>
-    </div>
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <div><div class="drawer-title" id="rd-title">Add restaurant</div><div class="drawer-sub" id="rd-sub"></div></div>
+    <button class="drawer-close" onclick="closeDrawer()">X</button>
   </div>
   <div class="drawer-body">
     <input type="hidden" id="rd-id">
     <div class="field-row">
-      <div class="field">
-        <label class="field-label">Restaurant name *</label>
-        <input class="field-input" id="rd-name" placeholder="e.g. The Exeter Hotel">
-      </div>
-      <div class="field">
-        <label class="field-label">Suburb *</label>
-        <input class="field-input" id="rd-suburb" placeholder="e.g. Adelaide CBD">
-      </div>
+      <div class="field"><label class="field-label">Name *</label><input class="field-input" id="rd-name" placeholder="e.g. The Exeter Hotel"></div>
+      <div class="field"><label class="field-label">Suburb *</label><input class="field-input" id="rd-suburb" placeholder="e.g. Adelaide CBD"></div>
     </div>
     <div class="field-row">
-      <div class="field">
-        <label class="field-label">Cuisine type</label>
-        <input class="field-input" id="rd-cuisine" placeholder="e.g. Australian">
-      </div>
-      <div class="field">
-        <label class="field-label">Address</label>
-        <input class="field-input" id="rd-addr" placeholder="e.g. 97 The Parade">
-      </div>
+      <div class="field"><label class="field-label">Cuisine</label><input class="field-input" id="rd-cuisine" placeholder="Australian"></div>
+      <div class="field"><label class="field-label">Address</label><input class="field-input" id="rd-addr" placeholder="97 The Parade"></div>
     </div>
     <div class="field-row">
-      <div class="field">
-        <label class="field-label">Phone</label>
-        <input class="field-input" id="rd-phone" placeholder="08 8xxx xxxx">
-      </div>
-      <div class="field">
-        <label class="field-label">Website</label>
-        <input class="field-input" id="rd-website" placeholder="https://…">
-      </div>
+      <div class="field"><label class="field-label">Phone</label><input class="field-input" id="rd-phone" placeholder="08 8xxx xxxx"></div>
+      <div class="field"><label class="field-label">Website</label><input class="field-input" id="rd-website" placeholder="https://..."></div>
     </div>
-
-    <!-- LOGO SECTION -->
     <div class="field">
-      <label class="field-label">Logo</label>
+      <label class="field-label">Logo (SVG or PNG)</label>
       <div class="logo-uploader" id="rd-logo-drop" onclick="document.getElementById('rd-logo-inp').click()">
         <div class="logo-uploader-preview" id="rd-logo-preview">
-          <span class="lu-placeholder">🖼</span>
+          <span class="lu-placeholder">Upload</span>
           <span class="lu-text">Click or drag SVG / PNG</span>
         </div>
-        <input type="file" id="rd-logo-inp" accept=".svg,.png,image/svg+xml,image/png" style="display:none" onchange="handleLogoUpload(event,'rd')">
+        <input type="file" id="rd-logo-inp" accept=".svg,.png,image/svg+xml,image/png" style="display:none" onchange="handleLogoUpload(event)">
       </div>
-      <div id="rd-logo-color-row" style="display:none">
-        <label class="field-label">SVG monotone colour</label>
+      <div id="rd-color-row" style="display:none">
+        <label class="field-label">SVG colour</label>
         <div class="color-swatches-row" id="rd-swatches">
-          <div class="csw sel" style="background:#0f0f0f" onclick="applyLogoColor('#0f0f0f',this,'rd')"></div>
-          <div class="csw" style="background:#f25c05" onclick="applyLogoColor('#f25c05',this,'rd')"></div>
-          <div class="csw" style="background:#1a5cf5" onclick="applyLogoColor('#1a5cf5',this,'rd')"></div>
-          <div class="csw" style="background:#1ec96a" onclick="applyLogoColor('#1ec96a',this,'rd')"></div>
-          <div class="csw" style="background:#8b45f5" onclick="applyLogoColor('#8b45f5',this,'rd')"></div>
-          <div class="csw" style="background:#f5c800" onclick="applyLogoColor('#f5c800',this,'rd')"></div>
-          <div class="csw-custom"><span>+</span><input type="color" value="#0f0f0f" oninput="applyLogoColor(this.value,null,'rd',true)"></div>
+          <div class="csw sel" style="background:#0f0f0f" onclick="applyLogoColor('#0f0f0f',this)"></div>
+          <div class="csw" style="background:#f25c05" onclick="applyLogoColor('#f25c05',this)"></div>
+          <div class="csw" style="background:#1a5cf5" onclick="applyLogoColor('#1a5cf5',this)"></div>
+          <div class="csw" style="background:#1ec96a" onclick="applyLogoColor('#1ec96a',this)"></div>
+          <div class="csw" style="background:#f5c800" onclick="applyLogoColor('#f5c800',this)"></div>
+          <div class="csw" style="background:#ffffff;border:2px solid #ddd" onclick="applyLogoColor('#ffffff',this)"></div>
+          <div class="csw-custom"><span>+</span><input type="color" value="#0f0f0f" oninput="applyLogoColor(this.value,null,true)"></div>
         </div>
       </div>
       <input type="hidden" id="rd-logo-type">
       <input type="hidden" id="rd-logo-data">
-      <input type="hidden" id="rd-logo-rawsvg">
     </div>
-
     <div class="field" style="display:flex;align-items:center;gap:10px">
-      <div class="toggle on" id="rd-active-tog" onclick="this.classList.toggle('on')">
-        <div class="toggle-knob"></div>
-      </div>
+      <div class="toggle on" id="rd-active-tog" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
       <label class="field-label" style="margin:0">Active (visible on site)</label>
     </div>
   </div>
   <div class="drawer-footer">
     <button class="del-btn-full" id="rd-del-btn" onclick="deleteRestaurant()" style="display:none">Delete</button>
     <button class="cancel-btn" onclick="closeDrawer()">Cancel</button>
-    <button class="save-btn" onclick="saveRestaurant()">Save restaurant</button>
+    <button class="save-btn" onclick="saveRestaurant()">Save</button>
   </div>
 </div>
 
-<!-- CONFIRM DIALOG -->
+<!-- CONFIRM -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
     <div class="confirm-title" id="confirm-title">Are you sure?</div>
     <div class="confirm-msg" id="confirm-msg">This cannot be undone.</div>
     <div class="confirm-btns">
       <button class="cancel-btn" onclick="closeConfirm()">Cancel</button>
-      <button class="del-btn-full" id="confirm-ok-btn" onclick="confirmOK()">Confirm</button>
+      <button class="del-btn-full" onclick="confirmOK()">Confirm</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CREDENTIALS (change these before deploying) ──
-let CREDENTIALS={user:"admin",pass:"specials2025"};
+// ─────────────────────────────────────────────
+// STEP 1: CREDENTIALS
+// ─────────────────────────────────────────────
+var ADMIN_USER = "admin";
+var ADMIN_PASS = "specials2025";
+var SETTINGS_KEY = "sa-settings";
 
-// ── SAMPLE DATA (same as main site, trimmed for brevity — loads from localStorage or defaults) ──
-const DEFAULT_RESTAURANTS=[
+// ─────────────────────────────────────────────
+// STEP 2: DEFAULT DATA
+// ─────────────────────────────────────────────
+var DEFAULT_RESTAURANTS = [
   {id:"r1",name:"Cumberland Arms Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Waymouth St",phone:"",website:"",active:true},
   {id:"r2",name:"General Havelock Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"162 Hutt St",phone:"",website:"",active:true},
   {id:"r3",name:"Union Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"70 Waymouth St",phone:"",website:"",active:true},
@@ -720,11 +553,11 @@ const DEFAULT_RESTAURANTS=[
   {id:"r6",name:"Benjamin On Franklin",suburb:"Adelaide CBD",cuisine:"Bar",addr:"148 Franklin St",phone:"",website:"",active:true},
   {id:"r7",name:"Lady Burra Brewhouse",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"3 Nile St",phone:"",website:"",active:true},
   {id:"r8",name:"Duke of Brunswick Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"207 Gilbert St",phone:"",website:"",active:true},
-  {id:"r9",name:"Duke of York Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"81-83 Grenfell St",phone:"",website:"",active:true},
-  {id:"r10",name:"Rob Roy Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"Grenfell & Pulteney St",phone:"",website:"",active:true},
+  {id:"r9",name:"Duke of York Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"81 Grenfell St",phone:"",website:"",active:true},
+  {id:"r10",name:"Rob Roy Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"Grenfell St",phone:"",website:"",active:true},
   {id:"r11",name:"The Austral",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Rundle St",phone:"",website:"",active:true},
   {id:"r12",name:"Coopers Alehouse",suburb:"Adelaide CBD",cuisine:"Australian",addr:"226 Rundle St",phone:"",website:"",active:true},
-  {id:"r13",name:"PJ O'Briens",suburb:"Adelaide CBD",cuisine:"Irish",addr:"Grenfell St",phone:"",website:"",active:true},
+  {id:"r13",name:"PJ OBriens",suburb:"Adelaide CBD",cuisine:"Irish",addr:"Grenfell St",phone:"",website:"",active:true},
   {id:"r14",name:"Norwood Hotel",suburb:"Norwood",cuisine:"Australian",addr:"97 The Parade",phone:"",website:"",active:true},
   {id:"r15",name:"Alma Tavern",suburb:"Norwood",cuisine:"Australian",addr:"66 Magill Rd",phone:"",website:"",active:true},
   {id:"r16",name:"The Kensi",suburb:"Marryatville",cuisine:"Australian",addr:"23 Regent St",phone:"",website:"",active:true},
@@ -753,7 +586,7 @@ const DEFAULT_RESTAURANTS=[
   {id:"r39",name:"Marion Hotel",suburb:"Mitchell Park",cuisine:"Australian",addr:"849 Marion Rd",phone:"",website:"",active:true},
   {id:"r40",name:"Emu Hotel",suburb:"Morphett Vale",cuisine:"Australian",addr:"132 Main South Rd",phone:"",website:"",active:true},
   {id:"r41",name:"TGI Fridays",suburb:"Oaklands Park",cuisine:"American",addr:"293 Diagonal Rd",phone:"",website:"",active:true},
-  {id:"r42",name:"Seamore's",suburb:"Henley Beach",cuisine:"Italian",addr:"255 Esplanade",phone:"",website:"",active:true},
+  {id:"r42",name:"Seamores",suburb:"Henley Beach",cuisine:"Italian",addr:"255 Esplanade",phone:"",website:"",active:true},
   {id:"r43",name:"Henley Beach Hotel",suburb:"Henley Beach",cuisine:"Australian",addr:"157 Esplanade",phone:"",website:"",active:true},
   {id:"r44",name:"Largs Pier Hotel",suburb:"Largs Bay",cuisine:"Australian",addr:"Esplanade",phone:"",website:"",active:true},
   {id:"r45",name:"Beach Hotel Seaford",suburb:"Seaford",cuisine:"Australian",addr:"Griffiths Drive",phone:"",website:"",active:true},
@@ -764,180 +597,657 @@ const DEFAULT_RESTAURANTS=[
   {id:"r50",name:"Fleet Street Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"Fleet St",phone:"",website:"",active:true},
   {id:"r51",name:"Grunthal Brewhouse",suburb:"Adelaide Hills",cuisine:"Brewery",addr:"",phone:"",website:"",active:true},
   {id:"r52",name:"Bar Lune",suburb:"Adelaide CBD",cuisine:"Wine Bar",addr:"",phone:"",website:"",active:true},
-  {id:"r53",name:"Gilbert Street Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"88 Gilbert St",phone:"",website:"",active:true},
-  {id:"r54",name:"La Scala Cafe",suburb:"Adelaide CBD",cuisine:"Italian",addr:"",phone:"",website:"",active:true},
+  {id:"r53",name:"La Scala Cafe",suburb:"Adelaide CBD",cuisine:"Italian",addr:"",phone:"",website:"",active:true},
 ];
 
-// Load data from localStorage or use defaults
-function loadData(){
-  try{
-    const r=localStorage.getItem("sa-admin-restaurants");
-    const s=localStorage.getItem("sa-admin-specials");
-    const l=localStorage.getItem("sa-admin-logos");
-    RESTAURANTS=r?JSON.parse(r):[...DEFAULT_RESTAURANTS.map(x=>({...x}))];
-    LOGOS=l?JSON.parse(l):{};
-    if(!s){
-      // Generate default specials with active flag
-      SPECIALS=DEFAULT_SPECIALS.map(x=>({...x,active:true}));
-    } else {
-      SPECIALS=JSON.parse(s);
-    }
-  }catch(e){
-    RESTAURANTS=[...DEFAULT_RESTAURANTS.map(x=>({...x}))];
-    SPECIALS=DEFAULT_SPECIALS.map(x=>({...x,active:true}));
-    LOGOS={};
-  }
-}
-
-function saveData(){
-  try{
-    localStorage.setItem("sa-admin-restaurants",JSON.stringify(RESTAURANTS));
-    localStorage.setItem("sa-admin-specials",JSON.stringify(SPECIALS));
-    localStorage.setItem("sa-admin-logos",JSON.stringify(LOGOS));
-  }catch(e){console.error("Save failed",e)}
-}
-
-// Default specials (abbreviated — same IDs as main site)
-const DEFAULT_SPECIALS=[
+var DEFAULT_SPECIALS = [
   {id:"s1",rid:"r1",name:"Schnitzel or Parmi Tuesday",desc:"$15 parmy or schnitzel with any drink purchase",price:15,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
   {id:"s2",rid:"r1",name:"$20 Rump Steak Nightly",desc:"$20 rump steak every night when you purchase a drink",price:20,food:"steak",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"9pm"},
-  {id:"s3",rid:"r1",name:"Fish n' Chips Monday",desc:"Serve of fish n chips $15 with any drink — all day Monday",price:15,food:"seafood",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s4",rid:"r1",name:"Sunday Parmy",desc:"Chicken parmy $15 when you buy a drink on Sundays",price:15,food:"parmi",session:"dinner",days:["sunday"],from:"12pm",until:"8pm"},
-  {id:"s5",rid:"r2",name:"Schnitzel Monday CBD",desc:"Just $15 schnitzel, chips, side salad and sauce",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s6",rid:"r2",name:"Burger Monday Lunch",desc:"$17 burgers for lunch Monday",price:17,food:"burger",session:"lunch",days:["monday"],from:"12pm",until:"3pm"},
-  {id:"s7",rid:"r2",name:"Stone Grill Rump Wednesday",desc:"$26 250g Stone Grill Rump Steak lunch or dinner",price:26,food:"steak",session:"lunch",days:["wednesday"],from:"12pm",until:"3pm"},
-  {id:"s8",rid:"r2",name:"Wings Tuesday CBD",desc:"Two kilos of wings for $15 — Tuesday special",price:15,food:"wings",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s9",rid:"r3",name:"Parmi & Pint Night",desc:"Chicken or Beef Parmi with core pint on tap for $25",price:25,food:"parmi",session:"dinner",days:["monday","tuesday"],from:"5pm",until:"9pm"},
-  {id:"s10",rid:"r3",name:"Burger Lunch Union",desc:"Union Burger or Chicken Avocado Burger with chips $20",price:20,food:"burger",session:"lunch",days:["monday","tuesday"],from:"12pm",until:"3pm"},
-  {id:"s11",rid:"r4",name:"Pasta Monday CBD",desc:"$20 pasta lunch or dinner. Rotating house specials",price:20,food:"pasta",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s12",rid:"r4",name:"Pizza Tuesday",desc:"Pizzas are $20 Tuesday all day",price:20,food:"pizza",session:"dinner",days:["tuesday"],from:"11am",until:"10pm"},
-  {id:"s13",rid:"r4",name:"Wings Wednesday & Thursday",desc:"Kilo of best wings in town, 8 flavours — pre-order only",price:22,food:"wings",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
-  {id:"s14",rid:"r5",name:"Pardon the Bun",desc:"One burger, endless fries for $20 — Tuesday special",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"10pm"},
-  {id:"s15",rid:"r5",name:"Happy Hour Pizza & Games",desc:"$9 pizzas, $7 games, $10 pint specials",price:9,food:"pizza",session:"drinks",days:["wednesday","thursday","friday"],from:"4pm",until:"7pm"},
-  {id:"s16",rid:"r6",name:"$20 Cocktail Jugs",desc:"$20 cocktail jugs, selected beer jugs & Patrick Sparkling",price:20,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"5pm"},
-  {id:"s17",rid:"r6",name:"Curry Tuesday Benjamin",desc:"Choice of four house-made curries $13 with any drink",price:13,food:"curry",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s18",rid:"r7",name:"Happy Hour Lady Burra",desc:"$8 house beers, wines & spirits for happy hour",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s19",rid:"r8",name:"Schnitzel Monday Duke",desc:"Chicken, beef or eggplant schnitzel $20 with chips and salad",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"5pm",until:"8:30pm"},
-  {id:"s20",rid:"r9",name:"T-Bone Monday",desc:"400g T-bone with red wine jus and chips $19.90 all day",price:19.9,food:"steak",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s21",rid:"r12",name:"Coopers Pints Happy Hour",desc:"5pm–7pm $5 Coopers pints, $3.50 wine",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
-  {id:"s22",rid:"r13",name:"$14 Steak Night PJ's",desc:"$14 steak night with chef's choice of chips & salad",price:14,food:"steak",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
-  {id:"s23",rid:"r14",name:"Bottomless Cocktails Norwood",desc:"1 cocktail on arrival + 1hr bottomless. 100 guests per night",price:9,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"10pm"},
-  {id:"s24",rid:"r16",name:"Burger & Pint Kensi",desc:"Your choice of burger and a pint of Coopers $18 — Corner Bar",price:18,food:"burger",session:"dinner",days:["tuesday"],from:"6pm",until:"9pm"},
-  {id:"s25",rid:"r17",name:"Happy Hour Feathers",desc:"Mon–Thu 4–6pm: $7 schooners or $8.50 pints",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s26",rid:"r18",name:"Locals Schnitzel Night",desc:"Schnitzel, calamari, battered fish — $20 pub classics",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"5:30pm",until:"9pm"},
-  {id:"s27",rid:"r18",name:"Wing Wednesday Parkside",desc:"500g buffalo wings with blue cheese dipping sauce",price:18,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s28",rid:"r18",name:"Curry Tuesday Parkside",desc:"Rotating curry night — $20 Tuesday dinner",price:20,food:"curry",session:"dinner",days:["tuesday"],from:"5pm",until:"9pm"},
-  {id:"s29",rid:"r20",name:"Burger Tuesdays Tower",desc:"All burgers & sandwiches with chips — Tower Hotel Magill",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s30",rid:"r21",name:"Schnitzel Wednesday Clearview",desc:"Full-size schnitzel with salad, veg bar & warm bread rolls $20",price:20,food:"schnitzel",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
-  {id:"s31",rid:"r24",name:"Schnitzel with Drink Windmill",desc:"$16 schnitzel or salad with any drink purchase",price:16,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
-  {id:"s32",rid:"r25",name:"Taco Tuesday $6 Prospect",desc:"$6 hand-pressed tacos — chicken, fish, prawn & more",price:6,food:"tacos",session:"lunch",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s33",rid:"r26",name:"Weekday Lunch North Adel",desc:"Schnitzels, fish & chips, curry, roast + soft drink $20",price:20,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11:30am",until:"2:30pm"},
-  {id:"s34",rid:"r27",name:"Friday Pasta Lord Melbourne",desc:"Pasta with selected tap beers or house wine $25",price:25,food:"pasta",session:"dinner",days:["friday"],from:"4pm",until:"8pm"},
-  {id:"s35",rid:"r30",name:"Schnitzel Tue & Wed Lockleys",desc:"Beef or chicken schnitzel with chips and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
-  {id:"s36",rid:"r31",name:"Happy Hour Mile End",desc:"House beers & wines $6 — Mon to Fri 4pm–6pm",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s37",rid:"r32",name:"Pasta & Cocktail Night",desc:"Entrée, pasta and a cocktail $49 per person — Ambra Spirits",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
-  {id:"s38",rid:"r32",name:"Bottomless Brunch Thebarton",desc:"Weekend bottomless brunch with live sax and DJs $65pp",price:65,food:"brunch",session:"brunch",days:["saturday","sunday"],from:"10am",until:"1pm"},
-  {id:"s39",rid:"r35",name:"Happy Hour Cremorne Unley",desc:"Aperol Spritz $14, Gin Spritz $16, tap beer & wine $10",price:10,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s40",rid:"r36",name:"Wing Wednesday Belair",desc:"1kg wings & 2 imperials of selected beer — Belair Hotel",price:28,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s41",rid:"r37",name:"Parma & Pint Lunch Hills",desc:"$25 pint and parmi deal for weekday lunch",price:25,food:"parmi",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
-  {id:"s42",rid:"r38",name:"Schnitzel Night Aldgate",desc:"$16.90 schnitzel with choice of 10 toppings",price:16.9,food:"schnitzel",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
-  {id:"s43",rid:"r39",name:"Burger Night Marion",desc:"Your choice of burger with chips in The Shed sports bar $18",price:18,food:"burger",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
-  {id:"s44",rid:"r39",name:"Saturday & Sunday Pizza",desc:"$18 Pizza in the Shed every Saturday and Sunday",price:18,food:"pizza",session:"brunch",days:["saturday","sunday"],from:"12pm",until:"4pm"},
-  {id:"s45",rid:"r42",name:"Wednesday Date Night Seamore's",desc:"Select pizzas, pasta and chicken schnitzel $17 — Wednesday",price:17,food:"pizza",session:"dinner",days:["wednesday"],from:"5:30pm",until:"9pm"},
-  {id:"s46",rid:"r43",name:"Schnitzel Henley Mon & Thu",desc:"Chicken or beef with chips, salad & gravy $20",price:20,food:"schnitzel",session:"dinner",days:["monday","thursday"],from:"12pm",until:"8:30pm"},
-  {id:"s47",rid:"r44",name:"Largs Happy Hour Mon–Sat",desc:"$6 house wine, $7 Coopers pints, $8 base spirits",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
-  {id:"s48",rid:"r45",name:"Schnitzel Monday Seaford",desc:"Beef or chicken schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s49",rid:"r45",name:"Seafood Friday Seaford",desc:"Battered or grilled fish, prawns and chips $22",price:22,food:"seafood",session:"lunch",days:["friday"],from:"12pm",until:"8pm"},
-  {id:"s50",rid:"r46",name:"Half Price Tacos Tuesday",desc:"$4 half-price tacos all day Tuesday — Beach Burrito Co",price:4,food:"tacos",session:"lunch",days:["tuesday"],from:"11:30am",until:"9:30pm"},
-  {id:"s51",rid:"r50",name:"Bottomless Brunch Fri–Sun",desc:"2hr bottomless cocktails with brunch bites. $85pp",price:85,food:"brunch",session:"brunch",days:["friday","saturday","sunday"],from:"11am",until:"4pm"},
-  {id:"s52",rid:"r51",name:"Bottomless Pizza Fridays",desc:"Unlimited pizza slices every Friday — bookings essential",price:30,food:"pizza",session:"dinner",days:["friday"],from:"6pm",until:"9pm"},
-  {id:"s53",rid:"r51",name:"Pasta & Wine Thursday",desc:"$30 pasta with a glass of wine or tap beer",price:30,food:"pasta",session:"dinner",days:["thursday"],from:"5pm",until:"9pm"},
-  {id:"s54",rid:"r46",name:"Beach Burrito Happy Hour",desc:"Beer & wine $5, tacos $5, margaritas $12 daily 3–6pm",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"6pm"},
+  {id:"s3",rid:"r1",name:"Fish n Chips Monday",desc:"Fish n chips $15 with any drink all day Monday",price:15,food:"seafood",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s4",rid:"r2",name:"Schnitzel Monday CBD",desc:"$15 schnitzel chips side salad and sauce",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s5",rid:"r2",name:"Wings Tuesday CBD",desc:"Two kilos of wings for $15 Tuesday special",price:15,food:"wings",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s6",rid:"r3",name:"Parmi and Pint Night",desc:"Chicken or Beef Parmi with core pint on tap $25",price:25,food:"parmi",session:"dinner",days:["monday","tuesday"],from:"5pm",until:"9pm"},
+  {id:"s7",rid:"r4",name:"Pasta Monday CBD",desc:"$20 pasta lunch or dinner rotating specials",price:20,food:"pasta",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s8",rid:"r4",name:"Pizza Tuesday",desc:"Pizzas $20 Tuesday all day",price:20,food:"pizza",session:"dinner",days:["tuesday"],from:"11am",until:"10pm"},
+  {id:"s9",rid:"r5",name:"Pardon the Bun",desc:"One burger endless fries $20 Tuesday",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"10pm"},
+  {id:"s10",rid:"r5",name:"Happy Hour Pizza Games",desc:"$9 pizzas $7 games $10 pint specials",price:9,food:"pizza",session:"drinks",days:["wednesday","thursday","friday"],from:"4pm",until:"7pm"},
+  {id:"s11",rid:"r6",name:"$20 Cocktail Jugs",desc:"$20 cocktail jugs and selected beer jugs daily",price:20,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"5pm"},
+  {id:"s12",rid:"r6",name:"Curry Tuesday Benjamin",desc:"Four house-made curries $13 with any drink",price:13,food:"curry",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s13",rid:"r7",name:"Happy Hour Lady Burra",desc:"$8 house beers wines and spirits",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s14",rid:"r8",name:"Schnitzel Monday Duke",desc:"Chicken beef or eggplant schnitzel $20 with chips and salad",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"5pm",until:"8:30pm"},
+  {id:"s15",rid:"r9",name:"T-Bone Monday",desc:"400g T-bone with red wine jus and chips $19.90",price:19.9,food:"steak",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s16",rid:"r12",name:"Coopers Happy Hour",desc:"$5 Coopers pints $3.50 wine 5pm to 7pm",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
+  {id:"s17",rid:"r13",name:"$14 Steak Night PJs",desc:"$14 steak night with chips and salad",price:14,food:"steak",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
+  {id:"s18",rid:"r14",name:"Bottomless Cocktails Norwood",desc:"1 cocktail on arrival plus 1hr bottomless. 100 guests only",price:9,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"10pm"},
+  {id:"s19",rid:"r16",name:"Burger and Pint Kensi",desc:"Choice of burger and a pint of Coopers $18",price:18,food:"burger",session:"dinner",days:["tuesday"],from:"6pm",until:"9pm"},
+  {id:"s20",rid:"r18",name:"Schnitzel Night Parkside",desc:"Schnitzel calamari battered fish $20 pub classics",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"5:30pm",until:"9pm"},
+  {id:"s21",rid:"r18",name:"Wing Wednesday Parkside",desc:"500g buffalo wings with blue cheese sauce",price:18,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
+  {id:"s22",rid:"r20",name:"Burger Tuesdays Magill",desc:"All burgers and sandwiches with chips",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s23",rid:"r21",name:"Schnitzel Wednesday Clearview",desc:"Full size schnitzel with salad veg bar and rolls $20",price:20,food:"schnitzel",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
+  {id:"s24",rid:"r24",name:"Schnitzel Windmill",desc:"$16 schnitzel with any drink purchase",price:16,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
+  {id:"s25",rid:"r25",name:"Taco Tuesday Prospect",desc:"$6 hand-pressed tacos chicken fish prawn",price:6,food:"tacos",session:"lunch",days:["tuesday"],from:"12pm",until:"9pm"},
+  {id:"s26",rid:"r26",name:"Weekday Lunch North Adel",desc:"Schnitzels fish chips curry roast plus soft drink $20",price:20,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11:30am",until:"2:30pm"},
+  {id:"s27",rid:"r29",name:"Schnitzel Excelsior",desc:"$20 schnitzels Mon-Wed half price toppings Tuesdays",price:20,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday"],from:"12pm",until:"9pm"},
+  {id:"s28",rid:"r30",name:"Schnitzel Lockleys",desc:"Beef or chicken schnitzel with chips and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
+  {id:"s29",rid:"r31",name:"Happy Hour Mile End",desc:"House beers and wines $6 Mon to Fri",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s30",rid:"r32",name:"Pasta Cocktail Night Ambra",desc:"Entree pasta and a cocktail $49 per person",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
+  {id:"s31",rid:"r32",name:"Bottomless Brunch Thebarton",desc:"Weekend bottomless brunch with live sax $65pp",price:65,food:"brunch",session:"brunch",days:["saturday","sunday"],from:"10am",until:"1pm"},
+  {id:"s32",rid:"r35",name:"Happy Hour Cremorne",desc:"Aperol $14 Gin Spritz $16 tap beer and wine $10",price:10,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
+  {id:"s33",rid:"r37",name:"Parma Pint Lunch Hills",desc:"$25 pint and parmi deal for weekday lunch",price:25,food:"parmi",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
+  {id:"s34",rid:"r39",name:"Burger Night Marion",desc:"Choice of burger with chips in The Shed $18",price:18,food:"burger",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
+  {id:"s35",rid:"r42",name:"Wednesday Date Night Seamores",desc:"Select pizzas pasta and schnitzel $17",price:17,food:"pizza",session:"dinner",days:["wednesday"],from:"5:30pm",until:"9pm"},
+  {id:"s36",rid:"r43",name:"Schnitzel Henley Mon Thu",desc:"Chicken or beef with chips salad and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["monday","thursday"],from:"12pm",until:"8:30pm"},
+  {id:"s37",rid:"r44",name:"Largs Happy Hour",desc:"$6 house wine $7 Coopers pints $8 base spirits",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
+  {id:"s38",rid:"r45",name:"Schnitzel Monday Seaford",desc:"Beef or chicken schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
+  {id:"s39",rid:"r45",name:"Seafood Friday Seaford",desc:"Battered or grilled fish prawns and chips $22",price:22,food:"seafood",session:"lunch",days:["friday"],from:"12pm",until:"8pm"},
+  {id:"s40",rid:"r46",name:"Half Price Tacos Tuesday",desc:"$4 half price tacos all day Tuesday",price:4,food:"tacos",session:"lunch",days:["tuesday"],from:"11:30am",until:"9:30pm"},
+  {id:"s41",rid:"r46",name:"Beach Burrito Happy Hour",desc:"Beer and wine $5 tacos $5 margaritas $12 daily",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"6pm"},
+  {id:"s42",rid:"r50",name:"Bottomless Brunch Fleet St",desc:"2hr bottomless cocktails with brunch bites $85pp",price:85,food:"brunch",session:"brunch",days:["friday","saturday","sunday"],from:"11am",until:"4pm"},
+  {id:"s43",rid:"r51",name:"Bottomless Pizza Fridays",desc:"Unlimited pizza slices every Friday bookings essential",price:30,food:"pizza",session:"dinner",days:["friday"],from:"6pm",until:"9pm"},
+  {id:"s44",rid:"r36",name:"Wing Wednesday Belair",desc:"1kg wings and 2 imperials of selected beer",price:28,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
+  {id:"s45",rid:"r3",name:"Happy Hour Union CBD",desc:"Core beer pints house wines and spirits $8 every day",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"6pm"},
 ];
 
-let RESTAURANTS=[],SPECIALS=[],LOGOS={};
-loadData();
+// ─────────────────────────────────────────────
+// STEP 3: DATA STATE (declared before loadData)
+// ─────────────────────────────────────────────
+var RESTAURANTS = [];
+var SPECIALS = [];
+var LOGOS = {};
+var activityLog = [];
 
-// ── AUTH ──
-let isLoggedIn=false;
-const SETTINGS_KEY="sa-admin-settings";
-
-function getSettings(){try{return JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}");}catch{return {};}}
-function saveSetting(key){
-  const s=getSettings();
-  const inp=document.getElementById("setting-"+key);
-  if(!inp)return;
-  s[key]=inp.value;
-  if(key==="username"||key==="password"){
-    if(key==="username")CREDENTIALS.user=inp.value;
-    if(key==="password"&&inp.value)CREDENTIALS.pass=inp.value;
-  }
-  localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
-  toast("Setting saved","green");
-}
-
-function doLogin(){
-  const u=document.getElementById("login-user").value.trim();
-  const p=document.getElementById("login-pass").value;
-
-  // Always try hardcoded credentials first — they always work
-  const hardcodeOK = (u===CREDENTIALS.user && p===CREDENTIALS.pass);
-
-  // Also check if user has saved custom credentials via Settings
-  let savedOK = false;
+// ─────────────────────────────────────────────
+// STEP 4: LOAD / SAVE
+// ─────────────────────────────────────────────
+function loadData() {
   try {
-    const s=getSettings();
-    if(s.username && s.password) {
-      savedOK = (u===s.username && p===s.password);
-    }
-  } catch(e){}
-
-  if(hardcodeOK || savedOK){
-    isLoggedIn=true;
-    document.getElementById("lock-screen").style.display="none";
-    document.getElementById("app").style.display="block";
-    document.getElementById("sidebar-user").textContent="Logged in as "+u;
-    document.getElementById("login-error").style.display="none";
-    init();
-  } else {
-    document.getElementById("login-error").style.display="block";
-    document.getElementById("login-pass").value="";
-    // Briefly shake the card
-    const card=document.querySelector(".lock-card");
-    card.style.animation="shake 0.3s ease";
-    setTimeout(()=>card.style.animation="",400);
+    var r = localStorage.getItem("sa-restaurants");
+    var s = localStorage.getItem("sa-specials");
+    var l = localStorage.getItem("sa-logos");
+    RESTAURANTS = r ? JSON.parse(r) : DEFAULT_RESTAURANTS.map(function(x){ return Object.assign({}, x); });
+    LOGOS = l ? JSON.parse(l) : {};
+    SPECIALS = s ? JSON.parse(s) : DEFAULT_SPECIALS.map(function(x){ return Object.assign({active:true}, x); });
+  } catch(e) {
+    RESTAURANTS = DEFAULT_RESTAURANTS.map(function(x){ return Object.assign({}, x); });
+    SPECIALS = DEFAULT_SPECIALS.map(function(x){ return Object.assign({active:true}, x); });
+    LOGOS = {};
   }
 }
-function doLogout(){
-  isLoggedIn=false;
-  document.getElementById("lock-screen").style.display="flex";
-  document.getElementById("app").style.display="none";
-  document.getElementById("login-pass").value="";
-  document.getElementById("login-error").style.display="none";
-}
-function clearSavedAuth(){
-  try{
-    const s=getSettings();
-    delete s.username;
-    delete s.password;
-    localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
-  }catch(e){}
-  document.getElementById("login-user").value="admin";
-  document.getElementById("login-pass").value="";
-  document.getElementById("login-error").style.display="none";
-  alert("Reset to defaults. Use: admin / specials2025");
+
+function saveData() {
+  try {
+    localStorage.setItem("sa-restaurants", JSON.stringify(RESTAURANTS));
+    localStorage.setItem("sa-specials", JSON.stringify(SPECIALS));
+    localStorage.setItem("sa-logos", JSON.stringify(LOGOS));
+  } catch(e) { console.error("Save failed", e); }
 }
 
-// ── VIEW ROUTING ──
-function showView(id,el){
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-  document.getElementById("view-"+id).classList.add("active");
-  document.querySelectorAll(".sidebar-item").forEach(b=>b.classList.remove("active"));
-  if(el)el.classList.add("active");
-  document.getElementById("topbar-title").textContent={
-    dashboard:"Dashboard",specials:"Specials",restaurants:"Restaurants",
-    logos:"Logos",import:"Import / Export",settings:"Settings"
-  }[id]||id;
-  // Topbar actions
-  const a=document.getElementById("topbar-actions");
-  const siteLink='<a href="ind
+// ─────────────────────────────────────────────
+// STEP 5: AUTH — simple and reliable
+// ─────────────────────────────────────────────
+function getCredentials() {
+  try {
+    var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    return {
+      user: s.user || ADMIN_USER,
+      pass: s.pass || ADMIN_PASS
+    };
+  } catch(e) {
+    return { user: ADMIN_USER, pass: ADMIN_PASS };
+  }
+}
+
+function doLogin() {
+  var u = document.getElementById("login-user").value.trim();
+  var p = document.getElementById("login-pass").value;
+  var creds = getCredentials();
+  var err = document.getElementById("login-error");
+  if (u === creds.user && p === creds.pass) {
+    document.getElementById("lock-screen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("sidebar-user").textContent = "Logged in as " + u;
+    err.style.display = "none";
+    loadData();
+    initApp();
+  } else {
+    err.style.display = "block";
+    document.getElementById("login-pass").value = "";
+    var card = document.querySelector(".lock-card");
+    card.style.animation = "none";
+    setTimeout(function(){ card.style.animation = "shake 0.35s ease"; }, 10);
+  }
+}
+
+function doLogout() {
+  document.getElementById("lock-screen").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("login-pass").value = "";
+  document.getElementById("login-user").value = "";
+}
+
+function resetAuth() {
+  try {
+    var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    delete s.user; delete s.pass;
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  } catch(e) {}
+  document.getElementById("login-user").value = ADMIN_USER;
+  document.getElementById("login-pass").value = "";
+  document.getElementById("login-error").style.display = "none";
+  alert("Reset done. Use: " + ADMIN_USER + " / " + ADMIN_PASS);
+}
+
+function saveCredentials() {
+  var u = document.getElementById("set-username").value.trim();
+  var p = document.getElementById("set-password").value;
+  if (!u) { toast("Username cannot be empty", ""); return; }
+  try {
+    var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    s.user = u;
+    if (p) s.pass = p;
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+    toast("Credentials saved", "green");
+    document.getElementById("set-password").value = "";
+  } catch(e) { toast("Save failed", "red"); }
+}
+
+// ─────────────────────────────────────────────
+// STEP 6: APP INIT
+// ─────────────────────────────────────────────
+function initApp() {
+  updateCounts();
+  renderDashboard();
+}
+
+function updateCounts() {
+  document.getElementById("sb-specials-count").textContent = SPECIALS.length;
+  document.getElementById("sb-rest-count").textContent = RESTAURANTS.length;
+}
+
+// ─────────────────────────────────────────────
+// VIEWS
+// ─────────────────────────────────────────────
+function showView(id, el) {
+  document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
+  document.getElementById("view-" + id).classList.add("active");
+  document.querySelectorAll(".sidebar-item").forEach(function(b){ b.classList.remove("active"); });
+  if (el) el.classList.add("active");
+  var titles = {dashboard:"Dashboard",specials:"Specials",restaurants:"Restaurants",logos:"Logos",export:"Export / Import",settings:"Settings"};
+  document.getElementById("topbar-title").textContent = titles[id] || id;
+  var acts = document.getElementById("topbar-actions");
+  var siteBtn = '<a href="index.html" target="_blank" class="tb-btn secondary">View site</a>';
+  if (id === "specials") acts.innerHTML = siteBtn + ' <button class="tb-btn primary" onclick="openSpecialDrawer(null)">+ Add special</button>';
+  else if (id === "restaurants") acts.innerHTML = siteBtn + ' <button class="tb-btn primary" onclick="openRestDrawer(null)">+ Add restaurant</button>';
+  else acts.innerHTML = siteBtn;
+  if (id === "specials") renderSpecialsTable();
+  if (id === "restaurants") renderRestsTable();
+  if (id === "logos") renderLogosGrid();
+  if (id === "dashboard") renderDashboard();
+}
+
+// ─────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────
+function logActivity(icon, text, bg) {
+  activityLog.unshift({icon:icon, text:text, bg:bg||"var(--yellow)", time:new Date()});
+  if (activityLog.length > 20) activityLog.pop();
+}
+
+function renderDashboard() {
+  var active = SPECIALS.filter(function(s){ return s.active !== false; }).length;
+  var prices = SPECIALS.map(function(s){ return s.price; });
+  var avg = prices.length ? Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length) : 0;
+  var minP = prices.length ? Math.min.apply(null,prices) : 0;
+  var maxP = prices.length ? Math.max.apply(null,prices) : 0;
+  var suburbs = (function(){ var s={}; RESTAURANTS.forEach(function(r){s[r.suburb]=1;}); return Object.keys(s).length; })();
+  var logoCount = Object.keys(LOGOS).length;
+  document.getElementById("d-specials").textContent = SPECIALS.length;
+  document.getElementById("d-active-s").textContent = active + " active";
+  document.getElementById("d-rests").textContent = RESTAURANTS.length;
+  document.getElementById("d-suburbs").textContent = suburbs + " suburbs";
+  document.getElementById("d-avg").textContent = "$" + avg;
+  document.getElementById("d-range").textContent = "$" + minP.toFixed(0) + " to $" + maxP.toFixed(0);
+  document.getElementById("d-logos").textContent = logoCount;
+  document.getElementById("d-no-logos").textContent = (RESTAURANTS.length - logoCount) + " missing";
+  var log = document.getElementById("activity-log");
+  if (!activityLog.length) { log.innerHTML = '<div style="padding:24px;text-align:center;color:#aaa;font-size:13px">No recent activity.</div>'; return; }
+  log.innerHTML = activityLog.map(function(a){
+    return '<div class="activity-row"><div class="activity-icon" style="background:'+a.bg+'">'+a.icon+'</div><div class="activity-text">'+a.text+'</div><div class="activity-time">'+fmtTime(a.time)+'</div></div>';
+  }).join("");
+}
+
+function fmtTime(d) {
+  var n = new Date() - d;
+  if (n < 60000) return "just now";
+  if (n < 3600000) return Math.floor(n/60000) + "m ago";
+  return Math.floor(n/3600000) + "h ago";
+}
+
+// ─────────────────────────────────────────────
+// SPECIALS TABLE
+// ─────────────────────────────────────────────
+var specPage = 1, specPageSize = 15;
+
+function renderSpecialsTable() {
+  var q = (document.getElementById("spec-search").value || "").toLowerCase();
+  var ff = document.getElementById("spec-f-food").value;
+  var fs = document.getElementById("spec-f-sess").value;
+  var DS = {monday:"Mon",tuesday:"Tue",wednesday:"Wed",thursday:"Thu",friday:"Fri",saturday:"Sat",sunday:"Sun"};
+  var filtered = SPECIALS.filter(function(s) {
+    var r = RESTAURANTS.find(function(x){ return x.id === s.rid; }) || {};
+    if (ff && s.food !== ff) return false;
+    if (fs && s.session !== fs) return false;
+    if (q && [s.name,s.desc,r.name,r.suburb,s.food,s.session].join(" ").toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+  document.getElementById("spec-count").textContent = "(" + filtered.length + ")";
+  var pages = Math.max(1, Math.ceil(filtered.length / specPageSize));
+  specPage = Math.min(specPage, pages);
+  var slice = filtered.slice((specPage-1)*specPageSize, specPage*specPageSize);
+  document.getElementById("spec-tbody").innerHTML = slice.map(function(s) {
+    var r = RESTAURANTS.find(function(x){ return x.id === s.rid; }) || {name:"",suburb:""};
+    var active = s.active !== false;
+    var days = (s.days||[]).map(function(d){ return '<span class="day-pip">'+(DS[d]||d)+'</span>'; }).join("");
+    return '<tr><td><div class="td-name">'+s.name+'</div><div class="td-sub">'+(s.desc||"").substring(0,55)+'</div></td>'
+      +'<td><div class="td-name">'+r.name+'</div><div class="td-sub">'+r.suburb+'</div></td>'
+      +'<td class="price-cell">$'+Number(s.price).toFixed(2)+'</td>'
+      +'<td><span class="td-badge active">'+(s.food||"")+'</span></td>'
+      +'<td><span class="td-badge '+(s.session||"")+'">'+(s.session||"—")+'</span></td>'
+      +'<td><div class="day-pips">'+days+'</div></td>'
+      +'<td><span class="td-badge '+(active?"active":"inactive")+'">'+(active?"Active":"Hidden")+'</span></td>'
+      +'<td><div class="row-actions">'
+        +'<button class="row-btn edit" onclick="openSpecialDrawer(\''+s.id+'\')">Edit</button>'
+        +'<button class="row-btn tog '+(active?"":"off")+'" onclick="toggleSpecial(\''+s.id+'\')">'+(active?"Hide":"Show")+'</button>'
+        +'<button class="row-btn del" onclick="promptDelete(\'special\',\''+s.id+'\')">Del</button>'
+      +'</div></td></tr>';
+  }).join("") || '<tr><td colspan="8"><div class="empty-tbl"><span>No results</span></div></td></tr>';
+  renderPg("spec-pg", pages, specPage, function(p){ specPage=p; renderSpecialsTable(); });
+}
+
+// ─────────────────────────────────────────────
+// RESTAURANTS TABLE
+// ─────────────────────────────────────────────
+var restPage = 1, restPageSize = 15;
+
+function renderRestsTable() {
+  var q = (document.getElementById("rest-search").value || "").toLowerCase();
+  var filtered = RESTAURANTS.filter(function(r) {
+    if (!q) return true;
+    return [r.name,r.suburb,r.cuisine,r.addr].join(" ").toLowerCase().indexOf(q) >= 0;
+  });
+  var counts = {};
+  SPECIALS.forEach(function(s){ counts[s.rid] = (counts[s.rid]||0)+1; });
+  document.getElementById("rest-count").textContent = "(" + filtered.length + ")";
+  var pages = Math.max(1, Math.ceil(filtered.length / restPageSize));
+  restPage = Math.min(restPage, pages);
+  var slice = filtered.slice((restPage-1)*restPageSize, restPage*restPageSize);
+  document.getElementById("rest-tbody").innerHTML = slice.map(function(r) {
+    var active = r.active !== false;
+    var lg = LOGOS[r.id];
+    var logoEl = lg ? (lg.type==="svg" ? '<div style="width:34px;height:34px;overflow:hidden">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="width:34px;height:34px;object-fit:contain">') : '<span style="font-family:var(--mono);font-size:13px;font-weight:700">'+r.name[0]+'</span>';
+    var cnt = counts[r.id]||0;
+    return '<tr><td><div class="logo-thumb" onclick="openRestDrawer(\''+r.id+'\')">'+logoEl+'</div></td>'
+      +'<td><div class="td-name">'+r.name+'</div><div class="td-sub">'+(r.addr||"")+'</div></td>'
+      +'<td>'+r.suburb+'</td><td>'+(r.cuisine||"")+'</td>'
+      +'<td><span class="td-badge active">'+cnt+' special'+(cnt!==1?"s":"")+'</span></td>'
+      +'<td><span class="td-badge '+(active?"active":"inactive")+'">'+(active?"Active":"Hidden")+'</span></td>'
+      +'<td><div class="row-actions">'
+        +'<button class="row-btn edit" onclick="openRestDrawer(\''+r.id+'\')">Edit</button>'
+        +'<button class="row-btn tog '+(active?"":"off")+'" onclick="toggleRest(\''+r.id+'\')">'+(active?"Hide":"Show")+'</button>'
+        +'<button class="row-btn del" onclick="promptDelete(\'rest\',\''+r.id+'\')">Del</button>'
+      +'</div></td></tr>';
+  }).join("") || '<tr><td colspan="7"><div class="empty-tbl"><span>No results</span></div></td></tr>';
+  renderPg("rest-pg", pages, restPage, function(p){ restPage=p; renderRestsTable(); });
+}
+
+// ─────────────────────────────────────────────
+// LOGOS GRID
+// ─────────────────────────────────────────────
+function renderLogosGrid() {
+  var withLogos = Object.keys(LOGOS).length;
+  document.getElementById("logo-prog").textContent = withLogos + " / " + RESTAURANTS.length + " have logos";
+  document.getElementById("logos-grid").innerHTML = RESTAURANTS.map(function(r) {
+    var lg = LOGOS[r.id];
+    var imgEl = lg ? (lg.type==="svg" ? '<div style="width:64px;height:64px;overflow:hidden;display:flex;align-items:center;justify-content:center">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="width:64px;height:64px;object-fit:contain">') : '<div style="font-family:var(--mono);font-size:24px;font-weight:700;color:#ccc">'+r.name[0]+'</div>';
+    return '<div class="logo-card" onclick="openRestDrawer(\''+r.id+'\')" title="Click to edit logo">'
+      +'<div class="logo-card-img">'+imgEl+'</div>'
+      +'<div class="logo-card-name">'+r.name+'</div>'
+      +'<div class="logo-card-sub">'+r.suburb+'</div>'
+      +'<div class="logo-card-status" style="color:'+(lg?"var(--green)":"#ccc")+'">'+(lg?"Logo set":"No logo")+'</div>'
+      +'</div>';
+  }).join("");
+}
+
+// ─────────────────────────────────────────────
+// PAGINATION
+// ─────────────────────────────────────────────
+function renderPg(id, pages, current, onChange) {
+  var el = document.getElementById(id);
+  if (pages <= 1) { el.innerHTML = ""; return; }
+  var btns = "";
+  for (var i=1; i<=pages; i++) {
+    if (i===1||i===pages||Math.abs(i-current)<=1) {
+      btns += '<button class="pg-btn'+(i===current?" cur":"")+('" onclick="('+onChange+')('+i+')">')+i+'</button>';
+    } else if (Math.abs(i-current)===2) btns += '<span style="padding:0 4px;color:#aaa">...</span>';
+  }
+  el.innerHTML = '<span class="pg-info">Page '+current+' of '+pages+'</span><div class="pg-btns">'+btns+'</div>';
+}
+
+// ─────────────────────────────────────────────
+// SPECIAL DRAWER
+// ─────────────────────────────────────────────
+function openSpecialDrawer(id) {
+  var s = id ? SPECIALS.find(function(x){ return x.id===id; }) : null;
+  document.getElementById("sd-id").value = id || "";
+  document.getElementById("sd-title").textContent = s ? "Edit special" : "Add special";
+  document.getElementById("sd-sub").textContent = s ? s.name : "";
+  document.getElementById("sd-del-btn").style.display = s ? "block" : "none";
+  document.getElementById("sd-rid").innerHTML = RESTAURANTS.map(function(r){
+    return '<option value="'+r.id+'"'+(s&&s.rid===r.id?' selected':'')+'>'+r.name+' — '+r.suburb+'</option>';
+  }).join("");
+  document.getElementById("sd-name").value = s ? s.name : "";
+  document.getElementById("sd-desc").value = s ? (s.desc||"") : "";
+  document.getElementById("sd-price").value = s ? s.price : "";
+  document.getElementById("sd-food").value = s ? (s.food||"") : "";
+  document.getElementById("sd-session").value = s ? (s.session||"") : "";
+  document.getElementById("sd-from").value = s ? (s.from||"") : "";
+  document.getElementById("sd-until").value = s ? (s.until||"") : "";
+  document.getElementById("sd-active-tog").classList.toggle("on", !s || s.active !== false);
+  document.querySelectorAll("#sd-days .day-pick-btn").forEach(function(b){
+    b.classList.toggle("on", !!(s && s.days && s.days.indexOf(b.dataset.day)>=0));
+  });
+  openDrawer("special-drawer");
+}
+
+function saveSpecial() {
+  var id = document.getElementById("sd-id").value;
+  var days = [];
+  document.querySelectorAll("#sd-days .day-pick-btn.on").forEach(function(b){ days.push(b.dataset.day); });
+  var data = {
+    id: id || ("s" + Date.now()),
+    rid: document.getElementById("sd-rid").value,
+    name: document.getElementById("sd-name").value.trim(),
+    desc: document.getElementById("sd-desc").value.trim(),
+    price: parseFloat(document.getElementById("sd-price").value) || 0,
+    food: document.getElementById("sd-food").value,
+    session: document.getElementById("sd-session").value,
+    days: days,
+    from: document.getElementById("sd-from").value.trim(),
+    until: document.getElementById("sd-until").value.trim(),
+    active: document.getElementById("sd-active-tog").classList.contains("on"),
+  };
+  if (!data.name || !data.rid || !data.price || !days.length) { toast("Fill required fields"); return; }
+  if (id) {
+    var idx = SPECIALS.findIndex(function(s){ return s.id===id; });
+    if (idx > -1) SPECIALS[idx] = data;
+    logActivity("edit", "Updated: " + data.name, "var(--yellow)");
+    toast("Saved", "green");
+  } else {
+    SPECIALS.push(data);
+    logActivity("+", "Added: " + data.name, "var(--green)");
+    toast("Added", "green");
+  }
+  saveData(); updateCounts(); closeDrawer(); renderSpecialsTable();
+}
+
+function toggleSpecial(id) {
+  var s = SPECIALS.find(function(x){ return x.id===id; });
+  if (!s) return;
+  s.active = (s.active === false);
+  saveData(); renderSpecialsTable(); toast(s.active ? "Visible" : "Hidden");
+}
+
+function deleteSpecial() {
+  promptDelete("special", document.getElementById("sd-id").value);
+}
+
+// ─────────────────────────────────────────────
+// RESTAURANT DRAWER
+// ─────────────────────────────────────────────
+var rdRawSvg = null, rdLogoColor = "#0f0f0f";
+
+function openRestDrawer(id) {
+  var r = id ? RESTAURANTS.find(function(x){ return x.id===id; }) : null;
+  rdRawSvg = null;
+  document.getElementById("rd-id").value = id || "";
+  document.getElementById("rd-title").textContent = r ? "Edit restaurant" : "Add restaurant";
+  document.getElementById("rd-sub").textContent = r ? r.name : "";
+  document.getElementById("rd-del-btn").style.display = r ? "block" : "none";
+  document.getElementById("rd-name").value = r ? r.name : "";
+  document.getElementById("rd-suburb").value = r ? r.suburb : "";
+  document.getElementById("rd-cuisine").value = r ? (r.cuisine||"") : "";
+  document.getElementById("rd-addr").value = r ? (r.addr||"") : "";
+  document.getElementById("rd-phone").value = r ? (r.phone||"") : "";
+  document.getElementById("rd-website").value = r ? (r.website||"") : "";
+  document.getElementById("rd-active-tog").classList.toggle("on", !r || r.active !== false);
+  var lg = id ? LOGOS[id] : null;
+  var prev = document.getElementById("rd-logo-preview");
+  if (lg) {
+    prev.innerHTML = lg.type==="svg" ? '<div style="max-width:120px;max-height:80px">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="max-width:120px;max-height:80px;object-fit:contain">';
+    document.getElementById("rd-logo-type").value = lg.type;
+    document.getElementById("rd-logo-data").value = lg.data;
+  } else {
+    prev.innerHTML = '<span class="lu-placeholder">Upload</span><span class="lu-text">Click or drag SVG / PNG</span>';
+    document.getElementById("rd-logo-type").value = "";
+    document.getElementById("rd-logo-data").value = "";
+  }
+  document.getElementById("rd-color-row").style.display = "none";
+  openDrawer("rest-drawer");
+}
+
+function saveRestaurant() {
+  var id = document.getElementById("rd-id").value;
+  var data = {
+    id: id || ("r" + Date.now()),
+    name: document.getElementById("rd-name").value.trim(),
+    suburb: document.getElementById("rd-suburb").value.trim(),
+    cuisine: document.getElementById("rd-cuisine").value.trim(),
+    addr: document.getElementById("rd-addr").value.trim(),
+    phone: document.getElementById("rd-phone").value.trim(),
+    website: document.getElementById("rd-website").value.trim(),
+    active: document.getElementById("rd-active-tog").classList.contains("on"),
+  };
+  if (!data.name || !data.suburb) { toast("Name and suburb required"); return; }
+  var lt = document.getElementById("rd-logo-type").value;
+  var ld = document.getElementById("rd-logo-data").value;
+  if (lt && ld) LOGOS[data.id] = {type:lt, data:ld};
+  if (id) {
+    var idx = RESTAURANTS.findIndex(function(r){ return r.id===id; });
+    if (idx > -1) RESTAURANTS[idx] = data;
+    logActivity("edit", "Updated: " + data.name, "var(--yellow)");
+    toast("Saved", "green");
+  } else {
+    RESTAURANTS.push(data);
+    logActivity("+", "Added: " + data.name, "var(--green)");
+    toast("Added", "green");
+  }
+  saveData(); updateCounts(); closeDrawer(); renderRestsTable(); renderLogosGrid();
+}
+
+function toggleRest(id) {
+  var r = RESTAURANTS.find(function(x){ return x.id===id; });
+  if (!r) return;
+  r.active = (r.active === false);
+  saveData(); renderRestsTable(); toast(r.active ? "Visible" : "Hidden");
+}
+
+function deleteRestaurant() {
+  promptDelete("rest", document.getElementById("rd-id").value);
+}
+
+// ─────────────────────────────────────────────
+// LOGO UPLOAD
+// ─────────────────────────────────────────────
+function handleLogoUpload(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  if (file.type === "image/svg+xml" || file.name.endsWith(".svg")) {
+    reader.onload = function(ev) { rdRawSvg = ev.target.result; applyLogoColor(rdLogoColor, null); document.getElementById("rd-color-row").style.display = "block"; };
+    reader.readAsText(file);
+  } else {
+    reader.onload = function(ev) {
+      var prev = document.getElementById("rd-logo-preview");
+      prev.innerHTML = '<img src="'+ev.target.result+'" style="max-width:120px;max-height:80px;object-fit:contain">';
+      document.getElementById("rd-logo-type").value = "img";
+      document.getElementById("rd-logo-data").value = ev.target.result;
+      document.getElementById("rd-color-row").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function applyLogoColor(color, el, custom) {
+  rdLogoColor = color;
+  if (!custom) {
+    document.querySelectorAll("#rd-swatches .csw").forEach(function(s){ s.classList.remove("sel"); });
+    if (el) el.classList.add("sel");
+  }
+  if (!rdRawSvg) return;
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(rdRawSvg, "image/svg+xml");
+  var svg = doc.querySelector("svg"); if (!svg) return;
+  svg.querySelectorAll("*").forEach(function(el) {
+    var f = el.getAttribute("fill"), st = el.getAttribute("stroke");
+    if (f && f !== "none" && f !== "transparent") el.setAttribute("fill", color);
+    if (st && st !== "none" && st !== "transparent") el.setAttribute("stroke", color);
+  });
+  if (!svg.getAttribute("viewBox") && svg.getAttribute("width") && svg.getAttribute("height"))
+    svg.setAttribute("viewBox", "0 0 " + svg.getAttribute("width") + " " + svg.getAttribute("height"));
+  svg.setAttribute("width", "100%"); svg.setAttribute("height", "100%");
+  var s = new XMLSerializer(); var svgStr = s.serializeToString(svg);
+  document.getElementById("rd-logo-preview").innerHTML = '<div style="max-width:120px;max-height:80px">'+svgStr+'</div>';
+  document.getElementById("rd-logo-type").value = "svg";
+  document.getElementById("rd-logo-data").value = svgStr;
+}
+
+// drag drop logo
+(function() {
+  var dz = document.getElementById("rd-logo-drop");
+  dz.addEventListener("dragover", function(e){ e.preventDefault(); dz.classList.add("over"); });
+  dz.addEventListener("dragleave", function(){ dz.classList.remove("over"); });
+  dz.addEventListener("drop", function(e){
+    e.preventDefault(); dz.classList.remove("over");
+    var f = e.dataTransfer.files[0];
+    if (f) { var dt = new DataTransfer(); dt.items.add(f); document.getElementById("rd-logo-inp").files = dt.files; handleLogoUpload({target:{files:[f]}}); }
+  });
+})();
+
+// ─────────────────────────────────────────────
+// DRAWER HELPERS
+// ─────────────────────────────────────────────
+function openDrawer(id) {
+  document.getElementById("drawer-overlay").classList.add("open");
+  document.getElementById(id).classList.add("open");
+}
+function closeDrawer() {
+  document.getElementById("drawer-overlay").classList.remove("open");
+  document.querySelectorAll(".drawer.open").forEach(function(d){ d.classList.remove("open"); });
+}
+function toggleDay(btn) { btn.classList.toggle("on"); }
+
+// ─────────────────────────────────────────────
+// CONFIRM
+// ─────────────────────────────────────────────
+var _confirmCB = null;
+
+function promptDelete(type, id) {
+  var name = "";
+  if (type === "special") { var s = SPECIALS.find(function(x){return x.id===id;}); name = s ? s.name : id; }
+  if (type === "rest") { var r = RESTAURANTS.find(function(x){return x.id===id;}); name = r ? r.name : id; }
+  showConfirm("Delete?", 'Permanently delete "' + name + '"?', function() {
+    if (type === "special") { SPECIALS = SPECIALS.filter(function(x){return x.id!==id;}); closeDrawer(); renderSpecialsTable(); logActivity("del", "Deleted special: "+name, "var(--red)"); }
+    if (type === "rest") { RESTAURANTS = RESTAURANTS.filter(function(x){return x.id!==id;}); SPECIALS = SPECIALS.filter(function(x){return x.rid!==id;}); delete LOGOS[id]; closeDrawer(); renderRestsTable(); logActivity("del", "Deleted restaurant: "+name, "var(--red)"); }
+    saveData(); updateCounts(); toast("Deleted", "red");
+  });
+}
+
+function confirmReset() {
+  showConfirm("Reset all data?", "Restore factory sample data. Logos and settings are kept.", function() {
+    RESTAURANTS = DEFAULT_RESTAURANTS.map(function(x){return Object.assign({},x);});
+    SPECIALS = DEFAULT_SPECIALS.map(function(x){return Object.assign({active:true},x);});
+    saveData(); updateCounts(); renderDashboard(); toast("Data reset");
+  });
+}
+
+function confirmClearLogos() {
+  showConfirm("Clear all logos?", "All uploaded logos will be removed.", function() {
+    LOGOS = {}; saveData(); renderLogosGrid(); toast("Logos cleared");
+  });
+}
+
+function showConfirm(title, msg, cb) {
+  document.getElementById("confirm-title").textContent = title;
+  document.getElementById("confirm-msg").textContent = msg;
+  _confirmCB = cb;
+  document.getElementById("confirm-overlay").classList.add("open");
+}
+function closeConfirm() { document.getElementById("confirm-overlay").classList.remove("open"); _confirmCB = null; }
+function confirmOK() { if (_confirmCB) _confirmCB(); closeConfirm(); }
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+var _toastTimer = null;
+function toast(msg, type) {
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.className = "toast " + (type||"");
+  t.classList.add("show");
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2800);
+}
+
+// ─────────────────────────────────────────────
+// EXPORT / IMPORT
+// ─────────────────────────────────────────────
+function exportJSON() {
+  var data = {restaurants:RESTAURANTS, specials:SPECIALS, logos:LOGOS, exportedAt:new Date().toISOString()};
+  var blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "adelaide-specials-export.json"; a.click();
+  toast("Exported", "green");
+}
+function exportCSV() {
+  var rows = [["id","name","restaurant","suburb","price","food","session","days","from","until","active"]];
+  SPECIALS.forEach(function(s) {
+    var r = RESTAURANTS.find(function(x){return x.id===s.rid;}) || {name:"",suburb:""};
+    rows.push([s.id,s.name,r.name,r.suburb,s.price,s.food||"",s.session||"",(s.days||[]).join(";"),s.from||"",s.until||"",s.active!==false?"yes":"no"]);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(","); }).join("\n");
+  var blob = new Blob([csv], {type:"text/csv"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "specials.csv"; a.click();
+  toast("CSV exported", "green");
+}
+function importJSON(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (data.restaurants) RESTAURANTS = data.restaurants;
+      if (data.specials) SPECIALS = data.specials;
+      if (data.logos) Object.assign(LOGOS, data.logos);
+      saveData(); updateCounts(); toast("Imported", "green"); logActivity("import", "Imported data from JSON", "var(--blue)");
+    } catch(err) { toast("Invalid JSON", "red"); }
+  };
+  reader.readAsText(file);
+}
+function generateSQL() {
+  function esc(s){ return String(s).replace(/'/g,"''"); }
+  var lines = ["-- Specials Adelaide SQL export -- " + new Date().toISOString(), ""];
+  lines.push("-- Restaurants");
+  RESTAURANTS.forEach(function(r) {
+    lines.push("INSERT INTO restaurants (id,name,suburb,cuisine_type,address,is_active) VALUES ('"+r.id+"','"+esc(r.name)+"','"+esc(r.suburb)+"','"+esc(r.cuisine||"")+"','"+esc(r.addr||"")+"',"+(r.active!==false)+") ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name,suburb=EXCLUDED.suburb,cuisine_type=EXCLUDED.cuisine_type,address=EXCLUDED.address,is_active=EXCLUDED.is_active;");
+  });
+  lines.push(""); lines.push("-- Specials");
+  SPECIALS.forEach(function(s) {
+    var days = "{" + (s.days||[]).map(function(d){ return '"'+d+'"'; }).join(",") + "}";
+    lines.push("INSERT INTO specials (id,restaurant_id,name,description,price,category,days_available,available_from,available_until,is_active) VALUES ('"+s.id+"','"+s.rid+"','"+esc(s.name)+"','"+esc(s.desc||"")+"',"+s.price+",'"+esc(s.food||"")+"','"+days+"','"+esc(s.from||"")+"','"+esc(s.until||"")+"',"+(s.active!==false)+") ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name,description=EXCLUDED.description,price=EXCLUDED.price,category=EXCLUDED.category,days_available=EXCLUDED.days_available,available_from=EXCLUDED.available_from,available_until=EXCLUDED.available_until,is_active=EXCLUDED.is_active;");
+  });
+  document.getElementById("sql-wrap").style.display = "block";
+  document.getElementById("sql-out").textContent = lines.join("\n");
+}
+function copySQL() {
+  navigator.clipboard.writeText(document.getElementById("sql-out").textContent).then(function(){ toast("Copied", "green"); });
+}
+</script>
+</body>
+</html>
