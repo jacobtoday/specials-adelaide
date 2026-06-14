@@ -224,8 +224,9 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
     </div>
     <button class="lock-btn" onclick="doLogin()">Sign in</button>
     <div class="lock-error" id="login-error">Incorrect username or password</div>
-    <div class="lock-hint">Default: admin / specials2025</div>
+    <div class="lock-hint" id="lock-hint">Default: admin / specials2025</div>
     <div class="lock-hint"><a href="#" onclick="resetAuth();return false">Reset to default credentials</a></div>
+    <div class="lock-hint" id="db-status" style="margin-top:14px;color:#444"></div>
   </div>
 </div>
 
@@ -344,8 +345,8 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
             </label>
           </div>
           <div class="settings-card" style="grid-column:1/3">
-            <div class="settings-card-title">Generate Supabase SQL</div>
-            <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">Generate SQL to upsert all current data into your Supabase database.</p>
+            <div class="settings-card-title">Generate SQL backup</div>
+            <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">Generate SQL to re-insert all current data — useful as a backup or to copy data into another Railway Postgres database.</p>
             <button class="tb-btn primary" onclick="generateSQL()" style="padding:10px 20px">Generate SQL</button>
             <div id="sql-wrap" style="display:none;margin-top:14px">
               <pre style="background:#111;border-radius:var(--r-sm);padding:16px;font-family:var(--mono);font-size:11px;color:#aaa;max-height:280px;overflow-y:auto;white-space:pre-wrap;line-height:1.6" id="sql-out"></pre>
@@ -376,7 +377,27 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
             </div>
           </div>
           <div class="settings-card">
+            <div class="settings-card-title">Google Maps</div>
+            <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
+              <div>
+                <div class="settings-key">Maps Embed API key</div>
+                <div class="settings-val" style="margin-top:2px">Used on the public Map page</div>
+              </div>
+              <div class="inline-edit" style="width:100%">
+                <input class="inline-input" id="set-mapskey" placeholder="AIzaSy..." style="width:100%;font-size:11px">
+                <button class="tb-btn primary" onclick="saveMapsKey()" style="padding:6px 12px">Save</button>
+              </div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.6">
+                Get a key from the <a href="https://console.cloud.google.com/apis/library/maps-embed-backend.googleapis.com" target="_blank" style="color:var(--blue)">Google Cloud Console</a> — enable the "Maps Embed API" and create a key under Credentials.
+              </div>
+            </div>
+          </div>
+          <div class="settings-card" style="grid-column:1/3">
             <div class="settings-card-title">Danger zone</div>
+            <div class="settings-row">
+              <div><div class="settings-key">Clear all specials</div><div class="settings-val">Removes every special. Restaurants are kept.</div></div>
+              <button class="tb-btn danger" onclick="confirmClearSpecials()">Clear specials</button>
+            </div>
             <div class="settings-row">
               <div><div class="settings-key">Reset all specials &amp; restaurants</div><div class="settings-val">Restores factory sample data</div></div>
               <button class="tb-btn danger" onclick="confirmReset()">Reset</button>
@@ -535,179 +556,100 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
 
 <script>
 // ─────────────────────────────────────────────
-// STEP 1: CREDENTIALS
+// STATE
 // ─────────────────────────────────────────────
-var ADMIN_USER = "admin";
-var ADMIN_PASS = "specials2025";
-var SETTINGS_KEY = "sa-settings";
+var DEFAULT_ADMIN_USER = "admin";
+var DEFAULT_ADMIN_PASS = "specials2025";
 
-// ─────────────────────────────────────────────
-// STEP 2: DEFAULT DATA
-// ─────────────────────────────────────────────
-var DEFAULT_RESTAURANTS = [
-  {id:"r1",name:"Cumberland Arms Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Waymouth St",phone:"",website:"",active:true},
-  {id:"r2",name:"General Havelock Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"162 Hutt St",phone:"",website:"",active:true},
-  {id:"r3",name:"Union Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"70 Waymouth St",phone:"",website:"",active:true},
-  {id:"r4",name:"Gilbert Street Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"88 Gilbert St",phone:"",website:"",active:true},
-  {id:"r5",name:"The Laneway Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"29 Ebenezer Place",phone:"",website:"",active:true},
-  {id:"r6",name:"Benjamin On Franklin",suburb:"Adelaide CBD",cuisine:"Bar",addr:"148 Franklin St",phone:"",website:"",active:true},
-  {id:"r7",name:"Lady Burra Brewhouse",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"3 Nile St",phone:"",website:"",active:true},
-  {id:"r8",name:"Duke of Brunswick Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"207 Gilbert St",phone:"",website:"",active:true},
-  {id:"r9",name:"Duke of York Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"81 Grenfell St",phone:"",website:"",active:true},
-  {id:"r10",name:"Rob Roy Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"Grenfell St",phone:"",website:"",active:true},
-  {id:"r11",name:"The Austral",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Rundle St",phone:"",website:"",active:true},
-  {id:"r12",name:"Coopers Alehouse",suburb:"Adelaide CBD",cuisine:"Australian",addr:"226 Rundle St",phone:"",website:"",active:true},
-  {id:"r13",name:"PJ OBriens",suburb:"Adelaide CBD",cuisine:"Irish",addr:"Grenfell St",phone:"",website:"",active:true},
-  {id:"r14",name:"Norwood Hotel",suburb:"Norwood",cuisine:"Australian",addr:"97 The Parade",phone:"",website:"",active:true},
-  {id:"r15",name:"Alma Tavern",suburb:"Norwood",cuisine:"Australian",addr:"66 Magill Rd",phone:"",website:"",active:true},
-  {id:"r16",name:"The Kensi",suburb:"Marryatville",cuisine:"Australian",addr:"23 Regent St",phone:"",website:"",active:true},
-  {id:"r17",name:"Feathers Hotel",suburb:"Burnside",cuisine:"Australian",addr:"Greenhill Rd",phone:"",website:"",active:true},
-  {id:"r18",name:"Parkside Hotel",suburb:"Parkside",cuisine:"Australian",addr:"142 Glen Osmond Rd",phone:"",website:"",active:true},
-  {id:"r19",name:"Sportys",suburb:"Fullarton",cuisine:"Australian",addr:"150 Glen Osmond Rd",phone:"",website:"",active:true},
-  {id:"r20",name:"Tower Hotel",suburb:"Magill",cuisine:"Australian",addr:"621 Magill Rd",phone:"",website:"",active:true},
-  {id:"r21",name:"Hampstead Hotel",suburb:"Clearview",cuisine:"Australian",addr:"184 Hampstead Rd",phone:"",website:"",active:true},
-  {id:"r22",name:"Enfield Hotel",suburb:"Clearview",cuisine:"Australian",addr:"184 Hampstead Rd",phone:"",website:"",active:true},
-  {id:"r23",name:"Northern Tavern",suburb:"Sefton Park",cuisine:"Australian",addr:"269 Main N Rd",phone:"",website:"",active:true},
-  {id:"r24",name:"Windmill Hotel",suburb:"Prospect",cuisine:"Australian",addr:"94 Main N Rd",phone:"",website:"",active:true},
-  {id:"r25",name:"Hecho En Mexico",suburb:"Prospect",cuisine:"Mexican",addr:"Prospect Rd",phone:"",website:"",active:true},
-  {id:"r26",name:"Cathedral Hotel",suburb:"North Adelaide",cuisine:"Australian",addr:"45 Kermode St",phone:"",website:"",active:true},
-  {id:"r27",name:"Lord Melbourne Hotel",suburb:"North Adelaide",cuisine:"Australian",addr:"63 Melbourne St",phone:"",website:"",active:true},
-  {id:"r28",name:"Grand Junction Tavern",suburb:"Pennington",cuisine:"Australian",addr:"174 Grand Junction Rd",phone:"",website:"",active:true},
-  {id:"r29",name:"Excelsior Hotel",suburb:"Brompton",cuisine:"Australian",addr:"110 Coglin St",phone:"",website:"",active:true},
-  {id:"r30",name:"Lockleys Hotel",suburb:"Fulham",cuisine:"Australian",addr:"493 Henley Beach Rd",phone:"",website:"",active:true},
-  {id:"r31",name:"Mile End Hotel",suburb:"Mile End",cuisine:"Australian",addr:"30 Henley Beach Rd",phone:"",website:"",active:true},
-  {id:"r32",name:"Ambra Spirits",suburb:"Thebarton",cuisine:"Italian",addr:"",phone:"",website:"",active:true},
-  {id:"r33",name:"Bartley Hotel",suburb:"West Lakes Shore",cuisine:"Australian",addr:"Bartley Terrace",phone:"",website:"",active:true},
-  {id:"r34",name:"Seaton Hotel",suburb:"Seaton",cuisine:"Australian",addr:"253 Tapleys Hill Rd",phone:"",website:"",active:true},
-  {id:"r35",name:"Cremorne Hotel",suburb:"Unley",cuisine:"Australian",addr:"207 Unley Rd",phone:"",website:"",active:true},
-  {id:"r36",name:"Belair Hotel",suburb:"Mitcham",cuisine:"Australian",addr:"",phone:"",website:"",active:true},
-  {id:"r37",name:"Gully Public House",suburb:"Adelaide Hills",cuisine:"Australian",addr:"",phone:"",website:"",active:true},
-  {id:"r38",name:"Aldgate Pump Hotel",suburb:"Adelaide Hills",cuisine:"Australian",addr:"Aldgate",phone:"",website:"",active:true},
-  {id:"r39",name:"Marion Hotel",suburb:"Mitchell Park",cuisine:"Australian",addr:"849 Marion Rd",phone:"",website:"",active:true},
-  {id:"r40",name:"Emu Hotel",suburb:"Morphett Vale",cuisine:"Australian",addr:"132 Main South Rd",phone:"",website:"",active:true},
-  {id:"r41",name:"TGI Fridays",suburb:"Oaklands Park",cuisine:"American",addr:"293 Diagonal Rd",phone:"",website:"",active:true},
-  {id:"r42",name:"Seamores",suburb:"Henley Beach",cuisine:"Italian",addr:"255 Esplanade",phone:"",website:"",active:true},
-  {id:"r43",name:"Henley Beach Hotel",suburb:"Henley Beach",cuisine:"Australian",addr:"157 Esplanade",phone:"",website:"",active:true},
-  {id:"r44",name:"Largs Pier Hotel",suburb:"Largs Bay",cuisine:"Australian",addr:"Esplanade",phone:"",website:"",active:true},
-  {id:"r45",name:"Beach Hotel Seaford",suburb:"Seaford",cuisine:"Australian",addr:"Griffiths Drive",phone:"",website:"",active:true},
-  {id:"r46",name:"Beach Burrito Co",suburb:"Glenelg",cuisine:"Mexican",addr:"56 Jetty Rd",phone:"",website:"",active:true},
-  {id:"r47",name:"Mismatch Brewing Co",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"55 Nile St",phone:"",website:"",active:true},
-  {id:"r48",name:"Bandit Pizza",suburb:"Adelaide CBD",cuisine:"Italian",addr:"",phone:"",website:"",active:true},
-  {id:"r49",name:"Good Gilbert",suburb:"Adelaide CBD",cuisine:"Modern Australian",addr:"Gilbert St",phone:"",website:"",active:true},
-  {id:"r50",name:"Fleet Street Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"Fleet St",phone:"",website:"",active:true},
-  {id:"r51",name:"Grunthal Brewhouse",suburb:"Adelaide Hills",cuisine:"Brewery",addr:"",phone:"",website:"",active:true},
-  {id:"r52",name:"Bar Lune",suburb:"Adelaide CBD",cuisine:"Wine Bar",addr:"",phone:"",website:"",active:true},
-  {id:"r53",name:"La Scala Cafe",suburb:"Adelaide CBD",cuisine:"Italian",addr:"",phone:"",website:"",active:true},
-];
-
-var DEFAULT_SPECIALS = [
-  {id:"s1",rid:"r1",name:"Schnitzel or Parmi Tuesday",desc:"$15 parmy or schnitzel with any drink purchase",price:15,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s2",rid:"r1",name:"$20 Rump Steak Nightly",desc:"$20 rump steak every night when you purchase a drink",price:20,food:"steak",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"9pm"},
-  {id:"s3",rid:"r1",name:"Fish n Chips Monday",desc:"Fish n chips $15 with any drink all day Monday",price:15,food:"seafood",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s4",rid:"r2",name:"Schnitzel Monday CBD",desc:"$15 schnitzel chips side salad and sauce",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s5",rid:"r2",name:"Wings Tuesday CBD",desc:"Two kilos of wings for $15 Tuesday special",price:15,food:"wings",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s6",rid:"r3",name:"Parmi and Pint Night",desc:"Chicken or Beef Parmi with core pint on tap $25",price:25,food:"parmi",session:"dinner",days:["monday","tuesday"],from:"5pm",until:"9pm"},
-  {id:"s7",rid:"r4",name:"Pasta Monday CBD",desc:"$20 pasta lunch or dinner rotating specials",price:20,food:"pasta",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s8",rid:"r4",name:"Pizza Tuesday",desc:"Pizzas $20 Tuesday all day",price:20,food:"pizza",session:"dinner",days:["tuesday"],from:"11am",until:"10pm"},
-  {id:"s9",rid:"r5",name:"Pardon the Bun",desc:"One burger endless fries $20 Tuesday",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"10pm"},
-  {id:"s10",rid:"r5",name:"Happy Hour Pizza Games",desc:"$9 pizzas $7 games $10 pint specials",price:9,food:"pizza",session:"drinks",days:["wednesday","thursday","friday"],from:"4pm",until:"7pm"},
-  {id:"s11",rid:"r6",name:"$20 Cocktail Jugs",desc:"$20 cocktail jugs and selected beer jugs daily",price:20,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"5pm"},
-  {id:"s12",rid:"r6",name:"Curry Tuesday Benjamin",desc:"Four house-made curries $13 with any drink",price:13,food:"curry",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s13",rid:"r7",name:"Happy Hour Lady Burra",desc:"$8 house beers wines and spirits",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s14",rid:"r8",name:"Schnitzel Monday Duke",desc:"Chicken beef or eggplant schnitzel $20 with chips and salad",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"5pm",until:"8:30pm"},
-  {id:"s15",rid:"r9",name:"T-Bone Monday",desc:"400g T-bone with red wine jus and chips $19.90",price:19.9,food:"steak",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s16",rid:"r12",name:"Coopers Happy Hour",desc:"$5 Coopers pints $3.50 wine 5pm to 7pm",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
-  {id:"s17",rid:"r13",name:"$14 Steak Night PJs",desc:"$14 steak night with chips and salad",price:14,food:"steak",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
-  {id:"s18",rid:"r14",name:"Bottomless Cocktails Norwood",desc:"1 cocktail on arrival plus 1hr bottomless. 100 guests only",price:9,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"10pm"},
-  {id:"s19",rid:"r16",name:"Burger and Pint Kensi",desc:"Choice of burger and a pint of Coopers $18",price:18,food:"burger",session:"dinner",days:["tuesday"],from:"6pm",until:"9pm"},
-  {id:"s20",rid:"r18",name:"Schnitzel Night Parkside",desc:"Schnitzel calamari battered fish $20 pub classics",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"5:30pm",until:"9pm"},
-  {id:"s21",rid:"r18",name:"Wing Wednesday Parkside",desc:"500g buffalo wings with blue cheese sauce",price:18,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s22",rid:"r20",name:"Burger Tuesdays Magill",desc:"All burgers and sandwiches with chips",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s23",rid:"r21",name:"Schnitzel Wednesday Clearview",desc:"Full size schnitzel with salad veg bar and rolls $20",price:20,food:"schnitzel",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
-  {id:"s24",rid:"r24",name:"Schnitzel Windmill",desc:"$16 schnitzel with any drink purchase",price:16,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
-  {id:"s25",rid:"r25",name:"Taco Tuesday Prospect",desc:"$6 hand-pressed tacos chicken fish prawn",price:6,food:"tacos",session:"lunch",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s26",rid:"r26",name:"Weekday Lunch North Adel",desc:"Schnitzels fish chips curry roast plus soft drink $20",price:20,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11:30am",until:"2:30pm"},
-  {id:"s27",rid:"r29",name:"Schnitzel Excelsior",desc:"$20 schnitzels Mon-Wed half price toppings Tuesdays",price:20,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday"],from:"12pm",until:"9pm"},
-  {id:"s28",rid:"r30",name:"Schnitzel Lockleys",desc:"Beef or chicken schnitzel with chips and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
-  {id:"s29",rid:"r31",name:"Happy Hour Mile End",desc:"House beers and wines $6 Mon to Fri",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s30",rid:"r32",name:"Pasta Cocktail Night Ambra",desc:"Entree pasta and a cocktail $49 per person",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
-  {id:"s31",rid:"r32",name:"Bottomless Brunch Thebarton",desc:"Weekend bottomless brunch with live sax $65pp",price:65,food:"brunch",session:"brunch",days:["saturday","sunday"],from:"10am",until:"1pm"},
-  {id:"s32",rid:"r35",name:"Happy Hour Cremorne",desc:"Aperol $14 Gin Spritz $16 tap beer and wine $10",price:10,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s33",rid:"r37",name:"Parma Pint Lunch Hills",desc:"$25 pint and parmi deal for weekday lunch",price:25,food:"parmi",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
-  {id:"s34",rid:"r39",name:"Burger Night Marion",desc:"Choice of burger with chips in The Shed $18",price:18,food:"burger",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
-  {id:"s35",rid:"r42",name:"Wednesday Date Night Seamores",desc:"Select pizzas pasta and schnitzel $17",price:17,food:"pizza",session:"dinner",days:["wednesday"],from:"5:30pm",until:"9pm"},
-  {id:"s36",rid:"r43",name:"Schnitzel Henley Mon Thu",desc:"Chicken or beef with chips salad and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["monday","thursday"],from:"12pm",until:"8:30pm"},
-  {id:"s37",rid:"r44",name:"Largs Happy Hour",desc:"$6 house wine $7 Coopers pints $8 base spirits",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
-  {id:"s38",rid:"r45",name:"Schnitzel Monday Seaford",desc:"Beef or chicken schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s39",rid:"r45",name:"Seafood Friday Seaford",desc:"Battered or grilled fish prawns and chips $22",price:22,food:"seafood",session:"lunch",days:["friday"],from:"12pm",until:"8pm"},
-  {id:"s40",rid:"r46",name:"Half Price Tacos Tuesday",desc:"$4 half price tacos all day Tuesday",price:4,food:"tacos",session:"lunch",days:["tuesday"],from:"11:30am",until:"9:30pm"},
-  {id:"s41",rid:"r46",name:"Beach Burrito Happy Hour",desc:"Beer and wine $5 tacos $5 margaritas $12 daily",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"6pm"},
-  {id:"s42",rid:"r50",name:"Bottomless Brunch Fleet St",desc:"2hr bottomless cocktails with brunch bites $85pp",price:85,food:"brunch",session:"brunch",days:["friday","saturday","sunday"],from:"11am",until:"4pm"},
-  {id:"s43",rid:"r51",name:"Bottomless Pizza Fridays",desc:"Unlimited pizza slices every Friday bookings essential",price:30,food:"pizza",session:"dinner",days:["friday"],from:"6pm",until:"9pm"},
-  {id:"s44",rid:"r36",name:"Wing Wednesday Belair",desc:"1kg wings and 2 imperials of selected beer",price:28,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s45",rid:"r3",name:"Happy Hour Union CBD",desc:"Core beer pints house wines and spirits $8 every day",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"6pm"},
-];
-
-// ─────────────────────────────────────────────
-// STEP 3: DATA STATE (declared before loadData)
-// ─────────────────────────────────────────────
 var RESTAURANTS = [];
 var SPECIALS = [];
 var LOGOS = {};
+var SETTINGS = {};
 var activityLog = [];
+var dbConnected = false;
 
 // ─────────────────────────────────────────────
-// STEP 4: LOAD / SAVE
+// API HELPERS
 // ─────────────────────────────────────────────
-function loadData() {
-  try {
-    var r = localStorage.getItem("sa-restaurants");
-    var s = localStorage.getItem("sa-specials");
-    var l = localStorage.getItem("sa-logos");
-    RESTAURANTS = r ? JSON.parse(r) : DEFAULT_RESTAURANTS.map(function(x){ return Object.assign({}, x); });
-    LOGOS = l ? JSON.parse(l) : {};
-    SPECIALS = s ? JSON.parse(s) : DEFAULT_SPECIALS.map(function(x){ return Object.assign({active:true}, x); });
-  } catch(e) {
-    RESTAURANTS = DEFAULT_RESTAURANTS.map(function(x){ return Object.assign({}, x); });
-    SPECIALS = DEFAULT_SPECIALS.map(function(x){ return Object.assign({active:true}, x); });
-    LOGOS = {};
-  }
+async function apiGet(path) {
+  const res = await fetch(path);
+  if (!res.ok) throw new Error("GET " + path + " failed: " + res.status);
+  return res.json();
+}
+async function apiPost(path, body) {
+  const res = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body || {})
+  });
+  if (!res.ok) throw new Error("POST " + path + " failed: " + res.status);
+  return res.json();
+}
+async function apiDelete(path) {
+  const res = await fetch(path, { method: "DELETE" });
+  if (!res.ok) throw new Error("DELETE " + path + " failed: " + res.status);
+  return res.json();
 }
 
-function saveData() {
-  try {
-    localStorage.setItem("sa-restaurants", JSON.stringify(RESTAURANTS));
-    localStorage.setItem("sa-specials", JSON.stringify(SPECIALS));
-    localStorage.setItem("sa-logos", JSON.stringify(LOGOS));
-  } catch(e) { console.error("Save failed", e); }
+// ─────────────────────────────────────────────
+// LOAD ALL DATA FROM API
+// ─────────────────────────────────────────────
+async function loadAllData() {
+  const [rests, specs, logos, settings] = await Promise.all([
+    apiGet("/api/restaurants"),
+    apiGet("/api/specials"),
+    apiGet("/api/logos"),
+    apiGet("/api/settings"),
+  ]);
+  RESTAURANTS = rests;
+  SPECIALS = specs;
+  LOGOS = logos;
+  SETTINGS = settings;
 }
 
 // ─────────────────────────────────────────────
-// STEP 5: AUTH — simple and reliable
+// AUTH
 // ─────────────────────────────────────────────
 function getCredentials() {
-  try {
-    var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    return {
-      user: s.user || ADMIN_USER,
-      pass: s.pass || ADMIN_PASS
-    };
-  } catch(e) {
-    return { user: ADMIN_USER, pass: ADMIN_PASS };
-  }
+  return {
+    user: (SETTINGS && SETTINGS.admin_user) || DEFAULT_ADMIN_USER,
+    pass: (SETTINGS && SETTINGS.admin_pass) || DEFAULT_ADMIN_PASS
+  };
 }
 
-function doLogin() {
+async function doLogin() {
   var u = document.getElementById("login-user").value.trim();
   var p = document.getElementById("login-pass").value;
-  var creds = getCredentials();
   var err = document.getElementById("login-error");
-  if (u === creds.user && p === creds.pass) {
+  var statusEl = document.getElementById("db-status");
+
+  // Always allow hardcoded defaults — guaranteed fallback even if DB is unreachable
+  var hardcodeOK = (u === DEFAULT_ADMIN_USER && p === DEFAULT_ADMIN_PASS);
+
+  // Try loading settings from DB to check custom credentials too
+  var dbOK = false;
+  try {
+    if (!SETTINGS || Object.keys(SETTINGS).length === 0) {
+      SETTINGS = await apiGet("/api/settings");
+    }
+    dbConnected = true;
+    var creds = getCredentials();
+    dbOK = (u === creds.user && p === creds.pass);
+  } catch (e) {
+    dbConnected = false;
+    statusEl.textContent = "Database unreachable — using default credentials only";
+  }
+
+  if (hardcodeOK || dbOK) {
     document.getElementById("lock-screen").style.display = "none";
     document.getElementById("app").style.display = "block";
     document.getElementById("sidebar-user").textContent = "Logged in as " + u;
     err.style.display = "none";
-    loadData();
+    try {
+      await loadAllData();
+    } catch (e) {
+      toast("Could not load data from database — check Postgres connection", "red");
+    }
     initApp();
   } else {
     err.style.display = "block";
@@ -726,37 +668,45 @@ function doLogout() {
 }
 
 function resetAuth() {
-  try {
-    var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    delete s.user; delete s.pass;
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
-  } catch(e) {}
-  document.getElementById("login-user").value = ADMIN_USER;
+  document.getElementById("login-user").value = DEFAULT_ADMIN_USER;
   document.getElementById("login-pass").value = "";
   document.getElementById("login-error").style.display = "none";
-  alert("Reset done. Use: " + ADMIN_USER + " / " + ADMIN_PASS);
+  alert("Use default credentials: " + DEFAULT_ADMIN_USER + " / " + DEFAULT_ADMIN_PASS + "\n\nNote: if a custom username/password was saved in Settings, you'll need those instead — or ask whoever set them to reset via the database settings table.");
 }
 
-function saveCredentials() {
+async function saveCredentials() {
   var u = document.getElementById("set-username").value.trim();
   var p = document.getElementById("set-password").value;
   if (!u) { toast("Username cannot be empty", ""); return; }
   try {
-    var s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    s.user = u;
-    if (p) s.pass = p;
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+    var updates = { admin_user: u };
+    if (p) updates.admin_pass = p;
+    await apiPost("/api/settings", updates);
+    SETTINGS.admin_user = u;
+    if (p) SETTINGS.admin_pass = p;
     toast("Credentials saved", "green");
     document.getElementById("set-password").value = "";
-  } catch(e) { toast("Save failed", "red"); }
+  } catch (e) { toast("Save failed — check connection", "red"); }
+}
+
+async function saveMapsKey() {
+  var key = document.getElementById("set-mapskey").value.trim();
+  try {
+    await apiPost("/api/settings", { maps_api_key: key });
+    SETTINGS.maps_api_key = key;
+    toast("Maps API key saved", "green");
+  } catch (e) { toast("Save failed — check connection", "red"); }
 }
 
 // ─────────────────────────────────────────────
-// STEP 6: APP INIT
+// APP INIT
 // ─────────────────────────────────────────────
-function initApp() {
+async function initApp() {
   updateCounts();
   renderDashboard();
+  // populate settings fields
+  document.getElementById("set-username").value = (SETTINGS && SETTINGS.admin_user) || DEFAULT_ADMIN_USER;
+  document.getElementById("set-mapskey").value = (SETTINGS && SETTINGS.maps_api_key) || "";
 }
 
 function updateCounts() {
@@ -783,6 +733,10 @@ function showView(id, el) {
   if (id === "restaurants") renderRestsTable();
   if (id === "logos") renderLogosGrid();
   if (id === "dashboard") renderDashboard();
+  if (id === "settings") {
+    document.getElementById("set-username").value = (SETTINGS && SETTINGS.admin_user) || DEFAULT_ADMIN_USER;
+    document.getElementById("set-mapskey").value = (SETTINGS && SETTINGS.maps_api_key) || "";
+  }
 }
 
 // ─────────────────────────────────────────────
@@ -791,11 +745,20 @@ function showView(id, el) {
 function logActivity(icon, text, bg) {
   activityLog.unshift({icon:icon, text:text, bg:bg||"var(--yellow)", time:new Date()});
   if (activityLog.length > 20) activityLog.pop();
+  renderActivityLog();
+}
+
+function renderActivityLog() {
+  var log = document.getElementById("activity-log");
+  if (!activityLog.length) { log.innerHTML = '<div style="padding:24px;text-align:center;color:#aaa;font-size:13px">No recent activity.</div>'; return; }
+  log.innerHTML = activityLog.map(function(a){
+    return '<div class="activity-row"><div class="activity-icon" style="background:'+a.bg+'">'+a.icon+'</div><div class="activity-text">'+a.text+'</div><div class="activity-time">'+fmtTime(a.time)+'</div></div>';
+  }).join("");
 }
 
 function renderDashboard() {
   var active = SPECIALS.filter(function(s){ return s.active !== false; }).length;
-  var prices = SPECIALS.map(function(s){ return s.price; });
+  var prices = SPECIALS.map(function(s){ return Number(s.price); });
   var avg = prices.length ? Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length) : 0;
   var minP = prices.length ? Math.min.apply(null,prices) : 0;
   var maxP = prices.length ? Math.max.apply(null,prices) : 0;
@@ -806,14 +769,10 @@ function renderDashboard() {
   document.getElementById("d-rests").textContent = RESTAURANTS.length;
   document.getElementById("d-suburbs").textContent = suburbs + " suburbs";
   document.getElementById("d-avg").textContent = "$" + avg;
-  document.getElementById("d-range").textContent = "$" + minP.toFixed(0) + " to $" + maxP.toFixed(0);
+  document.getElementById("d-range").textContent = prices.length ? ("$" + minP.toFixed(0) + " to $" + maxP.toFixed(0)) : "—";
   document.getElementById("d-logos").textContent = logoCount;
   document.getElementById("d-no-logos").textContent = (RESTAURANTS.length - logoCount) + " missing";
-  var log = document.getElementById("activity-log");
-  if (!activityLog.length) { log.innerHTML = '<div style="padding:24px;text-align:center;color:#aaa;font-size:13px">No recent activity.</div>'; return; }
-  log.innerHTML = activityLog.map(function(a){
-    return '<div class="activity-row"><div class="activity-icon" style="background:'+a.bg+'">'+a.icon+'</div><div class="activity-text">'+a.text+'</div><div class="activity-time">'+fmtTime(a.time)+'</div></div>';
-  }).join("");
+  renderActivityLog();
 }
 
 function fmtTime(d) {
@@ -848,10 +807,10 @@ function renderSpecialsTable() {
     var r = RESTAURANTS.find(function(x){ return x.id === s.rid; }) || {name:"",suburb:""};
     var active = s.active !== false;
     var days = (s.days||[]).map(function(d){ return '<span class="day-pip">'+(DS[d]||d)+'</span>'; }).join("");
-    return '<tr><td><div class="td-name">'+s.name+'</div><div class="td-sub">'+(s.desc||"").substring(0,55)+'</div></td>'
-      +'<td><div class="td-name">'+r.name+'</div><div class="td-sub">'+r.suburb+'</div></td>'
+    return '<tr><td><div class="td-name">'+esc(s.name)+'</div><div class="td-sub">'+esc((s.desc||"").substring(0,55))+'</div></td>'
+      +'<td><div class="td-name">'+esc(r.name)+'</div><div class="td-sub">'+esc(r.suburb)+'</div></td>'
       +'<td class="price-cell">$'+Number(s.price).toFixed(2)+'</td>'
-      +'<td><span class="td-badge active">'+(s.food||"")+'</span></td>'
+      +'<td><span class="td-badge active">'+esc(s.food||"")+'</span></td>'
       +'<td><span class="td-badge '+(s.session||"")+'">'+(s.session||"—")+'</span></td>'
       +'<td><div class="day-pips">'+days+'</div></td>'
       +'<td><span class="td-badge '+(active?"active":"inactive")+'">'+(active?"Active":"Hidden")+'</span></td>'
@@ -860,8 +819,13 @@ function renderSpecialsTable() {
         +'<button class="row-btn tog '+(active?"":"off")+'" onclick="toggleSpecial(\''+s.id+'\')">'+(active?"Hide":"Show")+'</button>'
         +'<button class="row-btn del" onclick="promptDelete(\'special\',\''+s.id+'\')">Del</button>'
       +'</div></td></tr>';
-  }).join("") || '<tr><td colspan="8"><div class="empty-tbl"><span>No results</span></div></td></tr>';
-  renderPg("spec-pg", pages, specPage, function(p){ specPage=p; renderSpecialsTable(); });
+  }).join("") || '<tr><td colspan="8"><div class="empty-tbl"><span>No specials yet</span><p style="font-size:12px;margin-top:6px">Click "+ Add special" above to create your first one.</p></div></td></tr>';
+  renderPg("spec-pg", pages, specPage, "specials");
+}
+
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
 // ─────────────────────────────────────────────
@@ -884,11 +848,11 @@ function renderRestsTable() {
   document.getElementById("rest-tbody").innerHTML = slice.map(function(r) {
     var active = r.active !== false;
     var lg = LOGOS[r.id];
-    var logoEl = lg ? (lg.type==="svg" ? '<div style="width:34px;height:34px;overflow:hidden">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="width:34px;height:34px;object-fit:contain">') : '<span style="font-family:var(--mono);font-size:13px;font-weight:700">'+r.name[0]+'</span>';
+    var logoEl = lg ? (lg.type==="svg" ? '<div style="width:34px;height:34px;overflow:hidden">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="width:34px;height:34px;object-fit:contain">') : '<span style="font-family:var(--mono);font-size:13px;font-weight:700">'+esc(r.name[0])+'</span>';
     var cnt = counts[r.id]||0;
     return '<tr><td><div class="logo-thumb" onclick="openRestDrawer(\''+r.id+'\')">'+logoEl+'</div></td>'
-      +'<td><div class="td-name">'+r.name+'</div><div class="td-sub">'+(r.addr||"")+'</div></td>'
-      +'<td>'+r.suburb+'</td><td>'+(r.cuisine||"")+'</td>'
+      +'<td><div class="td-name">'+esc(r.name)+'</div><div class="td-sub">'+esc(r.addr||"")+'</div></td>'
+      +'<td>'+esc(r.suburb)+'</td><td>'+esc(r.cuisine||"")+'</td>'
       +'<td><span class="td-badge active">'+cnt+' special'+(cnt!==1?"s":"")+'</span></td>'
       +'<td><span class="td-badge '+(active?"active":"inactive")+'">'+(active?"Active":"Hidden")+'</span></td>'
       +'<td><div class="row-actions">'
@@ -897,7 +861,7 @@ function renderRestsTable() {
         +'<button class="row-btn del" onclick="promptDelete(\'rest\',\''+r.id+'\')">Del</button>'
       +'</div></td></tr>';
   }).join("") || '<tr><td colspan="7"><div class="empty-tbl"><span>No results</span></div></td></tr>';
-  renderPg("rest-pg", pages, restPage, function(p){ restPage=p; renderRestsTable(); });
+  renderPg("rest-pg", pages, restPage, "restaurants");
 }
 
 // ─────────────────────────────────────────────
@@ -908,11 +872,11 @@ function renderLogosGrid() {
   document.getElementById("logo-prog").textContent = withLogos + " / " + RESTAURANTS.length + " have logos";
   document.getElementById("logos-grid").innerHTML = RESTAURANTS.map(function(r) {
     var lg = LOGOS[r.id];
-    var imgEl = lg ? (lg.type==="svg" ? '<div style="width:64px;height:64px;overflow:hidden;display:flex;align-items:center;justify-content:center">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="width:64px;height:64px;object-fit:contain">') : '<div style="font-family:var(--mono);font-size:24px;font-weight:700;color:#ccc">'+r.name[0]+'</div>';
+    var imgEl = lg ? (lg.type==="svg" ? '<div style="width:64px;height:64px;overflow:hidden;display:flex;align-items:center;justify-content:center">'+lg.data+'</div>' : '<img src="'+lg.data+'" style="width:64px;height:64px;object-fit:contain">') : '<div style="font-family:var(--mono);font-size:24px;font-weight:700;color:#ccc">'+esc(r.name[0])+'</div>';
     return '<div class="logo-card" onclick="openRestDrawer(\''+r.id+'\')" title="Click to edit logo">'
       +'<div class="logo-card-img">'+imgEl+'</div>'
-      +'<div class="logo-card-name">'+r.name+'</div>'
-      +'<div class="logo-card-sub">'+r.suburb+'</div>'
+      +'<div class="logo-card-name">'+esc(r.name)+'</div>'
+      +'<div class="logo-card-sub">'+esc(r.suburb)+'</div>'
       +'<div class="logo-card-status" style="color:'+(lg?"var(--green)":"#ccc")+'">'+(lg?"Logo set":"No logo")+'</div>'
       +'</div>';
   }).join("");
@@ -921,16 +885,20 @@ function renderLogosGrid() {
 // ─────────────────────────────────────────────
 // PAGINATION
 // ─────────────────────────────────────────────
-function renderPg(id, pages, current, onChange) {
+function renderPg(id, pages, current, targetName) {
   var el = document.getElementById(id);
   if (pages <= 1) { el.innerHTML = ""; return; }
   var btns = "";
   for (var i=1; i<=pages; i++) {
     if (i===1||i===pages||Math.abs(i-current)<=1) {
-      btns += '<button class="pg-btn'+(i===current?" cur":"")+('" onclick="('+onChange+')('+i+')">')+i+'</button>';
+      btns += '<button class="pg-btn'+(i===current?" cur":"")+'" onclick="goToPage(\''+targetName+'\','+i+')">'+i+'</button>';
     } else if (Math.abs(i-current)===2) btns += '<span style="padding:0 4px;color:#aaa">...</span>';
   }
   el.innerHTML = '<span class="pg-info">Page '+current+' of '+pages+'</span><div class="pg-btns">'+btns+'</div>';
+}
+function goToPage(target, p) {
+  if (target === "specials") { specPage = p; renderSpecialsTable(); }
+  if (target === "restaurants") { restPage = p; renderRestsTable(); }
 }
 
 // ─────────────────────────────────────────────
@@ -942,9 +910,15 @@ function openSpecialDrawer(id) {
   document.getElementById("sd-title").textContent = s ? "Edit special" : "Add special";
   document.getElementById("sd-sub").textContent = s ? s.name : "";
   document.getElementById("sd-del-btn").style.display = s ? "block" : "none";
-  document.getElementById("sd-rid").innerHTML = RESTAURANTS.map(function(r){
-    return '<option value="'+r.id+'"'+(s&&s.rid===r.id?' selected':'')+'>'+r.name+' — '+r.suburb+'</option>';
-  }).join("");
+
+  if (!RESTAURANTS.length) {
+    document.getElementById("sd-rid").innerHTML = '<option value="">No restaurants yet — add one first</option>';
+  } else {
+    document.getElementById("sd-rid").innerHTML = RESTAURANTS.slice().sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(r){
+      return '<option value="'+r.id+'"'+(s&&s.rid===r.id?' selected':'')+'>'+esc(r.name)+' — '+esc(r.suburb)+'</option>';
+    }).join("");
+  }
+
   document.getElementById("sd-name").value = s ? s.name : "";
   document.getElementById("sd-desc").value = s ? (s.desc||"") : "";
   document.getElementById("sd-price").value = s ? s.price : "";
@@ -959,13 +933,14 @@ function openSpecialDrawer(id) {
   openDrawer("special-drawer");
 }
 
-function saveSpecial() {
+async function saveSpecial() {
   var id = document.getElementById("sd-id").value;
   var days = [];
   document.querySelectorAll("#sd-days .day-pick-btn.on").forEach(function(b){ days.push(b.dataset.day); });
+  var rid = document.getElementById("sd-rid").value;
   var data = {
     id: id || ("s" + Date.now()),
-    rid: document.getElementById("sd-rid").value,
+    rid: rid,
     name: document.getElementById("sd-name").value.trim(),
     desc: document.getElementById("sd-desc").value.trim(),
     price: parseFloat(document.getElementById("sd-price").value) || 0,
@@ -976,25 +951,34 @@ function saveSpecial() {
     until: document.getElementById("sd-until").value.trim(),
     active: document.getElementById("sd-active-tog").classList.contains("on"),
   };
-  if (!data.name || !data.rid || !data.price || !days.length) { toast("Fill required fields"); return; }
-  if (id) {
-    var idx = SPECIALS.findIndex(function(s){ return s.id===id; });
-    if (idx > -1) SPECIALS[idx] = data;
-    logActivity("edit", "Updated: " + data.name, "var(--yellow)");
-    toast("Saved", "green");
-  } else {
-    SPECIALS.push(data);
-    logActivity("+", "Added: " + data.name, "var(--green)");
-    toast("Added", "green");
+  if (!data.name || !data.rid || !data.price || !days.length) { toast("Fill required fields (restaurant, name, price, at least one day)"); return; }
+  try {
+    await apiPost("/api/specials", data);
+    if (id) {
+      var idx = SPECIALS.findIndex(function(s){ return s.id===id; });
+      if (idx > -1) SPECIALS[idx] = data; else SPECIALS.push(data);
+      logActivity("✎", "Updated: " + esc(data.name), "var(--yellow)");
+      toast("Saved", "green");
+    } else {
+      SPECIALS.push(data);
+      logActivity("+", "Added: " + esc(data.name), "var(--green)");
+      toast("Added", "green");
+    }
+    updateCounts(); closeDrawer(); renderSpecialsTable(); renderDashboard();
+  } catch (e) {
+    toast("Save failed — check connection", "red");
   }
-  saveData(); updateCounts(); closeDrawer(); renderSpecialsTable();
 }
 
-function toggleSpecial(id) {
+async function toggleSpecial(id) {
   var s = SPECIALS.find(function(x){ return x.id===id; });
   if (!s) return;
-  s.active = (s.active === false);
-  saveData(); renderSpecialsTable(); toast(s.active ? "Visible" : "Hidden");
+  var newActive = (s.active === false);
+  try {
+    await apiPost("/api/specials", Object.assign({}, s, { active: newActive }));
+    s.active = newActive;
+    renderSpecialsTable(); toast(newActive ? "Visible" : "Hidden");
+  } catch (e) { toast("Update failed", "red"); }
 }
 
 function deleteSpecial() {
@@ -1035,7 +1019,7 @@ function openRestDrawer(id) {
   openDrawer("rest-drawer");
 }
 
-function saveRestaurant() {
+async function saveRestaurant() {
   var id = document.getElementById("rd-id").value;
   var data = {
     id: id || ("r" + Date.now()),
@@ -1050,25 +1034,37 @@ function saveRestaurant() {
   if (!data.name || !data.suburb) { toast("Name and suburb required"); return; }
   var lt = document.getElementById("rd-logo-type").value;
   var ld = document.getElementById("rd-logo-data").value;
-  if (lt && ld) LOGOS[data.id] = {type:lt, data:ld};
-  if (id) {
-    var idx = RESTAURANTS.findIndex(function(r){ return r.id===id; });
-    if (idx > -1) RESTAURANTS[idx] = data;
-    logActivity("edit", "Updated: " + data.name, "var(--yellow)");
-    toast("Saved", "green");
-  } else {
-    RESTAURANTS.push(data);
-    logActivity("+", "Added: " + data.name, "var(--green)");
-    toast("Added", "green");
+  try {
+    await apiPost("/api/restaurants", data);
+    if (lt && ld) {
+      await apiPost("/api/logos/" + data.id, { type: lt, data: ld });
+      LOGOS[data.id] = { type: lt, data: ld };
+    }
+    if (id) {
+      var idx = RESTAURANTS.findIndex(function(r){ return r.id===id; });
+      if (idx > -1) RESTAURANTS[idx] = data; else RESTAURANTS.push(data);
+      logActivity("✎", "Updated: " + esc(data.name), "var(--yellow)");
+      toast("Saved", "green");
+    } else {
+      RESTAURANTS.push(data);
+      logActivity("+", "Added: " + esc(data.name), "var(--green)");
+      toast("Added", "green");
+    }
+    updateCounts(); closeDrawer(); renderRestsTable(); renderLogosGrid(); renderDashboard();
+  } catch (e) {
+    toast("Save failed — check connection", "red");
   }
-  saveData(); updateCounts(); closeDrawer(); renderRestsTable(); renderLogosGrid();
 }
 
-function toggleRest(id) {
+async function toggleRest(id) {
   var r = RESTAURANTS.find(function(x){ return x.id===id; });
   if (!r) return;
-  r.active = (r.active === false);
-  saveData(); renderRestsTable(); toast(r.active ? "Visible" : "Hidden");
+  var newActive = (r.active === false);
+  try {
+    await apiPost("/api/restaurants", Object.assign({}, r, { active: newActive }));
+    r.active = newActive;
+    renderRestsTable(); toast(newActive ? "Visible" : "Hidden");
+  } catch (e) { toast("Update failed", "red"); }
 }
 
 function deleteRestaurant() {
@@ -1154,24 +1150,55 @@ function promptDelete(type, id) {
   var name = "";
   if (type === "special") { var s = SPECIALS.find(function(x){return x.id===id;}); name = s ? s.name : id; }
   if (type === "rest") { var r = RESTAURANTS.find(function(x){return x.id===id;}); name = r ? r.name : id; }
-  showConfirm("Delete?", 'Permanently delete "' + name + '"?', function() {
-    if (type === "special") { SPECIALS = SPECIALS.filter(function(x){return x.id!==id;}); closeDrawer(); renderSpecialsTable(); logActivity("del", "Deleted special: "+name, "var(--red)"); }
-    if (type === "rest") { RESTAURANTS = RESTAURANTS.filter(function(x){return x.id!==id;}); SPECIALS = SPECIALS.filter(function(x){return x.rid!==id;}); delete LOGOS[id]; closeDrawer(); renderRestsTable(); logActivity("del", "Deleted restaurant: "+name, "var(--red)"); }
-    saveData(); updateCounts(); toast("Deleted", "red");
+  showConfirm("Delete?", 'Permanently delete "' + name + '"?', async function() {
+    try {
+      if (type === "special") {
+        await apiDelete("/api/specials/" + id);
+        SPECIALS = SPECIALS.filter(function(x){return x.id!==id;});
+        closeDrawer(); renderSpecialsTable();
+        logActivity("✕", "Deleted special: "+esc(name), "var(--red)");
+      }
+      if (type === "rest") {
+        await apiDelete("/api/restaurants/" + id);
+        RESTAURANTS = RESTAURANTS.filter(function(x){return x.id!==id;});
+        SPECIALS = SPECIALS.filter(function(x){return x.rid!==id;});
+        delete LOGOS[id];
+        closeDrawer(); renderRestsTable();
+        logActivity("✕", "Deleted restaurant: "+esc(name), "var(--red)");
+      }
+      updateCounts(); renderDashboard(); toast("Deleted", "red");
+    } catch (e) { toast("Delete failed — check connection", "red"); }
   });
 }
 
 function confirmReset() {
-  showConfirm("Reset all data?", "Restore factory sample data. Logos and settings are kept.", function() {
-    RESTAURANTS = DEFAULT_RESTAURANTS.map(function(x){return Object.assign({},x);});
-    SPECIALS = DEFAULT_SPECIALS.map(function(x){return Object.assign({active:true},x);});
-    saveData(); updateCounts(); renderDashboard(); toast("Data reset");
+  showConfirm("Reset all data?", "This will overwrite restaurants and specials with factory sample data. This cannot be undone.", function() {
+    toast("Factory reset isn't available from this build — restore from a SQL backup instead.", "");
+  });
+}
+
+function confirmClearSpecials() {
+  showConfirm("Clear all specials?", "This will permanently delete all " + SPECIALS.length + " specials. Restaurants and logos are kept. This cannot be undone.", async function() {
+    try {
+      await apiPost("/api/reset-specials", {});
+      SPECIALS = [];
+      updateCounts(); renderDashboard();
+      if (document.getElementById("view-specials").classList.contains("active")) renderSpecialsTable();
+      logActivity("🗑", "Cleared all specials", "var(--red)");
+      toast("All specials cleared", "red");
+    } catch (e) { toast("Clear failed — check connection", "red"); }
   });
 }
 
 function confirmClearLogos() {
-  showConfirm("Clear all logos?", "All uploaded logos will be removed.", function() {
-    LOGOS = {}; saveData(); renderLogosGrid(); toast("Logos cleared");
+  showConfirm("Clear all logos?", "All uploaded logos will be removed. This cannot be undone.", async function() {
+    try {
+      await apiDelete("/api/logos");
+      LOGOS = {};
+      renderLogosGrid();
+      if (document.getElementById("view-restaurants").classList.contains("active")) renderRestsTable();
+      toast("Logos cleared");
+    } catch (e) { toast("Clear failed — check connection", "red"); }
   });
 }
 
@@ -1216,31 +1243,35 @@ function exportCSV() {
   var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "specials.csv"; a.click();
   toast("CSV exported", "green");
 }
-function importJSON(e) {
+async function importJSON(e) {
   var file = e.target.files[0]; if (!file) return;
   var reader = new FileReader();
-  reader.onload = function(ev) {
+  reader.onload = async function(ev) {
     try {
       var data = JSON.parse(ev.target.result);
-      if (data.restaurants) RESTAURANTS = data.restaurants;
-      if (data.specials) SPECIALS = data.specials;
-      if (data.logos) Object.assign(LOGOS, data.logos);
-      saveData(); updateCounts(); toast("Imported", "green"); logActivity("import", "Imported data from JSON", "var(--blue)");
-    } catch(err) { toast("Invalid JSON", "red"); }
+      var ops = [];
+      if (data.restaurants) data.restaurants.forEach(function(r){ ops.push(apiPost("/api/restaurants", r)); });
+      if (data.specials) data.specials.forEach(function(s){ ops.push(apiPost("/api/specials", s)); });
+      if (data.logos) Object.keys(data.logos).forEach(function(rid){ ops.push(apiPost("/api/logos/"+rid, data.logos[rid])); });
+      await Promise.all(ops);
+      await loadAllData();
+      updateCounts(); renderDashboard();
+      toast("Imported", "green"); logActivity("⇪", "Imported data from JSON", "var(--blue)");
+    } catch(err) { toast("Import failed: " + err.message, "red"); }
   };
   reader.readAsText(file);
 }
 function generateSQL() {
-  function esc(s){ return String(s).replace(/'/g,"''"); }
-  var lines = ["-- Specials Adelaide SQL export -- " + new Date().toISOString(), ""];
+  function sqlEsc(s){ return String(s).replace(/'/g,"''"); }
+  var lines = ["-- Specials Adelaide SQL backup -- " + new Date().toISOString(), ""];
   lines.push("-- Restaurants");
   RESTAURANTS.forEach(function(r) {
-    lines.push("INSERT INTO restaurants (id,name,suburb,cuisine_type,address,is_active) VALUES ('"+r.id+"','"+esc(r.name)+"','"+esc(r.suburb)+"','"+esc(r.cuisine||"")+"','"+esc(r.addr||"")+"',"+(r.active!==false)+") ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name,suburb=EXCLUDED.suburb,cuisine_type=EXCLUDED.cuisine_type,address=EXCLUDED.address,is_active=EXCLUDED.is_active;");
+    lines.push("INSERT INTO restaurants (id,name,suburb,cuisine,addr,phone,website,active) VALUES ('"+r.id+"','"+sqlEsc(r.name)+"','"+sqlEsc(r.suburb)+"','"+sqlEsc(r.cuisine||"")+"','"+sqlEsc(r.addr||"")+"','"+sqlEsc(r.phone||"")+"','"+sqlEsc(r.website||"")+"',"+(r.active!==false)+") ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name,suburb=EXCLUDED.suburb,cuisine=EXCLUDED.cuisine,addr=EXCLUDED.addr,phone=EXCLUDED.phone,website=EXCLUDED.website,active=EXCLUDED.active;");
   });
   lines.push(""); lines.push("-- Specials");
   SPECIALS.forEach(function(s) {
     var days = "{" + (s.days||[]).map(function(d){ return '"'+d+'"'; }).join(",") + "}";
-    lines.push("INSERT INTO specials (id,restaurant_id,name,description,price,category,days_available,available_from,available_until,is_active) VALUES ('"+s.id+"','"+s.rid+"','"+esc(s.name)+"','"+esc(s.desc||"")+"',"+s.price+",'"+esc(s.food||"")+"','"+days+"','"+esc(s.from||"")+"','"+esc(s.until||"")+"',"+(s.active!==false)+") ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name,description=EXCLUDED.description,price=EXCLUDED.price,category=EXCLUDED.category,days_available=EXCLUDED.days_available,available_from=EXCLUDED.available_from,available_until=EXCLUDED.available_until,is_active=EXCLUDED.is_active;");
+    lines.push("INSERT INTO specials (id,rid,name,desc_text,price,food,session,days,from_time,until_time,active) VALUES ('"+s.id+"','"+s.rid+"','"+sqlEsc(s.name)+"','"+sqlEsc(s.desc||"")+"',"+s.price+",'"+sqlEsc(s.food||"")+"','"+sqlEsc(s.session||"")+"','"+days+"','"+sqlEsc(s.from||"")+"','"+sqlEsc(s.until||"")+"',"+(s.active!==false)+") ON CONFLICT (id) DO UPDATE SET rid=EXCLUDED.rid,name=EXCLUDED.name,desc_text=EXCLUDED.desc_text,price=EXCLUDED.price,food=EXCLUDED.food,session=EXCLUDED.session,days=EXCLUDED.days,from_time=EXCLUDED.from_time,until_time=EXCLUDED.until_time,active=EXCLUDED.active;");
   });
   document.getElementById("sql-wrap").style.display = "block";
   document.getElementById("sql-out").textContent = lines.join("\n");
@@ -1248,6 +1279,22 @@ function generateSQL() {
 function copySQL() {
   navigator.clipboard.writeText(document.getElementById("sql-out").textContent).then(function(){ toast("Copied", "green"); });
 }
+
+// ─────────────────────────────────────────────
+// BOOT — try to load settings before showing login,
+// so custom credentials work; falls back gracefully.
+// ─────────────────────────────────────────────
+(async function boot() {
+  var statusEl = document.getElementById("db-status");
+  try {
+    SETTINGS = await apiGet("/api/settings");
+    dbConnected = true;
+    statusEl.textContent = "";
+  } catch (e) {
+    dbConnected = false;
+    statusEl.textContent = "Database unreachable — default login still works";
+  }
+})();
 </script>
 </body>
 </html>

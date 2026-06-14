@@ -92,7 +92,7 @@ pre code{background:none;padding:0;color:var(--yellow);font-size:13px;line-heigh
       <li><a href="#domain">Custom domain</a></li>
       <li><a href="#admin">Securing the admin</a></li>
       <li><a href="#updates">Pushing updates</a></li>
-      <li><a href="#supabase">Connecting Supabase</a></li>
+      <li><a href="#postgres">Add Postgres on Railway</a></li>
       <li><a href="#costs">Costs</a></li>
     </ol>
   </div>
@@ -113,14 +113,16 @@ pre code{background:none;padding:0;color:var(--yellow);font-size:13px;line-heigh
 <span class="ft-dir">specials-adelaide/</span>
 ├── <span class="ft-file">index.html</span>         <span style="color:#555">← Public-facing website</span>
 ├── <span class="ft-file">admin.html</span>         <span style="color:#555">← Admin panel (password protected)</span>
-├── <span class="ft-new">server.js</span>          <span style="color:#555">← Express server (Railway runs this)</span>
-├── <span class="ft-new">package.json</span>       <span style="color:#555">← Node dependencies</span>
+├── <span class="ft-new">server.js</span>          <span style="color:#555">← Express server + Postgres API (Railway runs this)</span>
+├── <span class="ft-new">package.json</span>       <span style="color:#555">← Node dependencies (express + pg)</span>
 ├── <span class="ft-new">railway.json</span>       <span style="color:#555">← Railway config</span>
+├── <span class="ft-new">schema.sql</span>         <span style="color:#555">← Database tables — run once in Railway Postgres</span>
+├── <span class="ft-new">seed.sql</span>           <span style="color:#555">← Seeds your 54 restaurants</span>
 └── <span class="ft-new">.gitignore</span>         <span style="color:#555">← Keeps node_modules out of git</span>
         </div>
         <div class="callout tip">
           <span class="callout-icon">✅</span>
-          <span class="callout-text">All files with an orange name were generated for you. The HTML files are your main site and admin panel — you already have everything.</span>
+          <span class="callout-text">All files with an orange name were generated for you. Everything is ready to deploy — <code>schema.sql</code> and <code>seed.sql</code> just need to be run once against your Railway Postgres database (Phase 7).</span>
         </div>
       </div>
     </div>
@@ -386,122 +388,102 @@ git push</code></pre>
         <div><div class="step-title">Adding new specials without coding</div><div class="step-sub">Use the admin panel</div></div>
       </div>
       <div class="step-body">
-        <p>For day-to-day content changes — adding a new restaurant, updating a price, toggling a special off — use the admin panel at <code>/admin</code>. Changes save to the browser's <code>localStorage</code> on that device.</p>
-        <div class="callout info">
-          <span class="callout-icon">ℹ️</span>
-          <span class="callout-text"><strong>Important:</strong> Admin panel changes currently save to <em>your browser only</em>. To push changes to the live site for everyone, you'll need to connect Supabase (Phase 7 below) or manually update the HTML file. The admin panel's <strong>Export → Generate SQL</strong> button helps bridge this gap.</span>
+        <p>For day-to-day content changes — adding a new restaurant, updating a price, toggling a special off, uploading a logo — use the admin panel at <code>/admin</code>. Every change saves straight to the Railway Postgres database and appears on the live site immediately for everyone.</p>
+        <div class="callout tip">
+          <span class="callout-icon">✅</span>
+          <span class="callout-text">No "publish" step needed — the public site reads live from the same database the admin panel writes to.</span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ── PHASE 7 ── -->
-  <div class="phase" id="supabase">
-    <div class="phase-badge blue">Phase 7 — Optional but recommended</div>
-    <h2>Connect Supabase for live data</h2>
-    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">This makes admin edits update the live site for everyone, not just your browser.</p>
+  <div class="phase" id="postgres">
+    <div class="phase-badge blue">Phase 7 — Required for the admin panel to work</div>
+    <h2>Add Postgres on Railway</h2>
+    <p style="color:var(--text2);margin:8px 0 20px;font-size:14px">Railway has built-in Postgres — one click, automatically connected to your app. This is what makes the admin panel's edits show up on the live site.</p>
 
     <div class="step">
       <div class="step-head">
         <div class="step-num">1</div>
-        <div><div class="step-title">Create your Supabase project</div><div class="step-sub">supabase.com — free tier</div></div>
+        <div><div class="step-title">Add the Postgres plugin</div><div class="step-sub">~1 minute</div></div>
       </div>
       <div class="step-body">
         <ol>
-          <li>Go to <strong>supabase.com</strong> → New project</li>
-          <li>Name it <code>specials-adelaide</code>, pick <strong>ap-southeast-2 (Sydney)</strong></li>
-          <li>Save your database password somewhere safe</li>
-          <li>Once created, go to <strong>Project Settings → API</strong></li>
-          <li>Copy your <strong>Project URL</strong> and <strong>anon public key</strong></li>
+          <li>Open your project in the Railway dashboard</li>
+          <li>Click <strong>+ New</strong> → <strong>Database</strong> → <strong>Add PostgreSQL</strong></li>
+          <li>Railway provisions a Postgres instance and automatically adds a <code>DATABASE_URL</code> variable to your app service</li>
         </ol>
+        <div class="callout tip">
+          <span class="callout-icon">✅</span>
+          <span class="callout-text">No manual connection string copying needed — Railway links the database to your app service automatically since they're in the same project.</span>
+        </div>
       </div>
     </div>
 
     <div class="step">
       <div class="step-head">
         <div class="step-num">2</div>
-        <div><div class="step-title">Run the database schema</div><div class="step-sub">Creates your tables in one go</div></div>
+        <div><div class="step-title">Run the schema</div><div class="step-sub">Creates the tables — one-time setup</div></div>
       </div>
       <div class="step-body">
-        <p>In Supabase → <strong>SQL Editor → New query</strong>, paste and run this:</p>
-        <div style="position:relative">
-<pre><code>create extension if not exists "pgcrypto";
-
-create table restaurants (
-  id            uuid primary key default gen_random_uuid(),
-  name          text not null,
-  suburb        text not null,
-  cuisine_type  text,
-  address       text,
-  phone         text,
-  website       text,
-  is_active     boolean not null default true,
-  created_at    timestamptz not null default now()
-);
-
-create table specials (
-  id              uuid primary key default gen_random_uuid(),
-  restaurant_id   uuid not null references restaurants(id) on delete cascade,
-  name            text not null,
-  description     text,
-  price           numeric(6,2) not null,
-  category        text,
-  session_type    text,
-  days_available  text[] not null,
-  available_from  text,
-  available_until text,
-  is_active       boolean not null default true,
-  created_at      timestamptz not null default now()
-);
-
-create index on specials(restaurant_id);
-create index on specials(is_active);
-
-alter table restaurants enable row level security;
-alter table specials enable row level security;
-
-create policy "Public read restaurants" on restaurants
-  for select using (is_active = true);
-create policy "Public read specials" on specials
-  for select using (is_active = true);</code></pre>
-        </div>
+        <ol>
+          <li>Click on the new <strong>Postgres</strong> service in your Railway project</li>
+          <li>Go to the <strong>Data</strong> tab → <strong>Query</strong></li>
+          <li>Open <code>schema.sql</code> from your project files, copy its contents, and run it in the query editor</li>
+        </ol>
+        <p>This creates four tables: <code>restaurants</code>, <code>specials</code>, <code>logos</code>, and <code>settings</code> — plus seeds default admin credentials (<code>admin</code> / <code>specials2025</code>) and an empty Maps API key.</p>
       </div>
     </div>
 
     <div class="step">
       <div class="step-head">
         <div class="step-num">3</div>
-        <div><div class="step-title">Push your data from the admin panel</div><div class="step-sub">Export → Generate SQL → run in Supabase</div></div>
+        <div><div class="step-title">Run the seed data</div><div class="step-sub">Loads your 54 restaurants — specials table stays empty for manual entry</div></div>
       </div>
       <div class="step-body">
         <ol>
-          <li>In the admin panel, go to <strong>Import / Export</strong></li>
-          <li>Click <strong>Generate SQL</strong></li>
-          <li>Copy the generated SQL</li>
-          <li>Paste it into Supabase SQL Editor and run it</li>
+          <li>Same Query tab as above</li>
+          <li>Open <code>seed.sql</code>, copy its contents, and run it</li>
         </ol>
-        <p>This upserts all your restaurants and specials into the database.</p>
+        <p>This inserts all 54 restaurants you already had. The <code>specials</code> table is intentionally left empty — add specials one by one through the admin panel at <code>/admin</code>.</p>
       </div>
     </div>
 
     <div class="step">
       <div class="step-head">
         <div class="step-num">4</div>
-        <div><div class="step-title">Add Supabase credentials to Railway</div><div class="step-sub">Environment variables — never hardcode keys</div></div>
+        <div><div class="step-title">Redeploy your app service</div><div class="step-sub">Picks up the new DATABASE_URL variable</div></div>
       </div>
       <div class="step-body">
         <ol>
-          <li>In Railway → your service → <strong>Variables</strong> tab</li>
-          <li>Add these two environment variables:</li>
+          <li>Go back to your <strong>app service</strong> (not the Postgres one)</li>
+          <li>It should redeploy automatically when the database variable is linked — if not, click <strong>Deploy</strong> in the top right</li>
+          <li>Check the deploy logs for <code>Connected to Postgres</code></li>
         </ol>
-        <div style="position:relative">
-<pre><code>SUPABASE_URL=https://yourproject.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5c...</code></pre>
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <span class="callout-text">If logs show <code>Could not connect to Postgres</code>, double check the Postgres service and app service are in the <strong>same Railway project</strong> — that's what enables the automatic <code>DATABASE_URL</code> link.</span>
         </div>
-        <p>Then in <code>index.html</code>, replace the static <code>RESTAURANTS</code> and <code>SPECIALS</code> arrays with Supabase fetch calls. We can help you do that in the next development session.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">5</div>
+        <div><div class="step-title">Verify and start adding specials</div><div class="step-sub">Login at /admin</div></div>
+      </div>
+      <div class="step-body">
+        <ol>
+          <li>Visit <code>yourdomain.up.railway.app/admin</code></li>
+          <li>Log in with <code>admin</code> / <code>specials2025</code></li>
+          <li>Go to <strong>Specials → + Add special</strong> and start entering your dining deals</li>
+          <li>Go to <strong>Settings</strong> to paste your Google Maps API key — it'll activate the styled map on the public Map page</li>
+          <li>Change the default admin username/password in <strong>Settings</strong> once you're happy everything works</li>
+        </ol>
         <div class="callout tip">
           <span class="callout-icon">💡</span>
-          <span class="callout-text">The site works fully without Supabase right now — all 95 specials are baked in. Supabase is the upgrade that lets you manage data without touching code.</span>
+          <span class="callout-text">Use <strong>Export → Generate SQL</strong> any time as a backup snapshot of everything in the database.</span>
         </div>
       </div>
     </div>
@@ -521,8 +503,8 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5c...</code></pre>
         <table class="costs-table">
           <thead><tr><th>Service</th><th>What it does</th><th>Cost</th></tr></thead>
           <tbody>
-            <tr><td><strong>Railway Hobby</strong></td><td>Hosts the site and server</td><td><span class="tag paid">$5/month</span></td></tr>
-            <tr><td><strong>Supabase</strong></td><td>Database (up to 500MB)</td><td><span class="tag free">Free tier</span></td></tr>
+            <tr><td><strong>Railway Hobby</strong></td><td>Hosts the app + Postgres database</td><td><span class="tag paid">$5/month</span></td></tr>
+            <tr><td><strong>Postgres (Railway)</strong></td><td>Database — included in Hobby usage</td><td><span class="tag free">Included</span></td></tr>
             <tr><td><strong>GitHub</strong></td><td>Code storage + deploys</td><td><span class="tag free">Free</span></td></tr>
             <tr><td><strong>Domain</strong></td><td>.com.au custom domain</td><td><span class="tag optional">~$20/year</span></td></tr>
             <tr><td><strong>SSL / HTTPS</strong></td><td>Auto-provisioned by Railway</td><td><span class="tag free">Free</span></td></tr>

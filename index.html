@@ -233,18 +233,15 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 .mve-spec-item{font-size:11px;padding:5px 0;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
 .mve-spec-item:last-child{border-bottom:none}
 .mve-spec-price{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange)}
-.map-embed-wrap{background:#e8e4da;position:relative;overflow:hidden}
-.map-placeholder-big{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:40px;text-align:center}
-.map-placeholder-big .icon{font-size:56px}
-.map-placeholder-big h2{font-family:var(--mono);font-size:26px;font-weight:700}
-.map-placeholder-big p{font-size:14px;color:#666;max-width:320px;line-height:1.7}
-.map-api-steps{background:var(--yellow);border-radius:var(--r);border:3px solid var(--black);padding:24px;max-width:400px;text-align:left;box-shadow:4px 4px 0 var(--black)}
-.map-api-steps h3{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:14px}
-.map-api-steps ol{padding-left:20px;font-size:13px;line-height:1.9}
-.map-api-steps a{color:var(--blue);font-weight:600}
-.map-api-input{width:100%;margin-top:14px;padding:10px 14px;border:2px solid var(--black);border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;background:var(--white)}
-.map-api-btn{margin-top:10px;width:100%;padding:11px;background:var(--black);color:var(--yellow);border:none;border-radius:var(--r-sm);font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:background 0.15s}
-.map-api-btn:hover{background:var(--orange);color:var(--black)}
+.map-embed-wrap{background:var(--bg);position:relative;overflow:hidden;padding:16px}
+.map-iframe-frame{width:100%;height:100%;border-radius:var(--r);border:3px solid var(--black);overflow:hidden;box-shadow:5px 5px 0 var(--black);background:#e8e4da}
+.map-iframe-frame iframe{width:100%;height:100%;border:none;filter:saturate(0.85) contrast(1.05)}
+.map-placeholder-big{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:18px;padding:40px;text-align:center;border-radius:var(--r);border:3px solid var(--black);background:repeating-linear-gradient(135deg,#e8e4da,#e8e4da 14px,#ded9cc 14px,#ded9cc 28px);box-shadow:5px 5px 0 var(--black)}
+.map-placeholder-big .icon{font-size:48px}
+.map-placeholder-big h2{font-family:var(--mono);font-size:24px;font-weight:700}
+.map-placeholder-big p{font-size:13px;color:#666;max-width:340px;line-height:1.7}
+.map-placeholder-note{background:var(--white);border:2px solid var(--black);border-radius:var(--r-sm);padding:12px 18px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--black);max-width:340px}
+.map-placeholder-note a{color:var(--blue)}
 
 /* ══════════════ PLANNER PAGE ══════════════ */
 .planner-page{background:var(--bg);min-height:100vh}
@@ -398,6 +395,99 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
   .planner-hero-grid{grid-template-columns:1fr 1fr}
   .plan-tabs,.plan-inner{padding-left:16px;padding-right:16px}
   .map-body{grid-template-columns:1fr}
+}
+
+/* ══════════════ MOBILE PHONE ══════════════ */
+@media(max-width:640px){
+  /* NAV */
+  nav{
+    height:auto;flex-wrap:wrap;padding:10px 14px;gap:8px;row-gap:8px;
+    position:sticky;top:0;
+  }
+  .ticker{display:none} /* free up sticky space on mobile */
+  .nav-logo{font-size:17px;flex:1}
+  .nav-links{
+    width:100%;margin-left:0;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;
+  }
+  .nav-btn{text-align:center;padding:9px 8px;font-size:12px}
+  .nav-cta{
+    grid-column:1/4;margin-left:0;text-align:center;padding:11px;font-size:12px;
+  }
+
+  /* HERO */
+  .hero{grid-template-columns:1fr;padding:14px;gap:10px}
+  .hero-title-cell{grid-column:1/2;padding:24px 20px 28px}
+  .hero-h1{font-size:38px}
+  .hero-sub{font-size:14px;max-width:100%}
+  .hero-finder{grid-column:1/2;grid-row:auto;padding:20px 18px}
+  .hero-finder-title{font-size:15px}
+
+  /* FILTER STRIP */
+  .filter-strip{position:static;padding:10px 14px}
+  .filter-row{flex-wrap:wrap;gap:12px}
+  .fg{width:100%}
+  .fdiv{display:none}
+  .chips{flex-wrap:wrap}
+  .fsearch,.filter-search{min-width:0;width:100%}
+
+  /* BROWSE LAYOUT */
+  .browse-main{grid-template-columns:1fr}
+  .map-sidebar-col{display:none}
+  .specials-col{border-right:none}
+  .spec-header{padding:12px 14px;flex-wrap:wrap;gap:6px}
+  .specials-grid{grid-template-columns:1fr;padding:12px;gap:10px}
+  .scard-name{font-size:14px;padding-right:40px}
+  .scard-price{font-size:19px}
+
+  /* VENUES */
+  .venues-section{padding:32px 14px}
+  .venues-bento{grid-template-columns:repeat(2,1fr)}
+  .section-h2{font-size:28px}
+
+  /* FOOTER */
+  footer{flex-direction:column;align-items:flex-start;gap:10px;padding:24px 14px}
+
+  /* MAP PAGE */
+  .map-page-inner{height:auto;min-height:calc(100vh - 56px)}
+  .map-page-header{padding:16px 14px}
+  .map-page-title{font-size:18px}
+  .map-area-filter{gap:5px}
+  .map-area-filter .chip{font-size:11px;padding:5px 10px}
+  .map-body{grid-template-columns:1fr;grid-template-rows:auto auto;height:auto}
+  .map-list-panel{max-height:280px;border-right:none;border-bottom:3px solid var(--black)}
+  .map-embed-wrap{min-height:320px;padding:12px}
+
+  /* PLANNER PAGE */
+  .planner-hero{padding:14px 14px 0}
+  .planner-hero-grid{grid-template-columns:1fr;gap:10px}
+  .planner-hero-main{padding:24px 20px}
+  .planner-hero-main h1{font-size:34px}
+  .planner-stat{padding:18px}
+  .ps-num{font-size:34px}
+  .plan-tabs{padding:0 14px;overflow-x:auto}
+  .ptab{padding:12px 14px;font-size:11px;white-space:nowrap}
+  .plan-inner{grid-template-columns:1fr;padding:14px;gap:14px}
+  .plan-sidebar-card{position:static;padding:18px}
+  .day-head-name{font-size:18px}
+  .plan-item-row{padding:10px 12px;gap:10px}
+  .pir-name{font-size:13px}
+  .pir-price{font-size:16px}
+
+  /* CALENDAR */
+  .cal-nav-row{gap:10px}
+  .cal-month-lbl{font-size:18px}
+  .cal-cell{min-height:64px;padding:5px}
+  .cal-pip{font-size:7px;padding:1px 3px}
+  .cal-dn{font-size:10px}
+  .cal-total{font-size:7px}
+
+  /* MODALS */
+  .mbox,.mbox.wide{max-width:100%;margin:0 4px}
+  .day-pick-grid{grid-template-columns:repeat(4,1fr)}
+
+  /* FOOTER LOGO */
+  .footer-logo{font-size:16px}
 }
 </style>
 </head>
@@ -653,24 +743,16 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
         <div class="map-list-head">VENUES &amp; SPECIALS</div>
         <div id="map-venue-entries"></div>
       </div>
-      <div class="map-embed-wrap">
-        <div class="map-placeholder-big">
+      <div class="map-embed-wrap" id="map-embed-wrap">
+        <div class="map-placeholder-big" id="map-placeholder">
           <div class="icon">📍</div>
           <h2>Interactive Map</h2>
-          <p>Enter your Google Maps Embed API key below to activate the live map. The venue list on the left is always available.</p>
-          <div class="map-api-steps">
-            <h3>Activate the map</h3>
-            <ol>
-              <li>Go to <a href="https://console.cloud.google.com/apis/library/maps-embed-backend.googleapis.com" target="_blank">Google Cloud Console</a></li>
-              <li>Enable the <strong>Maps Embed API</strong></li>
-              <li>Create an API key under Credentials</li>
-              <li>Paste it below</li>
-            </ol>
-            <input class="map-api-input" id="api-key-input" placeholder="AIzaSy…  paste your API key here">
-            <button class="map-api-btn" onclick="activateMap()">Activate map →</button>
-          </div>
+          <p>The interactive map will appear here once a Google Maps API key is added in the admin panel.</p>
+          <div class="map-placeholder-note">Admin → Settings → Google Maps API Key</div>
         </div>
-        <iframe id="map-iframe" src="" style="display:none;width:100%;height:100%;border:none;filter:saturate(0.9)"></iframe>
+        <div class="map-iframe-frame" id="map-iframe-frame" style="display:none">
+          <iframe id="map-iframe" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -743,7 +825,7 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
           <div class="cal-grid" id="cal-grid"></div>
         </div>
       </div>
-      <div class="plan-sidebar-card" style="position:sticky;top:168px">
+      <div class="plan-sidebar-card cal-sidebar-card">
         <div class="plan-sidebar-title" id="cal-sidebar-title">Select a day</div>
         <div id="cal-detail"><p style="font-size:13px;color:#aaa;font-family:var(--mono)">Click any date to see meals</p></div>
         <div style="border-top:2px solid var(--bg);padding-top:18px;margin-top:16px">
@@ -858,169 +940,8 @@ const AREA_MAP={
   Coast:["Henley Beach","Glenelg","Seaford","Brighton","Semaphore"],
 };
 
-const RESTAURANTS=[
-  {id:"r1",name:"Cumberland Arms Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Waymouth St"},
-  {id:"r2",name:"General Havelock Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"162 Hutt St"},
-  {id:"r3",name:"Union Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"70 Waymouth St"},
-  {id:"r4",name:"Gilbert Street Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"88 Gilbert St"},
-  {id:"r5",name:"The Laneway Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"29 Ebenezer Place"},
-  {id:"r6",name:"Benjamin On Franklin",suburb:"Adelaide CBD",cuisine:"Bar",addr:"148 Franklin St"},
-  {id:"r7",name:"Lady Burra Brewhouse",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"3 Nile St"},
-  {id:"r8",name:"Duke of Brunswick Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"207 Gilbert St"},
-  {id:"r9",name:"Duke of York Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"81-83 Grenfell St"},
-  {id:"r10",name:"Rob Roy Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"Corner Grenfell & Pulteney St"},
-  {id:"r11",name:"The Austral",suburb:"Adelaide CBD",cuisine:"Australian",addr:"205 Rundle St"},
-  {id:"r12",name:"Coopers Alehouse",suburb:"Adelaide CBD",cuisine:"Australian",addr:"226 Rundle St"},
-  {id:"r13",name:"PJ O'Briens",suburb:"Adelaide CBD",cuisine:"Irish",addr:"Grenfell St"},
-  {id:"r14",name:"Norwood Hotel",suburb:"Norwood",cuisine:"Australian",addr:"97 The Parade"},
-  {id:"r15",name:"Alma Tavern",suburb:"Norwood",cuisine:"Australian",addr:"66 Magill Rd"},
-  {id:"r16",name:"The Kensi",suburb:"Marryatville",cuisine:"Australian",addr:"23 Regent St"},
-  {id:"r17",name:"Feathers Hotel",suburb:"Burnside",cuisine:"Australian",addr:"Greenhill Rd"},
-  {id:"r18",name:"Parkside Hotel",suburb:"Parkside",cuisine:"Australian",addr:"142 Glen Osmond Rd"},
-  {id:"r19",name:"Sportys",suburb:"Fullarton",cuisine:"Australian",addr:"150 Glen Osmond Rd"},
-  {id:"r20",name:"Tower Hotel",suburb:"Magill",cuisine:"Australian",addr:"621 Magill Rd"},
-  {id:"r21",name:"Hampstead Hotel",suburb:"Clearview",cuisine:"Australian",addr:"184 Hampstead Rd"},
-  {id:"r22",name:"Enfield Hotel",suburb:"Clearview",cuisine:"Australian",addr:"184 Hampstead Rd"},
-  {id:"r23",name:"Northern Tavern",suburb:"Sefton Park",cuisine:"Australian",addr:"269 Main N Rd"},
-  {id:"r24",name:"Windmill Hotel",suburb:"Prospect",cuisine:"Australian",addr:"94 Main N Rd"},
-  {id:"r25",name:"Hecho En Mexico",suburb:"Prospect",cuisine:"Mexican",addr:"Prospect Rd"},
-  {id:"r26",name:"Cathedral Hotel",suburb:"North Adelaide",cuisine:"Australian",addr:"45 Kermode St"},
-  {id:"r27",name:"Lord Melbourne Hotel",suburb:"North Adelaide",cuisine:"Australian",addr:"63 Melbourne St"},
-  {id:"r28",name:"Grand Junction Tavern",suburb:"Pennington",cuisine:"Australian",addr:"174 Grand Junction Rd"},
-  {id:"r29",name:"Excelsior Hotel",suburb:"Brompton",cuisine:"Australian",addr:"110 Coglin St"},
-  {id:"r30",name:"Lockleys Hotel",suburb:"Fulham",cuisine:"Australian",addr:"493 Henley Beach Rd"},
-  {id:"r31",name:"Mile End Hotel",suburb:"Mile End",cuisine:"Australian",addr:"30 Henley Beach Rd"},
-  {id:"r32",name:"Ambra Spirits",suburb:"Thebarton",cuisine:"Italian",addr:""},
-  {id:"r33",name:"Bartley Hotel",suburb:"West Lakes Shore",cuisine:"Australian",addr:"Bartley Terrace"},
-  {id:"r34",name:"Seaton Hotel",suburb:"Seaton",cuisine:"Australian",addr:"253 Tapleys Hill Rd"},
-  {id:"r35",name:"Cremorne Hotel",suburb:"Unley",cuisine:"Australian",addr:"207 Unley Rd"},
-  {id:"r36",name:"Belair Hotel",suburb:"Mitcham",cuisine:"Australian",addr:""},
-  {id:"r37",name:"Gully Public House",suburb:"Adelaide Hills",cuisine:"Australian",addr:""},
-  {id:"r38",name:"Aldgate Pump Hotel",suburb:"Adelaide Hills",cuisine:"Australian",addr:"Aldgate"},
-  {id:"r39",name:"Marion Hotel",suburb:"Mitchell Park",cuisine:"Australian",addr:"849 Marion Rd"},
-  {id:"r40",name:"Emu Hotel",suburb:"Morphett Vale",cuisine:"Australian",addr:"132 Main South Rd"},
-  {id:"r41",name:"TGI Fridays",suburb:"Oaklands Park",cuisine:"American",addr:"293 Diagonal Rd"},
-  {id:"r42",name:"Seamore's",suburb:"Henley Beach",cuisine:"Italian",addr:"255 Esplanade"},
-  {id:"r43",name:"Henley Beach Hotel",suburb:"Henley Beach",cuisine:"Australian",addr:"157 Esplanade"},
-  {id:"r44",name:"Largs Pier Hotel",suburb:"Largs Bay",cuisine:"Australian",addr:"Esplanade"},
-  {id:"r45",name:"Beach Hotel Seaford",suburb:"Seaford",cuisine:"Australian",addr:"Griffiths Drive"},
-  {id:"r46",name:"Beach Burrito Co",suburb:"Glenelg",cuisine:"Mexican",addr:"56 Jetty Rd"},
-  {id:"r47",name:"Mismatch Brewing Co",suburb:"Adelaide CBD",cuisine:"Brewery",addr:"55 Nile St"},
-  {id:"r48",name:"Bandit Pizza",suburb:"Adelaide CBD",cuisine:"Italian",addr:""},
-  {id:"r49",name:"Good Gilbert",suburb:"Adelaide CBD",cuisine:"Modern Australian",addr:"Gilbert St"},
-  {id:"r50",name:"Fleet Street Social",suburb:"Adelaide CBD",cuisine:"Bar",addr:"Fleet St"},
-  {id:"r51",name:"Grunthal Brewhouse",suburb:"Adelaide Hills",cuisine:"Brewery",addr:""},
-  {id:"r52",name:"Bar Lune",suburb:"Adelaide CBD",cuisine:"Wine Bar",addr:""},
-  {id:"r53",name:"Gilbert Street Hotel",suburb:"Adelaide CBD",cuisine:"Australian",addr:"88 Gilbert St"},
-  {id:"r54",name:"La Scala Cafe",suburb:"Adelaide CBD",cuisine:"Italian",addr:""},
-];
-
-// session: "lunch" = 11am-3pm, "dinner" = 5pm-late, "drinks" = happy hour/bar only, "brunch" = morning/midday
-const SPECIALS=[
-  // ── CBD FOOD ──
-  {id:"s1",rid:"r1",name:"Schnitzel or Parmi Tuesday",desc:"$15 parmy or schnitzel with any drink purchase. Lunch or dinner",price:15,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s2",rid:"r1",name:"$20 Rump Steak Nightly",desc:"$20 rump steak every night when you purchase a drink",price:20,food:"steak",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"9pm"},
-  {id:"s3",rid:"r1",name:"Fish n' Chips Monday",desc:"Serve of fish n chips $15 with any drink — all day Monday",price:15,food:"seafood",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s4",rid:"r1",name:"Sunday Parmy",desc:"Chicken parmy $15 when you buy a drink on Sundays",price:15,food:"parmi",session:"dinner",days:["sunday"],from:"12pm",until:"8pm"},
-  {id:"s5",rid:"r2",name:"Schnitzel Monday CBD",desc:"Just $15 schnitzel, chips, side salad and sauce lunch or dinner",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s6",rid:"r2",name:"Burger Thursday CBD",desc:"$17 burgers for lunch Monday, $17 schnitzels Tuesday lunch",price:17,food:"burger",session:"lunch",days:["monday"],from:"12pm",until:"3pm"},
-  {id:"s7",rid:"r2",name:"Stone Grill Rump Wednesday",desc:"$26 250g Stone Grill Rump Steak — lunch or dinner",price:26,food:"steak",session:"lunch",days:["wednesday"],from:"12pm",until:"3pm"},
-  {id:"s8",rid:"r2",name:"Wings Tuesday CBD",desc:"Two kilos of wings for $15 — Tuesday special",price:15,food:"wings",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s9",rid:"r3",name:"Parmi & Pint Night",desc:"Chicken or Beef Parmi with core pint on tap for $25",price:25,food:"parmi",session:"dinner",days:["monday","tuesday"],from:"5pm",until:"9pm"},
-  {id:"s10",rid:"r3",name:"Burger Lunch Union",desc:"Union Burger or Chicken Avocado Burger with chips $20",price:20,food:"burger",session:"lunch",days:["monday","tuesday"],from:"12pm",until:"3pm"},
-  {id:"s11",rid:"r4",name:"Pasta Monday CBD",desc:"$20 pasta lunch or dinner. Rotating house specials",price:20,food:"pasta",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s12",rid:"r4",name:"Pizza Tuesday",desc:"Pizzas are $20 Tuesday. All day",price:20,food:"pizza",session:"dinner",days:["tuesday"],from:"11am",until:"10pm"},
-  {id:"s13",rid:"r4",name:"Wings Wednesday & Thursday",desc:"Kilo of best wings in town, 8 flavours — pre-order only",price:22,food:"wings",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
-  {id:"s14",rid:"r4",name:"Pizza & Pasta Wed Dinner",desc:"Entrée, Pasta and a Cocktail $49 every Wednesday and Thursday",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
-  {id:"s15",rid:"r5",name:"Pardon the Bun",desc:"One burger, endless fries for $20 — Tuesday special",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"10pm"},
-  {id:"s16",rid:"r5",name:"Happy Hour Pizza & Games",desc:"$9 pizzas, $7 games, $10 pint specials",price:9,food:"pizza",session:"drinks",days:["wednesday","thursday","friday"],from:"4pm",until:"7pm"},
-  {id:"s17",rid:"r5",name:"Limoncello Spritz Hour",desc:"Limoncello Spritz just $12 during Spritz Hour Wed–Sat",price:12,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday"],from:"5pm",until:"6pm"},
-  {id:"s18",rid:"r6",name:"$20 Cocktail Jugs 3–5pm",desc:"$20 cocktail jugs, selected beer jugs & bottles of Patrick Sparkling",price:20,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"5pm"},
-  {id:"s19",rid:"r6",name:"$7 Pints & $5 Wines 5–6pm",desc:"$7 pints, $5 select wines — Benjamin on Franklin",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"6pm"},
-  {id:"s20",rid:"r6",name:"Curry Tuesday Benjamin",desc:"Choice of four house-made curries $13 with any drink",price:13,food:"curry",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s21",rid:"r7",name:"Happy Hour Lady Burra",desc:"$8 house beers, wines & spirits for happy hour",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s22",rid:"r8",name:"Schnitzel Monday Duke",desc:"Chicken, beef or eggplant schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"5pm",until:"8:30pm"},
-  {id:"s23",rid:"r9",name:"Cheap Mains Monday",desc:"All mains $12.90 every Monday — except Porterhouse",price:12.9,food:"roast",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s24",rid:"r9",name:"$14.90 Mains With Drink",desc:"All mains $14.90 with drink purchase Mon–Thu lunch",price:14.9,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday"],from:"12pm",until:"2pm"},
-  {id:"s25",rid:"r9",name:"T-Bone Monday",desc:"400g T-bone with red wine jus and chips $19.90 all day",price:19.9,food:"steak",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s26",rid:"r10",name:"Buy 1 Get 1 Pasta Rob Roy",desc:"Get your second pasta free when you review on Google or Facebook",price:24,food:"pasta",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5pm",until:"9pm"},
-  {id:"s27",rid:"r11",name:"Burger & Beer Austral",desc:"Burger & Beer Deal $21 — great value at The Austral",price:21,food:"burger",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
-  {id:"s28",rid:"r12",name:"Coopers Pints Happy Hour",desc:"5pm–7pm $5 Coopers pints, $3.50 wine — Coopers Alehouse",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
-  {id:"s29",rid:"r13",name:"$14 Steak Night PJ's",desc:"$14 steak night with chef's choice of chips & salad",price:14,food:"steak",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
-  {id:"s30",rid:"r13",name:"Express Lunch PJ's",desc:"$15 express lunch with half pint, house wine or soft drink",price:15,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
-  {id:"s31",rid:"r47",name:"Pizzas & Jugs Sunday",desc:"$15 jugs and margherita pizzas every Sunday",price:15,food:"pizza",session:"brunch",days:["sunday"],from:"12pm",until:"6pm"},
-  {id:"s32",rid:"r48",name:"Cozzie Livs Mondays",desc:"Select pizzas $24.99, starters $19.99 and drinks $9.99 — Bandit",price:24.99,food:"pizza",session:"dinner",days:["monday"],from:"5pm",until:"10pm"},
-  {id:"s33",rid:"r48",name:"Pizza Mon & Tue",desc:"$15 pizzas all day Monday and Tuesday at Jimmy's",price:15,food:"pizza",session:"dinner",days:["monday","tuesday"],from:"12pm",until:"10pm"},
-  {id:"s34",rid:"r49",name:"3-Course Wed & Thu",desc:"3-course share menu $45pp Wed and Thu — Good Gilbert",price:45,food:"roast",session:"dinner",days:["wednesday","thursday"],from:"6pm",until:"9pm"},
-  {id:"s35",rid:"r52",name:"Golden Hour Cocktail Carafe",desc:"Cocktail carafe $25 during Golden Hour on Fridays",price:25,food:"drinks",session:"drinks",days:["friday"],from:"3pm",until:"5pm"},
-  {id:"s36",rid:"r53",name:"Pizza Wednesday CBD",desc:"Selected Pizzas $15 — Wednesday only",price:15,food:"pizza",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
-  {id:"s37",rid:"r54",name:"All-You-Can-Eat Pizza & Pasta",desc:"Unlimited pasta and pizza every Monday and Wednesday — book ahead",price:35,food:"pizza",session:"dinner",days:["monday","wednesday"],from:"6pm",until:"9pm"},
-  {id:"s38",rid:"r50",name:"Bottomless Brunch Fri–Sun",desc:"2hr bottomless cocktails with brunch bites. Sessions 11am–1pm and 2pm–4pm. $85pp",price:85,food:"brunch",session:"brunch",days:["friday","saturday","sunday"],from:"11am",until:"4pm"},
-  // ── NORWOOD & EAST ──
-  {id:"s39",rid:"r14",name:"Bottomless Cocktails Norwood",desc:"1 cocktail on arrival + 1hr bottomless. Limited to 100 guests per night",price:9,food:"drinks",session:"drinks",days:["wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"10pm"},
-  {id:"s40",rid:"r15",name:"Happy Hour Alma Norwood",desc:"$8 tap beer pints and $8 house wines at Alma Tavern",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s41",rid:"r16",name:"Burger & Pint Kensi",desc:"Your choice of burger and a pint of Coopers $18 — Corner Bar only",price:18,food:"burger",session:"dinner",days:["tuesday"],from:"6pm",until:"9pm"},
-  {id:"s42",rid:"r17",name:"Happy Hour Feathers",desc:"Mon–Thu 4–6pm: $7 schooners or $8.50 pints. Fri–Sat 7–8pm: $14 espresso martinis",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"8pm"},
-  {id:"s43",rid:"r18",name:"Locals Schnitzel Night",desc:"Schnitzel, calamari, battered fish — $20 pub classics night",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"5:30pm",until:"9pm"},
-  {id:"s44",rid:"r18",name:"Wing Wednesday Parkside",desc:"500g buffalo wings with blue cheese dipping sauce",price:18,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s45",rid:"r18",name:"Curry Tuesday Parkside",desc:"Rotating curry night — $20 Tuesday dinner",price:20,food:"curry",session:"dinner",days:["tuesday"],from:"5pm",until:"9pm"},
-  {id:"s46",rid:"r19",name:"$7 Pints Happy Hour",desc:"$7 pints for happy hour at Sportys Fullarton",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s47",rid:"r20",name:"Burger Tuesdays Tower",desc:"All burgers & sandwiches with chips — Tower Hotel Magill",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  // ── NORTH ──
-  {id:"s48",rid:"r21",name:"Schnitzel Wednesday Clearview",desc:"Full-size schnitzel with salad, veg bar & warm bread rolls $20",price:20,food:"schnitzel",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
-  {id:"s49",rid:"r21",name:"Happy Hour Hampstead",desc:"Sports bar $7.50 pints & $7 house wine Mon–Fri",price:7.5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s50",rid:"r22",name:"Schnitzel Monday Enfield",desc:"Schnitzel with chips & $5 toppers — lunch and dinner",price:15,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s51",rid:"r23",name:"Monday Schnitzel Sefton",desc:"Chicken or beef schnitzel with chips, salad & gravy",price:18.9,food:"schnitzel",session:"dinner",days:["monday"],from:"11:30am",until:"8pm"},
-  {id:"s52",rid:"r24",name:"Schnitzel with Drink Windmill",desc:"$16 schnitzel or salad with any drink purchase",price:16,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"12pm",until:"9pm"},
-  {id:"s53",rid:"r25",name:"Taco Tuesday $6 Prospect",desc:"$6 hand-pressed tacos — chicken, fish, prawn & more",price:6,food:"tacos",session:"lunch",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s54",rid:"r26",name:"Weekday Lunch North Adel",desc:"Schnitzels, fish & chips, curry, roast + soft drink $20",price:20,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11:30am",until:"2:30pm"},
-  {id:"s55",rid:"r27",name:"Friday Pasta Lord Melbourne",desc:"Pasta with selected tap beers or house wine $25",price:25,food:"pasta",session:"dinner",days:["friday"],from:"4pm",until:"8pm"},
-  {id:"s56",rid:"r28",name:"Parmi Night Pennington",desc:"Classic parmi with chips and salad $20",price:20,food:"parmi",session:"dinner",days:["tuesday"],from:"5pm",until:"9pm"},
-  // ── WEST & INNER ──
-  {id:"s57",rid:"r29",name:"Schnitzel Mon–Wed Excelsior",desc:"$20 schnitzels Mon–Wed. Half price toppings Tuesdays",price:20,food:"schnitzel",session:"dinner",days:["monday","tuesday","wednesday"],from:"12pm",until:"9pm"},
-  {id:"s58",rid:"r30",name:"Schnitzel Tue & Wed Lockleys",desc:"Beef or chicken schnitzel with chips and gravy $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
-  {id:"s59",rid:"r31",name:"Pub Schnitty Mile End Tue",desc:"Golden pub schnitty with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s60",rid:"r31",name:"Happy Hour Mile End",desc:"House beers & wines $6 — Mon to Fri 4pm–6pm",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s61",rid:"r32",name:"Pasta & Cocktail Night",desc:"Entrée, pasta and a cocktail $49 per person — Ambra Spirits",price:49,food:"pasta",session:"dinner",days:["wednesday","thursday"],from:"5pm",until:"9pm"},
-  {id:"s62",rid:"r32",name:"Bottomless Brunch Thebarton",desc:"Weekend bottomless brunch with live sax and DJs $65pp",price:65,food:"brunch",session:"brunch",days:["saturday","sunday"],from:"10am",until:"1pm"},
-  {id:"s63",rid:"r33",name:"Schnitzel West Lakes Tue",desc:"Chicken schnitzels from $13.90 — Tuesday special",price:13.9,food:"schnitzel",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s64",rid:"r34",name:"Schnitzel Seaton Tue & Wed",desc:"$20 Beef or Chicken Schnitzel with chips and salad",price:20,food:"schnitzel",session:"dinner",days:["tuesday","wednesday"],from:"12pm",until:"9pm"},
-  {id:"s65",rid:"r35",name:"Happy Hour Cremorne Unley",desc:"Aperol Spritz $14, Gin Spritz $16, tap beer & wine $10",price:10,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s66",rid:"r35",name:"Burger Lunch Cremorne",desc:"Beef or chicken burger with mid-strength pint",price:30,food:"burger",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
-  // ── SOUTH & HILLS ──
-  {id:"s67",rid:"r36",name:"Wing Wednesday Belair",desc:"1kg wings & 2 imperials of selected beer — Belair Hotel",price:28,food:"wings",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s68",rid:"r37",name:"Parma & Pint Lunch Hills",desc:"$25 pint and parmi deal for weekday lunch",price:25,food:"parmi",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"12pm",until:"3pm"},
-  {id:"s69",rid:"r37",name:"Weekday Happy Hour Hills",desc:"Drink specials every weekday 5pm–7pm at the Gully",price:7,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"5pm",until:"7pm"},
-  {id:"s70",rid:"r37",name:"Steak & Schnitzel Hills Wed",desc:"Schnitzels from $15.90, steak specials on hump day",price:15.9,food:"schnitzel",session:"dinner",days:["wednesday"],from:"5pm",until:"9pm"},
-  {id:"s71",rid:"r38",name:"Schnitzel Night Aldgate",desc:"$16.90 schnitzel with choice of 10 toppings",price:16.9,food:"schnitzel",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
-  {id:"s72",rid:"r39",name:"Burger Night Marion",desc:"Your choice of burger with chips in The Shed sports bar $18",price:18,food:"burger",session:"dinner",days:["monday"],from:"5:30pm",until:"9pm"},
-  {id:"s73",rid:"r39",name:"Saturday & Sunday Pizza",desc:"$18 Pizza in the Shed every Saturday and Sunday 12pm–4pm",price:18,food:"pizza",session:"brunch",days:["saturday","sunday"],from:"12pm",until:"4pm"},
-  {id:"s74",rid:"r40",name:"Burger Wednesday Morphett",desc:"Burger special with chips $19",price:19,food:"burger",session:"dinner",days:["wednesday"],from:"12pm",until:"9pm"},
-  {id:"s75",rid:"r41",name:"Signature Burgers Mon TGI",desc:"$16.90 signature burgers with fries",price:16.9,food:"burger",session:"lunch",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s76",rid:"r41",name:"TGI Lunch Specials",desc:"$15.90 lunch for MyFridays members — dine in only",price:15.9,food:"roast",session:"lunch",days:["monday","tuesday","wednesday","thursday","friday"],from:"11am",until:"3pm"},
-  // ── COAST & HENLEY ──
-  {id:"s77",rid:"r42",name:"Wednesday Date Night Seamore's",desc:"Select pizzas, pasta and chicken schnitzel $17 — Wednesday special",price:17,food:"pizza",session:"dinner",days:["wednesday"],from:"5:30pm",until:"9pm"},
-  {id:"s78",rid:"r42",name:"Italian Banquet Seamore's",desc:"3-course arancini + pizza or pasta + dessert $39pp for groups of 4+",price:39,food:"pasta",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"6pm",until:"9pm"},
-  {id:"s79",rid:"r43",name:"Schnitzel Henley Mon & Thu",desc:"Chicken or beef with chips, salad & gravy $20",price:20,food:"schnitzel",session:"dinner",days:["monday","thursday"],from:"12pm",until:"8:30pm"},
-  {id:"s80",rid:"r44",name:"Largs Happy Hour Mon–Sat",desc:"$6 house wine, $7 Coopers pints, $8 base spirits, $10 Ambra Spritzes",price:6,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
-  {id:"s81",rid:"r44",name:"Friday Cocktails Largs",desc:"$15 classic cocktails including espresso martini and margarita",price:15,food:"drinks",session:"drinks",days:["friday"],from:"6pm",until:"9pm"},
-  {id:"s82",rid:"r45",name:"Schnitzel Monday Seaford",desc:"Beef or chicken schnitzel with chips and salad $20",price:20,food:"schnitzel",session:"dinner",days:["monday"],from:"12pm",until:"9pm"},
-  {id:"s83",rid:"r45",name:"Burgers & Sandos Tuesday",desc:"$20 all burgers and sandwiches from main menu",price:20,food:"burger",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-  {id:"s84",rid:"r45",name:"Seafood Friday Seaford",desc:"Battered or grilled fish, prawns and chips $22",price:22,food:"seafood",session:"lunch",days:["friday"],from:"12pm",until:"8pm"},
-  {id:"s85",rid:"r46",name:"Half Price Tacos Tuesday",desc:"$4 half-price tacos all day Tuesday — Beach Burrito Co Glenelg",price:4,food:"tacos",session:"lunch",days:["tuesday"],from:"11:30am",until:"9:30pm"},
-  {id:"s86",rid:"r46",name:"Beer & Wine Happy Hour",desc:"Beer & wine $5, tacos $5, Classic & Jalapeño margaritas $12",price:5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"3pm",until:"6pm"},
-  // ── HILLS & SPECIAL ──
-  {id:"s87",rid:"r51",name:"Bottomless Pizza Fridays",desc:"Unlimited pizza slices every Friday — bookings essential",price:30,food:"pizza",session:"dinner",days:["friday"],from:"6pm",until:"9pm"},
-  {id:"s88",rid:"r51",name:"Pasta & Wine Thursday",desc:"$30 pasta with a glass of wine or tap beer — 4 rotating options",price:30,food:"pasta",session:"dinner",days:["thursday"],from:"5pm",until:"9pm"},
-  // ── EXTRA CBD DRINKS ──
-  {id:"s89",rid:"r3",name:"Happy Hour Union CBD",desc:"Core beer pints, house wines & house spirits $8 every day",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"6pm"},
-  {id:"s90",rid:"r2",name:"Happy Hour CBD General",desc:"$8 house beers & house wines for happy hour daily",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s91",rid:"r7",name:"$8 Pints & Wines Nightly",desc:"$8 pints and $7 wines in the bar, $15 cocktails Thu & Fri",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday"],from:"4pm",until:"6pm"},
-  {id:"s92",rid:"r52",name:"$8 Wines & Beers Bar Lune",desc:"Local wines $8, bottled beer $8, signature cocktails $15",price:8,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday"],from:"4pm",until:"6pm"},
-  {id:"s93",rid:"r47",name:"$8.50 Happy Hour Mismatch",desc:"$8.50 selected pints, $7 house wines, $8.50 base spirits or $12 Aperol Spritz",price:8.5,food:"drinks",session:"drinks",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"4pm",until:"5pm"},
-  {id:"s94",rid:"r49",name:"$4 Course Dinner + Drinks",desc:"4-course share dinner menu with 2hr drinks package $99pp",price:99,food:"roast",session:"dinner",days:["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],from:"5:30pm",until:"8pm"},
-  {id:"s95",rid:"r5",name:"Pork Ribs Tuesday",desc:"Pork ribs, chips & salad $21.90 at The Austral",price:21.9,food:"roast",session:"dinner",days:["tuesday"],from:"12pm",until:"9pm"},
-];
+let RESTAURANTS=[];
+let SPECIALS=[];
 
 
 // ── STATE ──
@@ -1097,7 +1018,11 @@ function renderSpecials(){
   const list=getFiltered();
   document.getElementById("spec-count").textContent=`${list.length} special${list.length!==1?"s":""}`;
   if(!list.length){
-    document.getElementById("specials-grid").innerHTML=`<div class="empty-grid"><span>🔍</span><p>No specials match your filters. Try adjusting area, day or food type.</p></div>`;
+    if(!SPECIALS.length){
+      document.getElementById("specials-grid").innerHTML=`<div class="empty-grid"><span>🍽️</span><p>No specials added yet. Head to <code>/admin</code> to start adding dining deals.</p></div>`;
+    }else{
+      document.getElementById("specials-grid").innerHTML=`<div class="empty-grid"><span>🔍</span><p>No specials match your filters. Try adjusting area, day or food type.</p></div>`;
+    }
     return;
   }
   document.getElementById("specials-grid").innerHTML=list.map((s,i)=>{
@@ -1196,13 +1121,30 @@ function renderMapVenues(){
 }
 function setMapArea(a){mapAreaFilter=a;renderMapVenues();}
 function toggleMapVenue(id){const el=document.getElementById(id);el&&el.classList.toggle("open");}
-function activateMap(){
-  const key=document.getElementById("api-key-input").value.trim();
-  if(!key){alert("Please enter your API key");return;}
+
+let MAPS_API_KEY="";
+async function loadMapsKey(){
+  try{
+    const res=await fetch('/api/settings');
+    if(res.ok){
+      const settings=await res.json();
+      MAPS_API_KEY=settings.maps_api_key||"";
+    }
+  }catch(e){console.error('Failed to load settings',e);}
+  applyMapEmbed();
+}
+function applyMapEmbed(){
+  const frame=document.getElementById("map-iframe-frame");
+  const placeholder=document.getElementById("map-placeholder");
   const iframe=document.getElementById("map-iframe");
-  iframe.src=`https://www.google.com/maps/embed/v1/view?key=${key}&center=-34.9285,138.5999&zoom=12`;
-  iframe.style.display="block";
-  iframe.previousElementSibling.style.display="none";
+  if(MAPS_API_KEY){
+    iframe.src=`https://www.google.com/maps/embed/v1/view?key=${MAPS_API_KEY}&center=-34.9285,138.5999&zoom=12`;
+    frame.style.display="block";
+    placeholder.style.display="none";
+  }else{
+    frame.style.display="none";
+    placeholder.style.display="flex";
+  }
 }
 
 // ── ADD TO PLAN ──
@@ -1407,7 +1349,17 @@ function applyColorToSvg(color){
   document.getElementById("logo-prev-wrap").style.display="block";document.getElementById("logo-apply-btn").style.display="block";
 }
 function pickCol(c,el,custom=false){curColor=c;if(!custom){document.querySelectorAll(".sw").forEach(s=>s.classList.remove("sel"));if(el)el.classList.add("sel");}applyColorToSvg(c);}
-function applyLogo(){if(!curLogoRid||!pendingLogoData)return;logos[curLogoRid]={type:pendingLogoType,data:pendingLogoData};closeLogo();renderSpecials();renderVenuesBento();renderCurrent();}
+function applyLogo(){
+  if(!curLogoRid||!pendingLogoData)return;
+  logos[curLogoRid]={type:pendingLogoType,data:pendingLogoData};
+  closeLogo();renderSpecials();renderVenuesBento();renderCurrent();
+  // Persist to database
+  fetch(`/api/logos/${curLogoRid}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:pendingLogoType,data:pendingLogoData})
+  }).catch(e=>console.error('Failed to save logo',e));
+}
 const dz=document.getElementById("drop-zone");
 dz.addEventListener("dragover",e=>{e.preventDefault();dz.classList.add("over")});
 dz.addEventListener("dragleave",()=>dz.classList.remove("over"));
@@ -1474,9 +1426,39 @@ setDay=function(v,el){_setDay(v,el);if(document.getElementById("hf-day"))documen
 setFood=function(v,el){_setFood(v,el);if(document.getElementById("hf-food"))document.getElementById("hf-food").value=fFood;renderHeroPills();};
 setSess=function(v,el){_setSess(v,el);renderHeroPills();};
 
+// ── DATA LOADING ──
+async function loadAllData(){
+  try{
+    const [restRes, specRes, logoRes] = await Promise.all([
+      fetch('/api/restaurants'),
+      fetch('/api/specials'),
+      fetch('/api/logos')
+    ]);
+    if(restRes.ok) RESTAURANTS = await restRes.json();
+    if(specRes.ok) SPECIALS = await specRes.json();
+    if(logoRes.ok) logos = await logoRes.json();
+  }catch(e){
+    console.error('Failed to load data from API', e);
+  }
+}
+
+function renderAllUI(){
+  buildTicker();
+  renderSpecials();
+  renderVenueSidebar();
+  renderVenuesBento();
+  renderCurrent();
+  renderCalendar();
+}
+
 // ── INIT ──
 try{const h=localStorage.getItem("spl-hist");if(h)savedHistory=JSON.parse(h);}catch(e){}
-buildTicker();renderSpecials();renderVenueSidebar();renderVenuesBento();renderCurrent();renderCalendar();
+
+(async function init(){
+  await loadAllData();
+  renderAllUI();
+  loadMapsKey();
+})();
 </script>
 </body>
 </html>
