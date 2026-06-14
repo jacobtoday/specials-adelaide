@@ -155,6 +155,51 @@ app.post('/api/settings', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// --- GEOCODING ---
+// Looks up lat/lng for every restaurant address using Google's Geocoding API
+// (uses the same Maps API key stored in settings; that key needs the
+// "Geocoding API" enabled in Google Cloud Console alongside Maps JS/Embed).
+app.post('/api/geocode-all', async (req, res) => {
+  try {
+    const { rows: settingsRows } = await pool.query("SELECT value FROM settings WHERE key='maps_api_key'");
+    const apiKey = settingsRows[0]?.value;
+    if (!apiKey) {
+      return res.status(400).json({ error: 'No Maps API key set in Settings' });
+    }
+
+    const { rows: restaurants } = await pool.query('SELECT id, name, addr, suburb FROM restaurants');
+    const results = [];
+
+    for (const r of restaurants) {
+      if (!r.addr || !r.addr.trim()) {
+        results.push({ id: r.id, name: r.name, status: 'skipped', reason: 'no address' });
+        continue;
+      }
+      const query = `${r.addr}, ${r.suburb}, South Australia, Australia`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${apiKey}`;
+      try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+        if (data.status === 'OK' && data.results?.length) {
+          const loc = data.results[0].geometry.location;
+          await pool.query('UPDATE restaurants SET lat=$1, lng=$2 WHERE id=$3', [loc.lat, loc.lng, r.id]);
+          results.push({ id: r.id, name: r.name, status: 'ok', lat: loc.lat, lng: loc.lng, formatted: data.results[0].formatted_address });
+        } else {
+          results.push({ id: r.id, name: r.name, status: 'failed', reason: data.status, query });
+        }
+      } catch (e) {
+        results.push({ id: r.id, name: r.name, status: 'error', reason: e.message });
+      }
+      // Small delay to stay well under Google's rate limits
+      await new Promise(r => setTimeout(r, 60));
+    }
+
+    const ok = results.filter(r => r.status === 'ok').length;
+    const failed = results.filter(r => r.status !== 'ok');
+    res.json({ ok: true, total: restaurants.length, succeeded: ok, failed: failed.length, results });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // --- BULK RESET (clear all specials, keep restaurants) ---
 app.post('/api/reset-specials', async (req, res) => {
   try {

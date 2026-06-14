@@ -439,6 +439,18 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
             </div>
           </div>
           <div class="settings-card" style="grid-column:1/3">
+            <div class="settings-card-title">Fix pin locations</div>
+            <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
+              <div class="settings-val">Re-look up latitude/longitude for every restaurant based on its street address. Use this if pins on the Map page don't match the real venue locations.</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.6">
+                Requires the <strong>Geocoding API</strong> to be enabled for your Maps API key (in addition to Maps JavaScript API) at the <a href="https://console.cloud.google.com/apis/library/geocoding-backend.googleapis.com" target="_blank" style="color:var(--blue)">Google Cloud Console</a>. This makes ~118 API calls — most Google accounts include $200/month free credit, which covers many thousands of geocoding requests.
+              </div>
+              <button class="tb-btn primary" onclick="geocodeAll()" id="geocode-btn" style="padding:10px 20px;align-self:flex-start">Geocode all addresses</button>
+              <div id="geocode-status" style="display:none;margin-top:8px"></div>
+              <div id="geocode-results" style="display:none;margin-top:8px;max-height:260px;overflow-y:auto;background:var(--bg);border-radius:var(--r-sm);padding:10px 12px;font-family:var(--mono);font-size:11px;line-height:1.8"></div>
+            </div>
+          </div>
+          <div class="settings-card" style="grid-column:1/3">
             <div class="settings-card-title">Danger zone</div>
             <div class="settings-row">
               <div><div class="settings-key">Clear all specials</div><div class="settings-val">Removes every special. Restaurants are kept.</div></div>
@@ -751,6 +763,53 @@ async function saveMapsKey() {
     SETTINGS.maps_api_key = key;
     toast("Maps API key saved", "green");
   } catch (e) { toast("Save failed — check connection", "red"); }
+}
+
+async function geocodeAll() {
+  var btn = document.getElementById("geocode-btn");
+  var statusEl = document.getElementById("geocode-status");
+  var resultsEl = document.getElementById("geocode-results");
+
+  if (!SETTINGS.maps_api_key) {
+    toast("Add and save a Maps API key first", "red");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Geocoding... this may take a minute";
+  statusEl.style.display = "block";
+  statusEl.textContent = "Looking up coordinates for every restaurant address...";
+  resultsEl.style.display = "none";
+  resultsEl.innerHTML = "";
+
+  try {
+    var data = await apiPost("/api/geocode-all", {});
+    statusEl.textContent = "Done: " + data.succeeded + " of " + data.total + " addresses updated" + (data.failed ? ", " + data.failed + " failed" : "") + ".";
+
+    if (data.results && data.results.length) {
+      resultsEl.style.display = "block";
+      resultsEl.innerHTML = data.results.map(function(r) {
+        if (r.status === "ok") {
+          return '<div style="color:var(--green)">&#x2713; ' + esc(r.name) + ' &rarr; ' + r.lat.toFixed(5) + ', ' + r.lng.toFixed(5) + '</div>';
+        } else if (r.status === "skipped") {
+          return '<div style="color:var(--text3)">&#x2014; ' + esc(r.name) + ' (skipped: ' + esc(r.reason) + ')</div>';
+        } else {
+          return '<div style="color:var(--red)">&#x2717; ' + esc(r.name) + ' (' + esc(r.reason || r.status) + ')</div>';
+        }
+      }).join("");
+    }
+
+    // Refresh local restaurant data so the admin tables/map reflect new coords
+    RESTAURANTS = await apiGet("/api/restaurants");
+    if (document.getElementById("view-restaurants").classList.contains("active")) renderRestsTable();
+    toast("Geocoding complete", "green");
+  } catch (e) {
+    statusEl.textContent = "Geocoding failed: " + e.message;
+    toast("Geocoding failed — check connection and API key", "red");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Geocode all addresses";
+  }
 }
 
 // ─────────────────────────────────────────────
