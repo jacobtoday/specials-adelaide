@@ -166,6 +166,8 @@ nav{background:var(--white);border-bottom:3px solid var(--black);height:62px;dis
 .scard-price{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--black)}
 .scard-time{font-size:9px;font-weight:600;opacity:0.6;margin-top:1px}
 .scard-add{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.06em;padding:7px 14px;border-radius:var(--r-sm);border:2px solid var(--black);background:var(--white);color:var(--black);cursor:pointer;transition:all 0.14s;text-transform:uppercase}
+.scard-map-link{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;opacity:0.85;transition:all 0.14s;white-space:nowrap;padding:7px 10px;border-radius:var(--r-sm);border:2px solid currentColor}
+.scard-map-link:hover{opacity:1;background:rgba(0,0,0,0.08)}
 .scard-add:hover{background:var(--black);color:var(--white)}
 .scard-add.added{background:var(--green);color:var(--black);border-color:var(--black)}
 
@@ -208,20 +210,33 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 .map-page-header{background:var(--blue);border-bottom:3px solid var(--black);padding:20px 28px;display:flex;align-items:center;gap:20px;flex-shrink:0}
 .map-page-title{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--white)}
 .map-page-sub{font-size:13px;color:rgba(255,255,255,0.7)}
+.map-search-row{margin-top:12px;max-width:340px}
+.map-search-wrap{position:relative}
+.map-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:13px;opacity:0.6}
+.map-search-input{width:100%;padding:10px 14px 10px 36px;border-radius:var(--r-sm);border:2px solid var(--black);background:var(--white);font-family:var(--sans);font-size:13px;outline:none}
+.map-search-input:focus{border-color:var(--yellow)}
+.map-search-input::placeholder{color:#999}
 .map-area-filter{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .map-body{display:grid;grid-template-columns:320px 1fr;flex:1;overflow:hidden}
 .map-list-panel{border-right:3px solid var(--black);overflow-y:auto;background:var(--white)}
 .map-list-head{padding:14px 16px;border-bottom:2px solid var(--bg);font-family:var(--mono);font-size:11px;font-weight:700;background:var(--yellow);border-bottom:3px solid var(--black)}
 .map-venue-entry{border-bottom:2px solid var(--bg);padding:14px 16px;cursor:pointer;transition:background 0.12s}
 .map-venue-entry:hover{background:var(--yellow)}
+.map-venue-entry.selected{background:var(--orange)}
+.map-venue-entry.selected .mve-name,.map-venue-entry.selected .mve-sub{color:var(--black)}
+.map-venue-entry.selected .mve-num{background:var(--black);color:var(--yellow)}
 .mve-num{width:24px;height:24px;border-radius:50%;background:var(--orange);border:2px solid var(--black);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;margin-right:10px;flex-shrink:0}
 .mve-name{font-size:13px;font-weight:600}
 .mve-sub{font-size:10px;color:#888;margin-top:2px;padding-left:34px}
 .mve-specials{padding:10px 16px 10px 50px;display:none;border-bottom:2px solid var(--bg);background:var(--bg)}
 .mve-specials.open{display:block}
-.mve-spec-item{font-size:11px;padding:5px 0;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
+.mve-spec-item{font-size:11px;padding:5px 0;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.mve-spec-item:hover{color:var(--orange)}
 .mve-spec-item:last-child{border-bottom:none}
 .mve-spec-price{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange)}
+.mve-actions{padding:0 16px 12px 50px}
+.mve-directions{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--blue);text-decoration:none}
+.mve-directions:hover{text-decoration:underline}
 .map-embed-wrap{background:var(--bg);position:relative;overflow:hidden;padding:16px}
 .map-iframe-frame{width:100%;height:100%;border-radius:var(--r);border:3px solid var(--black);overflow:hidden;box-shadow:5px 5px 0 var(--black);background:#e8e4da}
 .map-iframe-frame #map-canvas{width:100%;height:100%}
@@ -769,9 +784,15 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 <div id="page-map" class="page">
   <div class="map-page-inner">
     <div class="map-page-header">
-      <div>
+      <div style="flex:1">
         <div class="map-page-title">Adelaide Specials Map</div>
-        <div class="map-page-sub">Find specials near you — filter by area below</div>
+        <div class="map-page-sub">Find specials near you — search, filter by area, or click a pin</div>
+        <div class="map-search-row">
+          <div class="map-search-wrap">
+            <span class="map-search-icon">🔍</span>
+            <input class="map-search-input" id="map-search" placeholder="Search venue or suburb…" oninput="renderMapVenues();renderMapMarkers()">
+          </div>
+        </div>
         <div class="map-area-filter" id="map-area-filter"></div>
       </div>
     </div>
@@ -1159,6 +1180,23 @@ function showPage(id){
   }
 }
 
+// Jump to the map page with a specific venue selected and pinned
+function viewOnMap(rid){
+  mapSelectedRid=rid;
+  const search=document.getElementById("map-search");
+  if(search) search.value="";
+  mapAreaFilter="";
+  showPage("map");
+  // initGoogleMap/renderMapMarkers run async after the script loads;
+  // give it a brief tick so gmap exists before we try to pan.
+  setTimeout(()=>{
+    if(gmap){
+      google.maps.event.trigger(gmap,"resize");
+      renderMapMarkers();
+    }
+  },50);
+}
+
 // ── PLAN TABS ──
 function showPTab(id,el){
   document.querySelectorAll(".pview").forEach(v=>v.classList.remove("active"));
@@ -1235,7 +1273,10 @@ function renderSpecials(){
           <div class="scard-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</div>
           ${s.from?`<div class="scard-time">${s.from}${s.until?" – "+s.until:""}</div>`:""}
         </div>
-        <button class="scard-add${on?" added":""}" onclick="event.stopPropagation();handleAdd('${s.id}')">${on?"✓ Added":"+ Add"}</button>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="scard-map-link" onclick="event.stopPropagation();viewOnMap('${s.rid}')" title="View on map">📍 Map</span>
+          <button class="scard-add${on?" added":""}" onclick="event.stopPropagation();handleAdd('${s.id}')">${on?"✓ Added":"+ Add"}</button>
+        </div>
       </div>
     </div>`;
   }).join("");
@@ -1262,10 +1303,21 @@ function updateStats(){
 }
 
 // ── MAP PAGE ──
+let mapSelectedRid=null;
+
 function renderMapVenues(){
   const filter=mapAreaFilter;
+  const q=(document.getElementById("map-search")?.value||"").toLowerCase().trim();
   const rids=[...new Set(SPECIALS.map(s=>s.rid))];
-  const venues=RESTAURANTS.filter(r=>rids.includes(r.id)&&(!filter||getArea(r.suburb)===filter));
+  let venues=RESTAURANTS.filter(r=>rids.includes(r.id)&&(!filter||getArea(r.suburb)===filter));
+  if(q){
+    venues=venues.filter(r=>
+      r.name.toLowerCase().includes(q)||
+      r.suburb.toLowerCase().includes(q)||
+      (r.cuisine||"").toLowerCase().includes(q)||
+      SPECIALS.filter(s=>s.rid===r.id).some(s=>s.name.toLowerCase().includes(q)||(s.food||"").toLowerCase().includes(q))
+    );
+  }
   const counts={};SPECIALS.forEach(s=>{counts[s.rid]=(counts[s.rid]||0)+1});
 
   // area filter chips on map page
@@ -1276,22 +1328,45 @@ function renderMapVenues(){
 
   document.getElementById("map-venue-entries").innerHTML=venues.map((r,i)=>{
     const rSpecials=SPECIALS.filter(s=>s.rid===r.id);
+    const dirHref=dirLink(r);
     return`<div>
-      <div class="map-venue-entry" onclick="toggleMapVenue('mv-${r.id}')">
+      <div class="map-venue-entry${mapSelectedRid===r.id?" selected":""}" onclick="selectMapVenue('${r.id}')" id="mve-${r.id}">
         <div style="display:flex;align-items:center">
           <span class="mve-num">${i+1}</span>
           <div>
             <div class="mve-name">${r.name}</div>
           </div>
         </div>
-        <div class="mve-sub">${r.suburb}${r.addr?" · "+r.addr:""} · ${counts[r.id]||0} specials</div>
+        <div class="mve-sub">${r.suburb}${r.addr?" · "+r.addr:""} · ${counts[r.id]||0} special${(counts[r.id]||0)!==1?"s":""}</div>
       </div>
-      <div class="mve-specials" id="mv-${r.id}">
-        ${rSpecials.map(s=>`<div class="mve-spec-item"><span>${s.name} <span style="font-size:9px;color:#aaa">(${s.days.map(d=>DS[d]).join(",")}${s.from?" · "+s.from:""})</span></span><span class="mve-spec-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</span></div>`).join("")}
+      <div class="mve-specials${mapSelectedRid===r.id?" open":""}" id="mv-${r.id}">
+        ${rSpecials.map(s=>`<div class="mve-spec-item" onclick="event.stopPropagation();openSpecialDetail('${s.id}')"><span>${s.name} <span style="font-size:9px;color:#aaa">(${s.days.map(d=>DS[d]).join(",")}${s.from?" · "+s.from:""})</span></span><span class="mve-spec-price">$${s.price%1===0?s.price:s.price.toFixed(2)}</span></div>`).join("")}
+      </div>
+      <div class="mve-actions${mapSelectedRid===r.id?" open":""}" id="mva-${r.id}" style="${mapSelectedRid===r.id?"":"display:none"}">
+        ${dirHref?`<a class="mve-directions" href="${dirHref}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Get directions →</a>`:""}
       </div>
     </div>`;
-  }).join("")||`<div style="padding:24px;text-align:center;font-size:12px;color:#aaa;font-family:var(--mono)">No venues match this filter</div>`;
+  }).join("")||`<div style="padding:24px;text-align:center;font-size:12px;color:#aaa;font-family:var(--mono)">No venues match${q?" \""+q+"\"":" this filter"}</div>`;
 }
+
+// Get a Google Maps directions URL for a restaurant, using lat/lng if available
+function dirLink(r){
+  if(r.lat&&r.lng) return `https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}`;
+  if(r.addr) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${r.name} ${r.addr} ${r.suburb} Adelaide SA`)}`;
+  return null;
+}
+
+// Select a venue: highlight in list, open its specials, pan map + open info window
+function selectMapVenue(rid){
+  mapSelectedRid = mapSelectedRid===rid ? null : rid;
+  renderMapVenues();
+  if(mapSelectedRid){
+    const entry=document.getElementById("mve-"+mapSelectedRid);
+    if(entry) entry.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+  panToMarker(mapSelectedRid);
+}
+
 function setMapArea(a){mapAreaFilter=a;renderMapVenues();renderMapMarkers();}
 function toggleMapVenue(id){const el=document.getElementById(id);el&&el.classList.toggle("open");}
 
@@ -1383,54 +1458,125 @@ function initGoogleMap(){
 }
 
 // Marker icon: orange circle pin with black border, matching site aesthetic
-function markerIcon(){
+// Selected markers render larger and in black/yellow for clear contrast
+function markerIcon(selected){
   return {
     path:"M12 0C7 0 3 4 3 9c0 5.5 7.5 13 8.3 13.8.4.4 1 .4 1.4 0C13.5 22 21 14.5 21 9c0-5-4-9-9-9z",
-    fillColor:"#f25c05",
+    fillColor: selected ? "#0f0f0f" : "#f25c05",
     fillOpacity:1,
     strokeColor:"#0f0f0f",
     strokeWeight:1.5,
-    scale:1.4,
+    scale: selected ? 1.9 : 1.4,
     anchor:new google.maps.Point(12,23),
     labelOrigin:new google.maps.Point(12,9),
   };
 }
 
+let gmapInfoWindow=null;
+let mapVenuesCache=[];
+
 function renderMapMarkers(){
   if(!gmap||!window.google)return;
   gmapMarkers.forEach(m=>m.setMap(null));
   gmapMarkers=[];
+  if(gmapInfoWindow){gmapInfoWindow.close();}
+
+  const q=(document.getElementById("map-search")?.value||"").toLowerCase().trim();
   const rids=[...new Set(SPECIALS.map(s=>s.rid))];
   const filter=mapAreaFilter;
-  const venues=RESTAURANTS.filter(r=>rids.includes(r.id)&&(!filter||getArea(r.suburb)===filter)&&r.lat&&r.lng);
+  let venues=RESTAURANTS.filter(r=>rids.includes(r.id)&&(!filter||getArea(r.suburb)===filter)&&r.lat&&r.lng);
+  if(q){
+    venues=venues.filter(r=>
+      r.name.toLowerCase().includes(q)||
+      r.suburb.toLowerCase().includes(q)||
+      (r.cuisine||"").toLowerCase().includes(q)||
+      SPECIALS.filter(s=>s.rid===r.id).some(s=>s.name.toLowerCase().includes(q)||(s.food||"").toLowerCase().includes(q))
+    );
+  }
+  mapVenuesCache=venues;
   const bounds=new google.maps.LatLngBounds();
+
   venues.forEach((r,i)=>{
     const pos={lat:Number(r.lat),lng:Number(r.lng)};
+    const selected=mapSelectedRid===r.id;
     const marker=new google.maps.Marker({
       position:pos,
       map:gmap,
       title:r.name,
-      icon:markerIcon(),
-      label:{text:String(i+1),color:"#0f0f0f",fontFamily:"Space Mono, monospace",fontSize:"10px",fontWeight:"700"},
-    });
-    const rSpecials=SPECIALS.filter(s=>s.rid===r.id);
-    const info=new google.maps.InfoWindow({
-      content:`<div style="font-family:'Space Grotesk',sans-serif;min-width:160px">
-        <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:13px;margin-bottom:2px">${r.name}</div>
-        <div style="font-size:11px;color:#666;margin-bottom:6px">${r.suburb}${r.addr?" · "+r.addr:""}</div>
-        <div style="font-size:11px;font-weight:700;color:#f25c05">${rSpecials.length} special${rSpecials.length!==1?"s":""}</div>
-      </div>`
+      icon:markerIcon(selected),
+      label:{text:String(i+1),color: selected?"#f5c800":"#0f0f0f",fontFamily:"Space Mono, monospace",fontSize:"10px",fontWeight:"700"},
+      zIndex: selected?999:i,
     });
     marker.addListener("click",()=>{
-      info.open(gmap,marker);
-      const entry=document.getElementById("mv-"+r.id);
-      if(entry){entry.scrollIntoView({behavior:"smooth",block:"center"});entry.classList.add("open");}
+      selectMapVenue(r.id);
+    });
+    marker.addListener("mouseover",()=>{
+      marker.setIcon(markerIcon(true));
+    });
+    marker.addListener("mouseout",()=>{
+      marker.setIcon(markerIcon(mapSelectedRid===r.id));
     });
     gmapMarkers.push(marker);
     bounds.extend(pos);
   });
-  if(venues.length>1){gmap.fitBounds(bounds,48);}
-  else if(venues.length===1){gmap.setCenter({lat:Number(venues[0].lat),lng:Number(venues[0].lng)});gmap.setZoom(14);}
+
+  if(venues.length>1 && !mapSelectedRid){gmap.fitBounds(bounds,48);}
+  else if(venues.length===1 && !mapSelectedRid){gmap.setCenter({lat:Number(venues[0].lat),lng:Number(venues[0].lng)});gmap.setZoom(14);}
+
+  // If a venue is selected, open its info window
+  if(mapSelectedRid){
+    const idx=venues.findIndex(r=>r.id===mapSelectedRid);
+    if(idx>-1) openMarkerInfo(venues[idx], gmapMarkers[idx], idx+1);
+  }
+}
+
+// Build and open the info window for a venue, matching the detail-modal styling
+function openMarkerInfo(r, marker, num){
+  const rSpecials=SPECIALS.filter(s=>s.rid===r.id);
+  const dirHref=dirLink(r);
+  const websiteHtml=r.website?`<a href="${r.website.startsWith("http")?r.website:"https://"+r.website}" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:8px 10px;border:2px solid #0f0f0f;border-radius:8px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;text-decoration:none;color:#0f0f0f;background:#f0ede6">Website ↗</a>`:"";
+  const dirHtml=dirHref?`<a href="${dirHref}" target="_blank" rel="noopener" style="flex:1;text-align:center;padding:8px 10px;border:2px solid #0f0f0f;border-radius:8px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;text-decoration:none;color:#f5c800;background:#0f0f0f">Directions →</a>`:"";
+  const specsHtml=rSpecials.slice(0,4).map(s=>
+    `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #eee;font-size:11px;cursor:pointer" onclick="closeMapInfo();openSpecialDetail('${s.id}')">`
+    +`<span>${s.name}</span><span style="font-family:'Space Mono',monospace;font-weight:700;color:#f25c05">$${s.price%1===0?s.price:s.price.toFixed(2)}</span></div>`
+  ).join("");
+  const moreHtml=rSpecials.length>4?`<div style="font-size:10px;color:#999;margin-top:4px">+${rSpecials.length-4} more</div>`:"";
+
+  if(!gmapInfoWindow){
+    gmapInfoWindow=new google.maps.InfoWindow();
+    gmapInfoWindow.addListener("closeclick",()=>{
+      if(mapSelectedRid){ mapSelectedRid=null; renderMapVenues(); renderMapMarkers(); }
+    });
+  }
+  gmapInfoWindow.setContent(`<div style="font-family:'Space Grotesk',sans-serif;min-width:200px;max-width:240px">
+    <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:14px;margin-bottom:2px">${num?"#"+num+" ":""}${r.name}</div>
+    <div style="font-size:11px;color:#666;margin-bottom:8px">${r.suburb}${r.addr?" · "+r.addr:""}</div>
+    ${specsHtml}${moreHtml}
+    <div style="display:flex;gap:6px;margin-top:10px">${dirHtml}${websiteHtml}</div>
+  </div>`);
+  gmapInfoWindow.open(gmap,marker);
+  gmap.panTo(marker.getPosition());
+}
+
+function closeMapInfo(){
+  if(gmapInfoWindow) gmapInfoWindow.close();
+}
+
+// Pan the map to a venue's marker and open its info window (called from list selection)
+function panToMarker(rid){
+  if(!gmap||!window.google)return;
+  if(!rid){ if(gmapInfoWindow) gmapInfoWindow.close(); renderMapMarkers(); return; }
+  const idx=mapVenuesCache.findIndex(r=>r.id===rid);
+  if(idx===-1){ renderMapMarkers(); return; }
+  const r=mapVenuesCache[idx];
+  gmapMarkers.forEach((m,i)=>{
+    const sel=mapVenuesCache[i].id===rid;
+    m.setIcon(markerIcon(sel));
+    m.setZIndex(sel?999:i);
+    m.setLabel({text:String(i+1),color:sel?"#f5c800":"#0f0f0f",fontFamily:"Space Mono, monospace",fontSize:"10px",fontWeight:"700"});
+  });
+  gmap.setZoom(Math.max(gmap.getZoom(),15));
+  openMarkerInfo(r, gmapMarkers[idx], idx+1);
 }
 
 // ── ADD TO PLAN ──
