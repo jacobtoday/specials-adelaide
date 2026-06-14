@@ -153,7 +153,7 @@ nav{background:var(--white);border-bottom:3px solid var(--black);height:62px;dis
 .scard-top{padding:16px 16px 12px;flex:1;position:relative}
 .scard-logo{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:8px;border:2px solid rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.4);cursor:pointer;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--black)}
 .scard-logo:hover{border-color:var(--black)}
-.scard-food-tag{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:rgba(0,0,0,0.15);color:var(--black);display:inline-block;margin-bottom:10px}
+.scard-food-tag{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:rgba(0,0,0,0.15);color:var(--black);display:inline-block;margin-bottom:10px;margin-left:32px}
 .scard-name{font-family:var(--mono);font-size:15px;font-weight:700;line-height:1.2;margin-bottom:6px;padding-right:44px}
 .scard-venue{font-size:11px;font-weight:600;opacity:0.7;margin-bottom:3px}
 .scard-desc{font-size:11px;opacity:0.7;line-height:1.5;margin-bottom:10px}
@@ -366,6 +366,38 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 .logo-prev-box svg,.logo-prev-box img{max-width:90px;max-height:60px;object-fit:contain}
 .logo-apply-btn{width:100%;padding:12px;background:var(--orange);color:var(--black);border:2px solid var(--black);border-radius:var(--r-sm);cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;display:none;transition:all 0.14s}
 .logo-apply-btn:hover{background:var(--black);color:var(--yellow)}
+
+/* SUBMISSION FORMS (Suggest a special / Report) */
+.m-field{margin-bottom:14px}
+.m-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.m-label{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#888;margin-bottom:7px;display:block}
+.m-input,.m-select,.m-textarea{
+  width:100%;padding:10px 13px;background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);
+  font-family:var(--sans);font-size:13px;color:var(--black);outline:none;transition:border-color 0.14s;appearance:none;
+}
+.m-input:focus,.m-select:focus,.m-textarea:focus{border-color:var(--orange)}
+.m-textarea{resize:vertical;min-height:64px;line-height:1.5;font-family:var(--sans)}
+.m-select-wrap{position:relative}
+.m-select-arrow{position:absolute;right:13px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:11px;color:#888}
+.m-day-picker{display:flex;gap:6px;flex-wrap:wrap}
+.m-day-btn{font-family:var(--mono);font-size:11px;font-weight:700;padding:7px 12px;border-radius:var(--r-sm);border:2px solid var(--black);background:var(--bg);color:#aaa;cursor:pointer;transition:all 0.13s}
+.m-day-btn:hover{color:var(--black)}
+.m-day-btn.on{background:var(--black);color:var(--yellow)}
+.m-success{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:20px 0}
+.m-success .icon{font-size:40px}
+.m-success h3{font-family:var(--mono);font-size:18px;font-weight:700}
+.m-success p{font-size:13px;color:#666;line-height:1.6}
+
+/* FOOTER CTA */
+.footer-actions{display:flex;gap:10px;flex-wrap:wrap}
+.footer-btn{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.05em;padding:10px 18px;border-radius:var(--r-sm);border:2px solid var(--yellow);background:none;color:var(--yellow);cursor:pointer;transition:all 0.14s;text-transform:uppercase}
+.footer-btn:hover{background:var(--yellow);color:var(--black)}
+.footer-btn.primary{background:var(--yellow);color:var(--black)}
+.footer-btn.primary:hover{background:var(--orange);border-color:var(--orange);color:var(--black)}
+
+/* REPORT FLAG ON SPECIAL CARD */
+.scard-flag{position:absolute;top:12px;left:12px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.5);border:2px solid rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;transition:all 0.14s;z-index:2}
+.scard-flag:hover{background:var(--red);border-color:var(--black);color:var(--white)}
 
 @media(max-width:1024px){
   nav{padding:0 16px;gap:12px}
@@ -698,6 +730,10 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 
 <footer>
   <div class="footer-logo">specials.</div>
+  <div class="footer-actions">
+    <button class="footer-btn primary" onclick="openSuggestModal()">+ Suggest a special</button>
+    <button class="footer-btn" onclick="openReportModal()">Report an issue</button>
+  </div>
   <p>Prices approximate · Always verify with venue before visiting</p>
 </footer>
 </div>
@@ -896,6 +932,118 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
   </div>
 </div>
 
+<!-- SUGGEST A SPECIAL MODAL -->
+<div class="overlay" id="suggest-modal" onclick="if(event.target===this)closeSuggestModal()">
+  <div class="mbox wide">
+    <div class="m-head">
+      <div><div class="m-title">Suggest a special</div><div class="m-sub">Know a great deal? Let us know and we'll review it.</div></div>
+      <button class="m-close" onclick="closeSuggestModal()">✕</button>
+    </div>
+    <div class="m-body" id="suggest-body">
+      <div class="m-field">
+        <label class="m-label">Venue name *</label>
+        <input class="m-input" id="sg-venue" placeholder="e.g. The Exeter Hotel">
+      </div>
+      <div class="m-field">
+        <label class="m-label">Special name *</label>
+        <input class="m-input" id="sg-name" placeholder="e.g. Schnitzel Tuesday">
+      </div>
+      <div class="m-field">
+        <label class="m-label">Description</label>
+        <textarea class="m-textarea" id="sg-desc" placeholder="What's included, how to redeem…"></textarea>
+      </div>
+      <div class="m-field-row">
+        <div class="m-field">
+          <label class="m-label">Price ($)</label>
+          <input class="m-input" id="sg-price" type="number" step="0.01" placeholder="18.00">
+        </div>
+        <div class="m-field">
+          <label class="m-label">Food type</label>
+          <div class="m-select-wrap">
+            <select class="m-select" id="sg-food">
+              <option value="">Select…</option>
+              <option>schnitzel</option><option>parmi</option><option>burger</option>
+              <option>steak</option><option>pizza</option><option>pasta</option>
+              <option>tacos</option><option>wings</option><option>seafood</option>
+              <option>roast</option><option>brunch</option><option>curry</option><option>drinks</option>
+            </select>
+            <span class="m-select-arrow">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="m-field">
+        <label class="m-label">Meal time</label>
+        <div class="m-select-wrap">
+          <select class="m-select" id="sg-session">
+            <option value="">Select…</option>
+            <option value="lunch">Lunch (11am – 3pm)</option>
+            <option value="dinner">Dinner (5pm – late)</option>
+            <option value="drinks">Drinks &amp; Happy Hour</option>
+            <option value="brunch">Brunch &amp; Bottomless</option>
+          </select>
+          <span class="m-select-arrow">▾</span>
+        </div>
+      </div>
+      <div class="m-field">
+        <label class="m-label">Days available</label>
+        <div class="m-day-picker" id="sg-days">
+          <button class="m-day-btn" data-day="monday" onclick="this.classList.toggle('on')">Mon</button>
+          <button class="m-day-btn" data-day="tuesday" onclick="this.classList.toggle('on')">Tue</button>
+          <button class="m-day-btn" data-day="wednesday" onclick="this.classList.toggle('on')">Wed</button>
+          <button class="m-day-btn" data-day="thursday" onclick="this.classList.toggle('on')">Thu</button>
+          <button class="m-day-btn" data-day="friday" onclick="this.classList.toggle('on')">Fri</button>
+          <button class="m-day-btn" data-day="saturday" onclick="this.classList.toggle('on')">Sat</button>
+          <button class="m-day-btn" data-day="sunday" onclick="this.classList.toggle('on')">Sun</button>
+        </div>
+      </div>
+      <div class="m-field-row">
+        <div class="m-field">
+          <label class="m-label">From</label>
+          <input class="m-input" id="sg-from" placeholder="e.g. 5pm">
+        </div>
+        <div class="m-field">
+          <label class="m-label">Until</label>
+          <input class="m-input" id="sg-until" placeholder="e.g. 9pm">
+        </div>
+      </div>
+      <div class="m-field">
+        <label class="m-label">Your email (optional)</label>
+        <input class="m-input" id="sg-contact" type="email" placeholder="So we can follow up if needed">
+      </div>
+      <button class="m-confirm" onclick="submitSuggestion()">Submit suggestion →</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT AN ISSUE MODAL -->
+<div class="overlay" id="report-modal" onclick="if(event.target===this)closeReportModal()">
+  <div class="mbox">
+    <div class="m-head">
+      <div><div class="m-title">Report an issue</div><div class="m-sub" id="report-sub">Let us know if a special is no longer available</div></div>
+      <button class="m-close" onclick="closeReportModal()">✕</button>
+    </div>
+    <div class="m-body" id="report-body">
+      <div class="m-field" id="report-special-field" style="display:none">
+        <label class="m-label">Special</label>
+        <div style="background:var(--bg);border:2px solid var(--black);border-radius:var(--r-sm);padding:11px 13px;font-size:13px;font-weight:600" id="report-special-name"></div>
+      </div>
+      <div class="m-field" id="report-venue-field">
+        <label class="m-label">Venue / special name *</label>
+        <input class="m-input" id="rp-venue" placeholder="e.g. The Exeter Hotel — Schnitzel Tuesday">
+      </div>
+      <div class="m-field">
+        <label class="m-label">What's wrong? *</label>
+        <textarea class="m-textarea" id="rp-message" placeholder="e.g. This special is no longer running, the price has changed, the venue has closed…"></textarea>
+      </div>
+      <div class="m-field">
+        <label class="m-label">Your email (optional)</label>
+        <input class="m-input" id="rp-contact" type="email" placeholder="So we can follow up if needed">
+      </div>
+      <button class="m-confirm" onclick="submitReport()">Submit report →</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const DAYS=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 const DS={monday:"Mon",tuesday:"Tue",wednesday:"Wed",thursday:"Thu",friday:"Fri",saturday:"Sat",sunday:"Sun"};
@@ -1013,6 +1161,7 @@ function renderSpecials(){
     const days=DAYS.map(d=>`<span class="scard-day${s.days.includes(d)?" on":""}">${DS[d]}</span>`).join("");
     return`<div class="scard ${clr}">
       <div class="scard-top">
+        <div class="scard-flag" onclick="event.stopPropagation();openReportModal('${s.id}')" title="Report this special">⚑</div>
         <div class="scard-logo" onclick="openLogo('${s.rid}')" title="Upload logo">${logoHtml(s.rid,34)}</div>
         <span class="scard-food-tag">${s.food}${s.session?` · ${sessIcon[s.session]||""}${s.session}`:""}</span>
         <div class="scard-name">${s.name}</div>
@@ -1440,6 +1589,140 @@ const dz=document.getElementById("drop-zone");
 dz.addEventListener("dragover",e=>{e.preventDefault();dz.classList.add("over")});
 dz.addEventListener("dragleave",()=>dz.classList.remove("over"));
 dz.addEventListener("drop",e=>{e.preventDefault();dz.classList.remove("over");const f=e.dataTransfer.files[0];if(f){const dt=new DataTransfer();dt.items.add(f);document.getElementById("svg-inp").files=dt.files;handleFile({target:{files:[f]}});}});
+
+// ── SUGGEST A SPECIAL MODAL ──
+function openSuggestModal(){
+  // Reset form
+  document.getElementById("sg-venue").value="";
+  document.getElementById("sg-name").value="";
+  document.getElementById("sg-desc").value="";
+  document.getElementById("sg-price").value="";
+  document.getElementById("sg-food").value="";
+  document.getElementById("sg-session").value="";
+  document.getElementById("sg-from").value="";
+  document.getElementById("sg-until").value="";
+  document.getElementById("sg-contact").value="";
+  document.querySelectorAll("#sg-days .m-day-btn").forEach(b=>b.classList.remove("on"));
+  // Restore form body in case a success message replaced it
+  resetSuggestBody();
+  document.getElementById("suggest-modal").classList.add("open");
+}
+function closeSuggestModal(){document.getElementById("suggest-modal").classList.remove("open");}
+
+function resetSuggestBody(){
+  const body=document.getElementById("suggest-body");
+  if(body.dataset.success){
+    body.innerHTML=body.dataset.original;
+    delete body.dataset.success;
+  }
+}
+
+async function submitSuggestion(){
+  const venue=document.getElementById("sg-venue").value.trim();
+  const name=document.getElementById("sg-name").value.trim();
+  if(!venue||!name){alert("Please fill in the venue name and special name.");return;}
+  const days=[...document.querySelectorAll("#sg-days .m-day-btn.on")].map(b=>b.dataset.day);
+  const payload={
+    type:"new_special",
+    venue_name:venue,
+    special_name:name,
+    desc:document.getElementById("sg-desc").value.trim(),
+    price:document.getElementById("sg-price").value,
+    food:document.getElementById("sg-food").value,
+    session:document.getElementById("sg-session").value,
+    days,
+    from:document.getElementById("sg-from").value.trim(),
+    until:document.getElementById("sg-until").value.trim(),
+    contact:document.getElementById("sg-contact").value.trim(),
+  };
+  try{
+    const res=await fetch("/api/submissions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    if(!res.ok)throw new Error("failed");
+    showSuggestSuccess();
+  }catch(e){
+    alert("Sorry, something went wrong submitting your suggestion. Please try again later.");
+  }
+}
+
+function showSuggestSuccess(){
+  const body=document.getElementById("suggest-body");
+  body.dataset.original=body.innerHTML;
+  body.dataset.success="1";
+  body.innerHTML=`<div class="m-success">
+    <div class="icon">🎉</div>
+    <h3>Thanks for the tip!</h3>
+    <p>We've received your suggestion and will review it shortly. Cheers for helping keep the guide up to date.</p>
+    <button class="m-confirm" style="margin-top:8px" onclick="closeSuggestModal()">Done</button>
+  </div>`;
+}
+
+// ── REPORT AN ISSUE MODAL ──
+let reportSpecialId=null;
+function openReportModal(specialId){
+  reportSpecialId=specialId||null;
+  resetReportBody();
+  document.getElementById("rp-message").value="";
+  document.getElementById("rp-contact").value="";
+  document.getElementById("rp-venue").value="";
+  if(reportSpecialId){
+    const s=SPECIALS.find(x=>x.id===reportSpecialId);
+    const r=s?RESTAURANTS.find(x=>x.id===s.rid):null;
+    document.getElementById("report-special-field").style.display="block";
+    document.getElementById("report-venue-field").style.display="none";
+    document.getElementById("report-special-name").textContent=s?`${r?.name||""} — ${s.name}`:"Special";
+    document.getElementById("report-sub").textContent="Let us know if this special is no longer available";
+    document.getElementById("rp-message").value="This special is no longer available.";
+  }else{
+    document.getElementById("report-special-field").style.display="none";
+    document.getElementById("report-venue-field").style.display="block";
+    document.getElementById("report-sub").textContent="Spotted something wrong? Let us know";
+  }
+  document.getElementById("report-modal").classList.add("open");
+}
+function closeReportModal(){document.getElementById("report-modal").classList.remove("open");reportSpecialId=null;}
+
+function resetReportBody(){
+  const body=document.getElementById("report-body");
+  if(body.dataset.success){
+    body.innerHTML=body.dataset.original;
+    delete body.dataset.success;
+  }
+}
+
+async function submitReport(){
+  const message=document.getElementById("rp-message").value.trim();
+  if(!message){alert("Please describe the issue.");return;}
+  if(!reportSpecialId){
+    const venue=document.getElementById("rp-venue").value.trim();
+    if(!venue){alert("Please tell us which venue or special this relates to.");return;}
+  }
+  const payload={
+    type:"report",
+    special_id:reportSpecialId||null,
+    venue_name:reportSpecialId?"":document.getElementById("rp-venue").value.trim(),
+    message,
+    contact:document.getElementById("rp-contact").value.trim(),
+  };
+  try{
+    const res=await fetch("/api/submissions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    if(!res.ok)throw new Error("failed");
+    showReportSuccess();
+  }catch(e){
+    alert("Sorry, something went wrong submitting your report. Please try again later.");
+  }
+}
+
+function showReportSuccess(){
+  const body=document.getElementById("report-body");
+  body.dataset.original=body.innerHTML;
+  body.dataset.success="1";
+  body.innerHTML=`<div class="m-success">
+    <div class="icon">✅</div>
+    <h3>Thanks for letting us know</h3>
+    <p>We'll take a look and update the listing if needed.</p>
+    <button class="m-confirm" style="margin-top:8px" onclick="closeReportModal()">Done</button>
+  </div>`;
+}
 
 // ── HERO DROPDOWN FINDER ──
 function heroDropChange(){

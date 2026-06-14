@@ -45,6 +45,34 @@ CREATE TABLE IF NOT EXISTS settings (
   value       TEXT NOT NULL DEFAULT ''
 );
 
+-- Public submissions: new special suggestions + "no longer available" reports
+CREATE TABLE IF NOT EXISTS submissions (
+  id          SERIAL PRIMARY KEY,
+  type        TEXT NOT NULL,             -- 'new_special' or 'report'
+  status      TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'resolved', 'dismissed'
+  -- for type = 'report'
+  special_id  TEXT,
+  -- shared / new_special fields
+  rid         TEXT,
+  venue_name  TEXT DEFAULT '',
+  special_name TEXT DEFAULT '',
+  desc_text   TEXT DEFAULT '',
+  price       NUMERIC(6,2),
+  food        TEXT DEFAULT '',
+  session     TEXT DEFAULT '',
+  days        TEXT[] DEFAULT '{}',
+  from_time   TEXT DEFAULT '',
+  until_time  TEXT DEFAULT '',
+  -- contact + free text
+  message     TEXT DEFAULT '',
+  contact     TEXT DEFAULT '',
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_submissions_status ON submissions(status);
+CREATE INDEX IF NOT EXISTS idx_submissions_type   ON submissions(type);
+
+
 CREATE INDEX IF NOT EXISTS idx_specials_rid     ON specials(rid);
 CREATE INDEX IF NOT EXISTS idx_specials_active  ON specials(active);
 CREATE INDEX IF NOT EXISTS idx_specials_food    ON specials(food);

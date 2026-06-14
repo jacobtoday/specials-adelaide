@@ -194,6 +194,24 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
 .logo-card-sub{font-size:10px;color:var(--text3);margin-top:2px}
 .logo-card-status{font-size:9px;font-weight:700;margin-top:6px;letter-spacing:0.1em;text-transform:uppercase}
 
+/* SUBMISSIONS */
+.sub-row{padding:16px 18px;border-bottom:2px solid var(--bg);display:flex;gap:14px;align-items:flex-start}
+.sub-row:last-child{border-bottom:none}
+.sub-icon{width:34px;height:34px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:2px solid var(--black)}
+.sub-icon.new{background:var(--green)}
+.sub-icon.report{background:var(--red);color:var(--white)}
+.sub-body{flex:1;min-width:0}
+.sub-title{font-weight:600;font-size:13px;margin-bottom:2px}
+.sub-meta{font-size:11px;color:var(--text3);margin-bottom:6px}
+.sub-detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:8px 0;background:var(--bg);border-radius:var(--r-sm);padding:10px 12px}
+.sub-detail-item{font-size:11px}
+.sub-detail-label{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:2px}
+.sub-detail-val{font-weight:600}
+.sub-message{font-size:12px;color:var(--text2);line-height:1.6;margin-top:6px;font-style:italic}
+.sub-contact{font-size:11px;color:var(--blue);margin-top:6px;font-family:var(--mono)}
+.sub-time{font-size:10px;color:var(--text3);font-family:var(--mono);white-space:nowrap;flex-shrink:0}
+.sub-actions{display:flex;gap:6px;margin-top:10px}
+
 /* CONFIRM / TOAST */
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:center;justify-content:center}
 .confirm-overlay.open{display:flex}
@@ -242,6 +260,7 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
     <button class="sidebar-item" onclick="showView('specials',this)">Specials <span class="sidebar-count" id="sb-specials-count">0</span></button>
     <button class="sidebar-item" onclick="showView('restaurants',this)">Restaurants <span class="sidebar-count" id="sb-rest-count">0</span></button>
     <button class="sidebar-item" onclick="showView('logos',this)">Logos</button>
+    <button class="sidebar-item" onclick="showView('submissions',this)">Submissions <span class="sidebar-count" id="sb-subs-count">0</span></button>
     <div class="sidebar-section">Management</div>
     <button class="sidebar-item" onclick="showView('export',this)">Export / Import</button>
     <button class="sidebar-item" onclick="showView('settings',this)">Settings</button>
@@ -267,6 +286,10 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
           <div class="dash-card c-y"><div class="dash-num" id="d-rests">0</div><div class="dash-lbl">Restaurants</div><div class="dash-sub" id="d-suburbs"></div></div>
           <div class="dash-card c-g"><div class="dash-num" id="d-avg">$0</div><div class="dash-lbl">Avg price</div><div class="dash-sub" id="d-range"></div></div>
           <div class="dash-card c-b"><div class="dash-num" id="d-logos">0</div><div class="dash-lbl">Logos</div><div class="dash-sub" id="d-no-logos"></div></div>
+        </div>
+        <div id="pending-subs-banner" style="display:none;background:var(--yellow);border:3px solid var(--black);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;box-shadow:3px 3px 0 var(--black);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div style="font-size:13px;font-weight:600" id="pending-subs-text"></div>
+          <button class="tb-btn primary" onclick="showView('submissions', document.querySelector('.sidebar-item[onclick*=\'submissions\']'))">Review submissions →</button>
         </div>
         <div class="activity-list">
           <div class="activity-head"><div class="activity-head-title">Recent activity</div></div>
@@ -323,6 +346,29 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
             <span class="tbl-header-title" id="logo-prog" style="font-size:11px;opacity:0.6"></span>
           </div>
           <div class="logos-grid" id="logos-grid"></div>
+        </div>
+      </div>
+
+      <!-- SUBMISSIONS -->
+      <div class="view" id="view-submissions">
+        <div class="tbl-wrap">
+          <div class="tbl-header">
+            <span class="tbl-header-title">Public Submissions <span id="subs-count" style="opacity:0.5;font-size:11px"></span></span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select class="tbl-select" id="subs-f-type" onchange="renderSubmissions()">
+                <option value="">All types</option>
+                <option value="new_special">New special</option>
+                <option value="report">Report</option>
+              </select>
+              <select class="tbl-select" id="subs-f-status" onchange="renderSubmissions()">
+                <option value="pending">Pending</option>
+                <option value="resolved">Resolved</option>
+                <option value="dismissed">Dismissed</option>
+                <option value="">All statuses</option>
+              </select>
+            </div>
+          </div>
+          <div id="subs-list"></div>
         </div>
       </div>
 
@@ -570,6 +616,7 @@ var RESTAURANTS = [];
 var SPECIALS = [];
 var LOGOS = {};
 var SETTINGS = {};
+var SUBMISSIONS = [];
 var activityLog = [];
 var dbConnected = false;
 
@@ -600,16 +647,18 @@ async function apiDelete(path) {
 // LOAD ALL DATA FROM API
 // ─────────────────────────────────────────────
 async function loadAllData() {
-  const [rests, specs, logos, settings] = await Promise.all([
+  const [rests, specs, logos, settings, subs] = await Promise.all([
     apiGet("/api/restaurants"),
     apiGet("/api/specials"),
     apiGet("/api/logos"),
     apiGet("/api/settings"),
+    apiGet("/api/submissions").catch(()=>[]),
   ]);
   RESTAURANTS = rests;
   SPECIALS = specs;
   LOGOS = logos;
   SETTINGS = settings;
+  SUBMISSIONS = subs;
 }
 
 // ─────────────────────────────────────────────
@@ -717,6 +766,8 @@ async function initApp() {
 function updateCounts() {
   document.getElementById("sb-specials-count").textContent = SPECIALS.length;
   document.getElementById("sb-rest-count").textContent = RESTAURANTS.length;
+  var pending = SUBMISSIONS.filter(function(s){ return s.status === "pending"; }).length;
+  document.getElementById("sb-subs-count").textContent = pending;
 }
 
 // ─────────────────────────────────────────────
@@ -727,7 +778,7 @@ function showView(id, el) {
   document.getElementById("view-" + id).classList.add("active");
   document.querySelectorAll(".sidebar-item").forEach(function(b){ b.classList.remove("active"); });
   if (el) el.classList.add("active");
-  var titles = {dashboard:"Dashboard",specials:"Specials",restaurants:"Restaurants",logos:"Logos",export:"Export / Import",settings:"Settings"};
+  var titles = {dashboard:"Dashboard",specials:"Specials",restaurants:"Restaurants",logos:"Logos",submissions:"Submissions",export:"Export / Import",settings:"Settings"};
   document.getElementById("topbar-title").textContent = titles[id] || id;
   var acts = document.getElementById("topbar-actions");
   var siteBtn = '<a href="index.html" target="_blank" class="tb-btn secondary">View site</a>';
@@ -737,6 +788,7 @@ function showView(id, el) {
   if (id === "specials") renderSpecialsTable();
   if (id === "restaurants") renderRestsTable();
   if (id === "logos") renderLogosGrid();
+  if (id === "submissions") renderSubmissions();
   if (id === "dashboard") renderDashboard();
   if (id === "settings") {
     document.getElementById("set-username").value = (SETTINGS && SETTINGS.admin_user) || DEFAULT_ADMIN_USER;
@@ -777,6 +829,21 @@ function renderDashboard() {
   document.getElementById("d-range").textContent = prices.length ? ("$" + minP.toFixed(0) + " to $" + maxP.toFixed(0)) : "—";
   document.getElementById("d-logos").textContent = logoCount;
   document.getElementById("d-no-logos").textContent = (RESTAURANTS.length - logoCount) + " missing";
+
+  var pending = SUBMISSIONS.filter(function(s){ return s.status === "pending"; });
+  var banner = document.getElementById("pending-subs-banner");
+  if (pending.length) {
+    var newCount = pending.filter(function(s){return s.type==="new_special";}).length;
+    var reportCount = pending.filter(function(s){return s.type==="report";}).length;
+    var parts = [];
+    if (newCount) parts.push(newCount + " new special suggestion" + (newCount!==1?"s":""));
+    if (reportCount) parts.push(reportCount + " report" + (reportCount!==1?"s":""));
+    document.getElementById("pending-subs-text").textContent = parts.join(" and ") + " awaiting review";
+    banner.style.display = "flex";
+  } else {
+    banner.style.display = "none";
+  }
+
   renderActivityLog();
 }
 
@@ -885,6 +952,122 @@ function renderLogosGrid() {
       +'<div class="logo-card-status" style="color:'+(lg?"var(--green)":"#ccc")+'">'+(lg?"Logo set":"No logo")+'</div>'
       +'</div>';
   }).join("");
+}
+
+// ─────────────────────────────────────────────
+// SUBMISSIONS
+// ─────────────────────────────────────────────
+var DS_FULL = {monday:"Mon",tuesday:"Tue",wednesday:"Wed",thursday:"Thu",friday:"Fri",saturday:"Sat",sunday:"Sun"};
+
+function renderSubmissions() {
+  var ft = document.getElementById("subs-f-type").value;
+  var fs = document.getElementById("subs-f-status").value;
+  var filtered = SUBMISSIONS.filter(function(s){
+    if (ft && s.type !== ft) return false;
+    if (fs && s.status !== fs) return false;
+    return true;
+  });
+  document.getElementById("subs-count").textContent = "(" + filtered.length + ")";
+  var list = document.getElementById("subs-list");
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-tbl"><span>No submissions</span><p style="font-size:12px;margin-top:6px">Public suggestions and reports will appear here.</p></div>';
+    return;
+  }
+  list.innerHTML = filtered.map(function(s){
+    var isNew = s.type === "new_special";
+    var icon = isNew ? '<div class="sub-icon new">+</div>' : '<div class="sub-icon report">⚑</div>';
+    var title, detailHtml = "";
+    if (isNew) {
+      title = esc(s.venue_name) + ' — ' + esc(s.special_name);
+      var days = (s.days||[]).map(function(d){ return DS_FULL[d]||d; }).join(", ");
+      var details = [];
+      if (s.price != null) details.push(["Price", "$"+Number(s.price).toFixed(2)]);
+      if (s.food) details.push(["Food type", esc(s.food)]);
+      if (s.session) details.push(["Session", esc(s.session)]);
+      if (days) details.push(["Days", days]);
+      if (s.from_time || s.until_time) details.push(["Time", esc((s.from_time||"")+(s.until_time?" – "+s.until_time:""))]);
+      if (details.length) {
+        detailHtml = '<div class="sub-detail-grid">' + details.map(function(d){
+          return '<div class="sub-detail-item"><div class="sub-detail-label">'+d[0]+'</div><div class="sub-detail-val">'+d[1]+'</div></div>';
+        }).join("") + '</div>';
+      }
+      if (s.desc_text) detailHtml += '<div class="sub-message">"'+esc(s.desc_text)+'"</div>';
+    } else {
+      var linkedSpecial = s.special_id ? SPECIALS.find(function(x){return x.id===s.special_id;}) : null;
+      var linkedRest = linkedSpecial ? RESTAURANTS.find(function(x){return x.id===linkedSpecial.rid;}) : null;
+      title = linkedSpecial
+        ? 'Report: ' + esc((linkedRest?linkedRest.name+' — ':'')) + esc(linkedSpecial.name)
+        : 'Report: ' + esc(s.venue_name || "General feedback");
+      detailHtml = '<div class="sub-message">"'+esc(s.message)+'"</div>';
+    }
+    var statusBadgeClass = s.status === "pending" ? "lunch" : (s.status === "resolved" ? "active" : "inactive");
+    var actions = '';
+    if (s.status === "pending") {
+      if (isNew) {
+        actions += '<button class="row-btn edit" onclick="useSubmission('+s.id+')">Use to create special</button>';
+      }
+      actions += '<button class="row-btn tog" onclick="setSubmissionStatus('+s.id+',\'resolved\')">Mark resolved</button>'
+        + '<button class="row-btn del" onclick="setSubmissionStatus('+s.id+',\'dismissed\')">Dismiss</button>';
+    } else {
+      actions += '<button class="row-btn edit" onclick="setSubmissionStatus('+s.id+',\'pending\')">Reopen</button>'
+        + '<button class="row-btn del" onclick="deleteSubmission('+s.id+')">Delete</button>';
+    }
+    return '<div class="sub-row">'
+      + icon
+      + '<div class="sub-body">'
+        + '<div class="sub-title">'+title+'</div>'
+        + '<div class="sub-meta"><span class="td-badge '+statusBadgeClass+'">'+s.status+'</span> · '+fmtTime(new Date(s.created_at))+'</div>'
+        + detailHtml
+        + (s.contact ? '<div class="sub-contact">'+esc(s.contact)+'</div>' : '')
+        + '<div class="sub-actions">'+actions+'</div>'
+      + '</div>'
+    + '</div>';
+  }).join("");
+}
+
+async function setSubmissionStatus(id, status) {
+  try {
+    await apiPost("/api/submissions/"+id+"/status", { status: status });
+    var sub = SUBMISSIONS.find(function(s){ return s.id===id; });
+    if (sub) sub.status = status;
+    updateCounts(); renderSubmissions();
+    toast(status === "resolved" ? "Marked resolved" : (status === "dismissed" ? "Dismissed" : "Reopened"));
+  } catch (e) { toast("Update failed — check connection", "red"); }
+}
+
+async function deleteSubmission(id) {
+  try {
+    await apiDelete("/api/submissions/"+id);
+    SUBMISSIONS = SUBMISSIONS.filter(function(s){ return s.id!==id; });
+    updateCounts(); renderSubmissions();
+    toast("Deleted", "red");
+  } catch (e) { toast("Delete failed — check connection", "red"); }
+}
+
+// Pre-fill the "Add special" drawer from a new_special submission
+function useSubmission(id) {
+  var s = SUBMISSIONS.find(function(x){ return x.id===id; });
+  if (!s) return;
+  showView("specials", document.querySelector(".sidebar-item[onclick*=\"'specials'\"]"));
+  openSpecialDrawer(null);
+  // Try to match restaurant by name (case-insensitive)
+  var match = RESTAURANTS.find(function(r){ return r.name.toLowerCase() === (s.venue_name||"").toLowerCase(); });
+  if (match) document.getElementById("sd-rid").value = match.id;
+  document.getElementById("sd-name").value = s.special_name || "";
+  document.getElementById("sd-desc").value = s.desc_text || "";
+  if (s.price != null) document.getElementById("sd-price").value = s.price;
+  document.getElementById("sd-food").value = s.food || "";
+  document.getElementById("sd-session").value = s.session || "";
+  document.getElementById("sd-from").value = s.from_time || "";
+  document.getElementById("sd-until").value = s.until_time || "";
+  document.querySelectorAll("#sd-days .day-pick-btn").forEach(function(b){
+    b.classList.toggle("on", (s.days||[]).indexOf(b.dataset.day) >= 0);
+  });
+  if (!match) {
+    toast('No matching restaurant found for "'+s.venue_name+'" — select one manually', "");
+  }
+  // Mark as resolved once the admin starts using it
+  setSubmissionStatus(id, "resolved");
 }
 
 // ─────────────────────────────────────────────

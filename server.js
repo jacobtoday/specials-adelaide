@@ -163,6 +163,66 @@ app.post('/api/reset-specials', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// --- SUBMISSIONS (public suggestions + "no longer available" reports) ---
+
+// Public: create a submission (new special suggestion or report)
+app.post('/api/submissions', async (req, res) => {
+  try {
+    const s = req.body;
+    const type = s.type === 'report' ? 'report' : 'new_special';
+    await pool.query(
+      `INSERT INTO submissions
+        (type, special_id, rid, venue_name, special_name, desc_text, price, food, session, days, from_time, until_time, message, contact)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+      [
+        type,
+        s.special_id || null,
+        s.rid || null,
+        s.venue_name || '',
+        s.special_name || '',
+        s.desc || '',
+        s.price != null && s.price !== '' ? Number(s.price) : null,
+        s.food || '',
+        s.session || '',
+        s.days || [],
+        s.from || '',
+        s.until || '',
+        s.message || '',
+        s.contact || '',
+      ]
+    );
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Admin: list submissions (optionally filter by status)
+app.get('/api/submissions', async (req, res) => {
+  try {
+    const status = req.query.status;
+    const { rows } = status
+      ? await pool.query('SELECT * FROM submissions WHERE status=$1 ORDER BY created_at DESC', [status])
+      : await pool.query('SELECT * FROM submissions ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Admin: update submission status (resolved / dismissed / pending)
+app.post('/api/submissions/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    await pool.query('UPDATE submissions SET status=$1 WHERE id=$2', [status, req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Admin: delete a submission
+app.delete('/api/submissions/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM submissions WHERE id=$1', [req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // --- HEALTHCHECK ---
 app.get('/api/health', async (req, res) => {
   try {
