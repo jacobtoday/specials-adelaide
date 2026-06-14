@@ -504,6 +504,11 @@ td{padding:12px 16px;font-size:13px;vertical-align:middle}
       <div class="field"><label class="field-label">Phone</label><input class="field-input" id="rd-phone" placeholder="08 8xxx xxxx"></div>
       <div class="field"><label class="field-label">Website</label><input class="field-input" id="rd-website" placeholder="https://..."></div>
     </div>
+    <div class="field-row">
+      <div class="field"><label class="field-label">Latitude</label><input class="field-input" id="rd-lat" type="number" step="0.000001" placeholder="-34.925000"></div>
+      <div class="field"><label class="field-label">Longitude</label><input class="field-input" id="rd-lng" type="number" step="0.000001" placeholder="138.600000"></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin:-10px 0 16px;line-height:1.6">Used to place this venue's pin on the Map page. Find coordinates by right-clicking the location in <a href="https://www.google.com/maps" target="_blank" style="color:var(--blue)">Google Maps</a> and copying the numbers.</div>
     <div class="field">
       <label class="field-label">Logo (SVG or PNG)</label>
       <div class="logo-uploader" id="rd-logo-drop" onclick="document.getElementById('rd-logo-inp').click()">
@@ -1003,6 +1008,8 @@ function openRestDrawer(id) {
   document.getElementById("rd-addr").value = r ? (r.addr||"") : "";
   document.getElementById("rd-phone").value = r ? (r.phone||"") : "";
   document.getElementById("rd-website").value = r ? (r.website||"") : "";
+  document.getElementById("rd-lat").value = r && r.lat != null ? r.lat : "";
+  document.getElementById("rd-lng").value = r && r.lng != null ? r.lng : "";
   document.getElementById("rd-active-tog").classList.toggle("on", !r || r.active !== false);
   var lg = id ? LOGOS[id] : null;
   var prev = document.getElementById("rd-logo-preview");
@@ -1029,6 +1036,8 @@ async function saveRestaurant() {
     addr: document.getElementById("rd-addr").value.trim(),
     phone: document.getElementById("rd-phone").value.trim(),
     website: document.getElementById("rd-website").value.trim(),
+    lat: document.getElementById("rd-lat").value.trim() ? parseFloat(document.getElementById("rd-lat").value) : null,
+    lng: document.getElementById("rd-lng").value.trim() ? parseFloat(document.getElementById("rd-lng").value) : null,
     active: document.getElementById("rd-active-tog").classList.contains("on"),
   };
   if (!data.name || !data.suburb) { toast("Name and suburb required"); return; }

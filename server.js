@@ -41,11 +41,14 @@ app.post('/api/restaurants', async (req, res) => {
   try {
     const r = req.body;
     await pool.query(
-      `INSERT INTO restaurants (id,name,suburb,cuisine,addr,phone,website,active)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+      `INSERT INTO restaurants (id,name,suburb,cuisine,addr,phone,website,lat,lng,active)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
        ON CONFLICT (id) DO UPDATE SET
-         name=$2, suburb=$3, cuisine=$4, addr=$5, phone=$6, website=$7, active=$8`,
-      [r.id, r.name, r.suburb, r.cuisine || '', r.addr || '', r.phone || '', r.website || '', r.active !== false]
+         name=$2, suburb=$3, cuisine=$4, addr=$5, phone=$6, website=$7, lat=$8, lng=$9, active=$10`,
+      [r.id, r.name, r.suburb, r.cuisine || '', r.addr || '', r.phone || '', r.website || '',
+       r.lat != null && r.lat !== '' ? Number(r.lat) : null,
+       r.lng != null && r.lng !== '' ? Number(r.lng) : null,
+       r.active !== false]
     );
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }

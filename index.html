@@ -196,19 +196,6 @@ nav{background:var(--white);border-bottom:3px solid var(--black);height:62px;dis
 .v-sub{font-size:10px;color:#888;margin-top:1px}
 .v-count{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--orange);flex-shrink:0}
 
-/* VENUES SECTION */
-.venues-section{padding:40px 28px;background:var(--bg);border-top:3px solid var(--black)}
-.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
-.section-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#888;margin-bottom:8px}
-.section-h2{font-family:var(--mono);font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1;letter-spacing:-0.02em}
-.venues-bento{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-.venue-bento-card{border-radius:var(--r);border:3px solid var(--black);padding:20px;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;box-shadow:3px 3px 0 var(--black)}
-.venue-bento-card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--black)}
-.vbc-logo{width:48px;height:48px;border-radius:10px;border:2px solid rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;font-weight:700;margin-bottom:14px;background:rgba(255,255,255,0.35)}
-.vbc-name{font-family:var(--mono);font-size:13px;font-weight:700;margin-bottom:4px;line-height:1.2}
-.vbc-meta{font-size:10px;opacity:0.65;font-weight:500;margin-bottom:10px}
-.vbc-count{font-size:11px;font-weight:700;background:rgba(0,0,0,0.12);padding:3px 9px;border-radius:99px;display:inline-block}
-
 /* FOOTER */
 footer{background:var(--black);padding:36px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:3px solid var(--black)}
 .footer-logo{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--yellow)}
@@ -235,7 +222,7 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
 .mve-spec-price{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange)}
 .map-embed-wrap{background:var(--bg);position:relative;overflow:hidden;padding:16px}
 .map-iframe-frame{width:100%;height:100%;border-radius:var(--r);border:3px solid var(--black);overflow:hidden;box-shadow:5px 5px 0 var(--black);background:#e8e4da}
-.map-iframe-frame iframe{width:100%;height:100%;border:none;filter:saturate(0.85) contrast(1.05)}
+.map-iframe-frame #map-canvas{width:100%;height:100%}
 .map-placeholder-big{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:18px;padding:40px;text-align:center;border-radius:var(--r);border:3px solid var(--black);background:repeating-linear-gradient(135deg,#e8e4da,#e8e4da 14px,#ded9cc 14px,#ded9cc 28px);box-shadow:5px 5px 0 var(--black)}
 .map-placeholder-big .icon{font-size:48px}
 .map-placeholder-big h2{font-family:var(--mono);font-size:24px;font-weight:700}
@@ -387,7 +374,7 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
   .browse-main{grid-template-columns:1fr}
   .map-sidebar-col{display:none}
   .specials-grid{grid-template-columns:1fr}
-  .venues-section,.footer{padding-left:16px;padding-right:16px}
+  .footer{padding-left:16px;padding-right:16px}
   .plan-inner{grid-template-columns:1fr;padding:16px}
   .plan-sidebar-card{position:static}
   .filter-strip{top:100px;padding:12px 16px}
@@ -439,11 +426,6 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
   .specials-grid{grid-template-columns:1fr;padding:12px;gap:10px}
   .scard-name{font-size:14px;padding-right:40px}
   .scard-price{font-size:19px}
-
-  /* VENUES */
-  .venues-section{padding:32px 14px}
-  .venues-bento{grid-template-columns:repeat(2,1fr)}
-  .section-h2{font-size:28px}
 
   /* FOOTER */
   footer{flex-direction:column;align-items:flex-start;gap:10px;padding:24px 14px}
@@ -714,14 +696,6 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
   </div>
 </div>
 
-<!-- VENUES -->
-<section class="venues-section" id="venues-sec">
-  <div class="section-header">
-    <div><div class="section-eyebrow">On the guide</div><div class="section-h2">Venues</div></div>
-  </div>
-  <div class="venues-bento" id="venues-bento"></div>
-</section>
-
 <footer>
   <div class="footer-logo">specials.</div>
   <p>Prices approximate · Always verify with venue before visiting</p>
@@ -751,7 +725,7 @@ footer p{font-size:11px;color:rgba(255,255,255,0.4)}
           <div class="map-placeholder-note">Admin → Settings → Google Maps API Key</div>
         </div>
         <div class="map-iframe-frame" id="map-iframe-frame" style="display:none">
-          <iframe id="map-iframe" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div id="map-canvas" style="width:100%;height:100%"></div>
         </div>
       </div>
     </div>
@@ -967,7 +941,13 @@ function showPage(id){
   document.getElementById("nb-"+id)?.classList.add("active");
   window.scrollTo(0,0);
   if(id==="planner"){renderCurrent();renderCalendar();renderHistory();}
-  if(id==="map"){renderMapVenues();}
+  if(id==="map"){
+    renderMapVenues();
+    if(gmap){
+      google.maps.event.trigger(gmap,"resize");
+      renderMapMarkers();
+    }
+  }
 }
 
 // ── PLAN TABS ──
@@ -1064,23 +1044,6 @@ function renderVenueSidebar(){
     </div>`).join("")||`<div style="padding:20px 16px;font-size:12px;color:#aaa;text-align:center;font-family:var(--mono)">No venues match</div>`;
 }
 
-// ── VENUES BENTO ──
-const V_COLORS=["c-orange","c-yellow","c-blue","c-green","c-purple","c-red","c-pink","c-bg"];
-function renderVenuesBento(){
-  const counts={};SPECIALS.forEach(s=>{counts[s.rid]=(counts[s.rid]||0)+1});
-  document.getElementById("venues-bento").innerHTML=RESTAURANTS.map((r,i)=>{
-    const clr=V_COLORS[i%V_COLORS.length];
-    const lg=logos[r.id];
-    const logoInner=lg?(lg.type==="svg"?lg.data:`<img src="${lg.data}" style="width:48px;height:48px;object-fit:contain">`):`<span style="font-family:var(--mono);font-size:18px;font-weight:700">${r.name[0]}</span>`;
-    return`<div class="venue-bento-card ${clr}" onclick="openLogo('${r.id}')">
-      <div class="vbc-logo">${logoInner}</div>
-      <div class="vbc-name">${r.name}</div>
-      <div class="vbc-meta">${r.suburb}${r.cuisine?" · "+r.cuisine:""}</div>
-      <span class="vbc-count">${counts[r.id]||0} special${(counts[r.id]||0)!==1?"s":""}</span>
-    </div>`;
-  }).join("");
-}
-
 // ── STATS ──
 function updateStats(){
   document.getElementById("stat-n").textContent=SPECIALS.length;
@@ -1119,10 +1082,36 @@ function renderMapVenues(){
     </div>`;
   }).join("")||`<div style="padding:24px;text-align:center;font-size:12px;color:#aaa;font-family:var(--mono)">No venues match this filter</div>`;
 }
-function setMapArea(a){mapAreaFilter=a;renderMapVenues();}
+function setMapArea(a){mapAreaFilter=a;renderMapVenues();renderMapMarkers();}
 function toggleMapVenue(id){const el=document.getElementById(id);el&&el.classList.toggle("open");}
 
+// ── GOOGLE MAPS (styled, with markers) ──
 let MAPS_API_KEY="";
+let gmap=null;
+let gmapMarkers=[];
+
+// Custom map style matching the site's bold orange/yellow/blue palette
+const MAP_STYLE=[
+  {elementType:"geometry",stylers:[{color:"#f0ede6"}]},
+  {elementType:"labels.text.fill",stylers:[{color:"#0f0f0f"}]},
+  {elementType:"labels.text.stroke",stylers:[{color:"#f0ede6"},{weight:3}]},
+  {featureType:"administrative",elementType:"geometry.stroke",stylers:[{color:"#0f0f0f"},{weight:1}]},
+  {featureType:"landscape",elementType:"geometry",stylers:[{color:"#f0ede6"}]},
+  {featureType:"poi",stylers:[{visibility:"off"}]},
+  {featureType:"poi.park",elementType:"geometry",stylers:[{color:"#cfe8d5"}]},
+  {featureType:"poi.park",elementType:"labels",stylers:[{visibility:"off"}]},
+  {featureType:"road",elementType:"geometry",stylers:[{color:"#ffffff"}]},
+  {featureType:"road",elementType:"geometry.stroke",stylers:[{color:"#0f0f0f"},{weight:1.2}]},
+  {featureType:"road.arterial",elementType:"geometry",stylers:[{color:"#ffffff"}]},
+  {featureType:"road.highway",elementType:"geometry",stylers:[{color:"#f5c800"}]},
+  {featureType:"road.highway",elementType:"geometry.stroke",stylers:[{color:"#0f0f0f"},{weight:1.5}]},
+  {featureType:"road.highway",elementType:"labels.text.fill",stylers:[{color:"#0f0f0f"}]},
+  {featureType:"road.local",elementType:"geometry",stylers:[{color:"#ffffff"}]},
+  {featureType:"transit",stylers:[{visibility:"off"}]},
+  {featureType:"water",elementType:"geometry",stylers:[{color:"#a9d3f5"}]},
+  {featureType:"water",elementType:"labels.text.fill",stylers:[{color:"#0f0f0f"}]},
+];
+
 async function loadMapsKey(){
   try{
     const res=await fetch('/api/settings');
@@ -1133,18 +1122,105 @@ async function loadMapsKey(){
   }catch(e){console.error('Failed to load settings',e);}
   applyMapEmbed();
 }
+
 function applyMapEmbed(){
   const frame=document.getElementById("map-iframe-frame");
   const placeholder=document.getElementById("map-placeholder");
-  const iframe=document.getElementById("map-iframe");
   if(MAPS_API_KEY){
-    iframe.src=`https://www.google.com/maps/embed/v1/view?key=${MAPS_API_KEY}&center=-34.9285,138.5999&zoom=12`;
     frame.style.display="block";
     placeholder.style.display="none";
+    loadGoogleMapsScript(MAPS_API_KEY).then(initGoogleMap).catch(()=>{
+      frame.style.display="none";
+      placeholder.style.display="flex";
+    });
   }else{
     frame.style.display="none";
     placeholder.style.display="flex";
   }
+}
+
+function loadGoogleMapsScript(key){
+  return new Promise((resolve,reject)=>{
+    if(window.google&&window.google.maps){resolve();return;}
+    const existing=document.getElementById("gmaps-script");
+    if(existing){existing.addEventListener("load",resolve);existing.addEventListener("error",reject);return;}
+    const script=document.createElement("script");
+    script.id="gmaps-script";
+    script.src=`https://maps.googleapis.com/maps/api/js?key=${key}`;
+    script.async=true;
+    script.onload=resolve;
+    script.onerror=reject;
+    document.head.appendChild(script);
+  });
+}
+
+function initGoogleMap(){
+  if(!window.google||!window.google.maps)return;
+  const canvas=document.getElementById("map-canvas");
+  if(!gmap){
+    gmap=new google.maps.Map(canvas,{
+      center:{lat:-34.9285,lng:138.5999},
+      zoom:12,
+      styles:MAP_STYLE,
+      disableDefaultUI:true,
+      zoomControl:true,
+      mapTypeControl:false,
+      streetViewControl:false,
+      fullscreenControl:false,
+    });
+  }
+  renderMapMarkers();
+}
+
+// Marker icon: orange circle pin with black border, matching site aesthetic
+function markerIcon(){
+  return {
+    path:"M12 0C7 0 3 4 3 9c0 5.5 7.5 13 8.3 13.8.4.4 1 .4 1.4 0C13.5 22 21 14.5 21 9c0-5-4-9-9-9z",
+    fillColor:"#f25c05",
+    fillOpacity:1,
+    strokeColor:"#0f0f0f",
+    strokeWeight:1.5,
+    scale:1.4,
+    anchor:new google.maps.Point(12,23),
+    labelOrigin:new google.maps.Point(12,9),
+  };
+}
+
+function renderMapMarkers(){
+  if(!gmap||!window.google)return;
+  gmapMarkers.forEach(m=>m.setMap(null));
+  gmapMarkers=[];
+  const rids=[...new Set(SPECIALS.map(s=>s.rid))];
+  const filter=mapAreaFilter;
+  const venues=RESTAURANTS.filter(r=>rids.includes(r.id)&&(!filter||getArea(r.suburb)===filter)&&r.lat&&r.lng);
+  const bounds=new google.maps.LatLngBounds();
+  venues.forEach((r,i)=>{
+    const pos={lat:Number(r.lat),lng:Number(r.lng)};
+    const marker=new google.maps.Marker({
+      position:pos,
+      map:gmap,
+      title:r.name,
+      icon:markerIcon(),
+      label:{text:String(i+1),color:"#0f0f0f",fontFamily:"Space Mono, monospace",fontSize:"10px",fontWeight:"700"},
+    });
+    const rSpecials=SPECIALS.filter(s=>s.rid===r.id);
+    const info=new google.maps.InfoWindow({
+      content:`<div style="font-family:'Space Grotesk',sans-serif;min-width:160px">
+        <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:13px;margin-bottom:2px">${r.name}</div>
+        <div style="font-size:11px;color:#666;margin-bottom:6px">${r.suburb}${r.addr?" · "+r.addr:""}</div>
+        <div style="font-size:11px;font-weight:700;color:#f25c05">${rSpecials.length} special${rSpecials.length!==1?"s":""}</div>
+      </div>`
+    });
+    marker.addListener("click",()=>{
+      info.open(gmap,marker);
+      const entry=document.getElementById("mv-"+r.id);
+      if(entry){entry.scrollIntoView({behavior:"smooth",block:"center"});entry.classList.add("open");}
+    });
+    gmapMarkers.push(marker);
+    bounds.extend(pos);
+  });
+  if(venues.length>1){gmap.fitBounds(bounds,48);}
+  else if(venues.length===1){gmap.setCenter({lat:Number(venues[0].lat),lng:Number(venues[0].lng)});gmap.setZoom(14);}
 }
 
 // ── ADD TO PLAN ──
@@ -1352,7 +1428,7 @@ function pickCol(c,el,custom=false){curColor=c;if(!custom){document.querySelecto
 function applyLogo(){
   if(!curLogoRid||!pendingLogoData)return;
   logos[curLogoRid]={type:pendingLogoType,data:pendingLogoData};
-  closeLogo();renderSpecials();renderVenuesBento();renderCurrent();
+  closeLogo();renderSpecials();renderCurrent();
   // Persist to database
   fetch(`/api/logos/${curLogoRid}`,{
     method:'POST',
@@ -1446,7 +1522,6 @@ function renderAllUI(){
   buildTicker();
   renderSpecials();
   renderVenueSidebar();
-  renderVenuesBento();
   renderCurrent();
   renderCalendar();
 }

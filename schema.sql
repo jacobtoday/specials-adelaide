@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS restaurants (
   addr        TEXT DEFAULT '',
   phone       TEXT DEFAULT '',
   website     TEXT DEFAULT '',
+  lat         NUMERIC(9,6),
+  lng         NUMERIC(9,6),
   active      BOOLEAN NOT NULL DEFAULT true,
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -49,6 +51,10 @@ CREATE INDEX IF NOT EXISTS idx_specials_food    ON specials(food);
 CREATE INDEX IF NOT EXISTS idx_specials_session ON specials(session);
 CREATE INDEX IF NOT EXISTS idx_rest_suburb      ON restaurants(suburb);
 CREATE INDEX IF NOT EXISTS idx_rest_active      ON restaurants(active);
+
+-- Migration: add lat/lng columns if upgrading an existing database
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS lat NUMERIC(9,6);
+ALTER TABLE restaurants ADD COLUMN IF NOT EXISTS lng NUMERIC(9,6);
 
 -- Seed default admin credentials (change after first login)
 INSERT INTO settings (key, value) VALUES ('admin_user', 'admin')
